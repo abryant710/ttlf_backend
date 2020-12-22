@@ -1,0 +1,24 @@
+{
+  "name": "ttlf-backend",
+  "version": "1.0.0",
+  "description": "ttlf.net backend app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abryant710/ttlf-backend.git"
+  },
+  "keywords": [
+    "node",
+    "js",
+    "ttlf"
+  ],
+  "author": "Alex Bryant",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abryant710/ttlf-backend/issues"
+  },
+  "homepage": "https://github.com/abryant710/ttlf-backend#readme"
+}
