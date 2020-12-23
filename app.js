@@ -1,8 +1,23 @@
-const http = require('http');
+// Native node packages
 
-const server = http.createServer((req, res) => {
-  res.write('<p>Hello23</p>');
-  res.end();
+// 3rd party packages
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+
+const adminRoutes = require('./routes/admin');
+const apiRoutes = require('./routes/api');
+
+app.use(bodyParser.urlencoded({
+  extended: false,
+}));
+
+app.use(adminRoutes);
+app.use('/api', apiRoutes);
+
+app.use('/', (_req, res) => {
+  res.status(404).send('<h1>This page doesn\'t exist</h1>');
 });
 
-server.listen(5000);
+app.listen(5000);
