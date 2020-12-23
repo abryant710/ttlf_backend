@@ -1,4 +1,27 @@
-@import 'abstracts/variables';
-@import 'abstracts/mixins';
+@import 'bootstrap';
 
-@import 'base/base';
+@mixin flex-items($type, $align, $justify) {
+  display: flex;
+  flex-direction: $type;
+  align-items: $align;
+  justify-self: $justify;
+}
+
+.login-form {
+  @include flex-items(row, center, center);
+  width: 100vw;
+  height: 100vh;
+  &__imgcontainer {
+    @include flex-items(row, center, center);
+  }
+  &__avatar {
+    width: 30rem;
+    margin: 2rem;
+  }
+  &__container {
+
+  }
+  &__psw {
+    text-align: center;
+  }
+}
