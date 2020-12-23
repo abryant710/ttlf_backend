@@ -20,17 +20,18 @@
   ],
   "homepage": "https://github.com/abryant710/ttlf-backend#readme",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "node app.js",
+    "dev": "nodemon app.js",
     "clean:yarn": "rm -rf node_modules && rm yarn.lock && yarn cache clean && yarn install",
     "lint": "npm-run-all lint:js lint:css",
     "lint:js": "npx eslint --fix .",
     "lint:css": "sass-lint-auto-fix --config-sass-lint .sass-lint.yml -c .sass-lint-auto-fix.yml",
-    "watch:sass": "node-sass sass/main.scss css/style.css -w",
-    "compile:sass": "node-sass sass/main.scss css/style.comp.css",
-    "concat:css": "concat -o css/style.concat.css css/icon-font.css css/style.comp.css",
-    "prefix:css": "postcss --use autoprefixer -b 'last 10 versions' css/style.comp.css -o css/style.prefix.css",
-    "compress:css": "node-sass css/style.prefix.css css/style.min.css --output-style compressed",
-    "remove_unused:css": "rm css/style.comp.css && rm css/style.prefix.css",
+    "watch:sass": "node-sass sass/main.scss public/css/style.css -w",
+    "compile:sass": "node-sass sass/main.scss public/css/style.comp.css",
+    "concat:css": "concat -o public/css/style.concat.css public/css/icon-font.css public/css/style.comp.css",
+    "prefix:css": "postcss --use autoprefixer -b 'last 10 versions' public/css/style.comp.css -o public/css/style.prefix.css",
+    "compress:css": "node-sass public/css/style.prefix.css public/css/style.min.css --output-style compressed",
+    "remove_unused:css": "rm public/css/style.comp.css && rm public/css/style.prefix.css",
     "build:css": "npm-run-all compile:sass prefix:css compress:css remove_unused:css"
   },
   "devDependencies": {
@@ -50,6 +51,7 @@
   },
   "dependencies": {
     "body-parser": "^1.19.0",
+    "ejs": "^3.1.5",
     "express": "^4.17.1",
     "pg": "^8.5.1"
   }
