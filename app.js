@@ -50,4 +50,4 @@ app.use('/', (_req, res) => {
   res.status(404).send('<h1>This page doesn\'t exist</h1>');
 });
 
-app.listen(5000);
+app.listen(process.env.PORT || 5000);
