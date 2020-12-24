@@ -3,3 +3,4 @@ files:
     - 'sass/**/*.scss'
   ignore:
     - 'node_modules/**'
+    - 'public/*'

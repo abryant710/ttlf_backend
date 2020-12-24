@@ -7572,20 +7572,83 @@ a.text-dark:focus, a.text-dark:hover {
 .close:hover {
   color: #b9a78a; }
 
-.login-form {
+.no-page {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  justify-self: center;
+  justify-content: flex-start;
   width: 100vw;
-  height: 100vh; }
-  .login-form__imgcontainer {
+  height: 100vh;
+  padding: 3rem; }
+
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100vw;
+  height: 100vh;
+  margin-top: 4rem; }
+  .login-panel {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    justify-self: center; }
-  .login-form__avatar {
+    justify-content: center;
     width: 30rem;
-    margin: 2rem; }
-  .login-form__psw {
-    text-align: center; }
+    height: 30rem; }
+  .login form {
+    width: 100%; }
+    .login form fieldset {
+      display: flex;
+      flex-direction: column; }
+  .login-img {
+    width: 15rem;
+    margin: 1rem; }
+
+.reset-password {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100vw;
+  height: 100vh;
+  margin-top: 4rem; }
+  .reset-password-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 30rem;
+    height: 30rem; }
+  .reset-password form {
+    width: 100%; }
+    .reset-password form fieldset {
+      display: flex;
+      flex-direction: column; }
+  .reset-password-img {
+    width: 15rem;
+    margin: 1rem; }
+
+.send-reset {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100vw;
+  height: 100vh;
+  margin-top: 4rem; }
+  .send-reset-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 30rem;
+    height: 30rem; }
+  .send-reset form {
+    width: 100%; }
+    .send-reset form fieldset {
+      display: flex;
+      flex-direction: column; }
+  .send-reset-img {
+    width: 15rem;
+    margin: 1rem; }

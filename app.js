@@ -5,7 +5,7 @@ const path = require('path');
 // 3rd party packages
 const express = require('express');
 const bodyParser = require('body-parser');
-const { Pool } = require('pg');
+// const { Pool } = require('pg');
 // const rootDir = require('./utils/path');
 
 const app = express();
@@ -13,12 +13,12 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-const pool = new Pool({
-  connectionString: process.env.TTLF_DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-});
+// const pool = new Pool({
+//   connectionString: process.env.TTLF_DATABASE_URL,
+//   ssl: {
+//     rejectUnauthorized: false,
+//   },
+// });
 
 const adminRoutes = require('./routes/admin');
 const apiRoutes = require('./routes/api');
