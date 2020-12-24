@@ -15,6 +15,8 @@ const { get404 } = require('./controllers/error');
 const adminRoutes = require('./routes/admin');
 const apiRoutes = require('./routes/api');
 
+const { mongoConnect } = require('./utils/database');
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -23,4 +25,6 @@ app.use('/api', apiRoutes);
 
 app.use(get404);
 
-app.listen(process.env.PORT || 5000);
+mongoConnect(() => {
+  app.listen(process.env.PORT || 5000);
+});
