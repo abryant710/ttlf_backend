@@ -1,9 +1,10 @@
 const express = require('express');
 
-const router = express.Router();
+const {
+  getApi,
+} = require('../controlllers/api');
 
-router.get('/', (_req, res) => {
-  res.send('<h1>This is the api placeholder</h1>');
-});
+const router = express.Router();
+router.get('/', getApi);
 
 module.exports = router;
