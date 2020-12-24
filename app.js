@@ -19,7 +19,7 @@ app.set('views', 'views');
 //   },
 // });
 
-const { get404 } = require('./controlllers/error');
+const { get404 } = require('./controllers/error');
 const adminRoutes = require('./routes/admin');
 const apiRoutes = require('./routes/api');
 

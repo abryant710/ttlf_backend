@@ -8,7 +8,7 @@ const {
   getResetPassword,
   postResetPassword,
   getConfig,
-} = require('../controlllers/admin');
+} = require('../controllers/admin');
 
 const router = express.Router();
 router.get('/login', getLogin);
