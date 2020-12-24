@@ -1,7 +1,7 @@
 @import 'bootstrap';
 @import 'mixins';
 
-@import '404';
-@import 'login';
-@import 'reset_password';
-@import 'send_reset';
+@import 'pages/404';
+@import 'pages/login';
+@import 'pages/reset_password';
+@import 'pages/send_reset';
