@@ -1,0 +1,36 @@
+@mixin flex-items($type, $align, $justify) {
+  display: flex;
+  flex-direction: $type;
+  align-items: $align;
+  justify-content: $justify;
+}
+
+@mixin full-page-container {
+  @include flex-items(column, center, flex-start);
+  width: 100vw;
+  height: 100vh;
+}
+
+@mixin login-form {
+  @include full-page-container;
+  margin-top: 4rem;
+
+  &-panel {
+    @include flex-items(column, center, center);
+    width: 30rem;
+    height: 30rem;
+  }
+
+  & form {
+    width: 100%;
+    & fieldset {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  &-img {
+    width: 15rem;
+    margin: 1rem;
+  }
+}
