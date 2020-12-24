@@ -13,11 +13,11 @@
 
 @mixin login-form {
   @include full-page-container;
-  margin-top: 4rem;
+  padding-top: 4rem;
 
   &-panel {
     @include flex-items(column, center, center);
-    width: 30rem;
+    width: 20rem;
     height: 30rem;
   }
 
