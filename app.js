@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 // Native node packages
 const path = require('path');
 
