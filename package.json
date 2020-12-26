@@ -22,7 +22,9 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "deploy": "git push heroku main",
+    "build:app": "npm run clean:build && cp package.json ./www && mkdir www/tmp/ && cd www && zip -r Archive.zip . && cd ..",
+    "deploy": "npm run build:app && eb deploy",
+    "clean:build": "rm -rf www/* || true",
     "clean:yarn": "rm -rf node_modules && rm yarn.lock && yarn cache clean && yarn install",
     "lint": "npm-run-all lint:js lint:css",
     "lint:js": "npx eslint --fix .",
