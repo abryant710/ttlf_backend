@@ -22,10 +22,10 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "build:app": "npm run clean:build && cp package.json ./www && mkdir www/tmp/ && cd www && zip -r Archive.zip . && cd ..",
+    "build:app": "npm run clean:build && git archive -v -o www/ttlf-backend.zip --format=zip HEAD",
     "deploy": "npm run build:app && eb deploy",
     "clean:build": "rm -rf www/* || true",
-    "clean:yarn": "rm -rf node_modules && rm yarn.lock && yarn cache clean && yarn install",
+    "clean:yarn": "rm -rf node_modules || true && rm yarn.lock  || true && yarn cache clean && yarn install",
     "lint": "npm-run-all lint:js lint:css",
     "lint:js": "npx eslint --fix .",
     "lint:css": "sass-lint-auto-fix --config-sass-lint .sass-lint.yml -c .sass-lint-auto-fix.yml",
