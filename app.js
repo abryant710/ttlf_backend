@@ -5,6 +5,11 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 // const rootDir = require('./utils/path');
+const mongoose = require('mongoose');
+
+const {
+  TTLF_MONGO_USER, TTLF_MONGO_PW, TTLF_MONGO_URI, TTLF_MONGO_DB,
+} = process.env;
 
 const app = express();
 
@@ -15,8 +20,6 @@ const { get404 } = require('./controllers/error');
 const adminRoutes = require('./routes/admin');
 const apiRoutes = require('./routes/api');
 
-const { mongoConnect } = require('./utils/database');
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -25,6 +28,14 @@ app.use('/api', apiRoutes);
 
 app.use(get404);
 
-mongoConnect(() => {
-  app.listen(process.env.PORT || 5000);
-});
+mongoose.connect(
+  `mongodb+srv://${TTLF_MONGO_USER}:${TTLF_MONGO_PW}@${TTLF_MONGO_URI}/${TTLF_MONGO_DB}?retryWrites=true&w=majority`,
+  { useNewUrlParser: true, useUnifiedTopology: true },
+)
+  .then(() => {
+    console.info('Successfully connected to the database');
+    app.listen(process.env.PORT || 5000);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
