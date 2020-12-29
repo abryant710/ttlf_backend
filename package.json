@@ -23,7 +23,7 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "build:app": "npm run clean:build && git archive -v -o www/ttlf-backend.zip --format=zip HEAD",
-    "deploy": "npm run build:app && eb deploy (echo $TTLF_EB_ENV) --profile (echo $TTLF_EB_PROFILE)",
+    "deploy": "npm run build:app && eb deploy $(echo $TTLF_EB_ENV) --profile $(echo $TTLF_EB_PROFILE)",
     "clean:build": "rm -rf www/* || true",
     "clean:yarn": "rm -rf node_modules || true && rm yarn.lock  || true && yarn cache clean && yarn install",
     "lint": "npm-run-all lint:js lint:css",
