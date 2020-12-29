@@ -7588,20 +7588,46 @@ a.text-dark:focus, a.text-dark:hover {
   justify-content: flex-start;
   width: 100vw;
   height: 100vh;
-  padding-top: 4rem; }
+  padding-top: 1rem; }
   .login-panel {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 20rem;
-    height: 30rem; }
+    height: auto;
+    padding-bottom: 5rem; }
   .login form {
     width: 100%; }
     .login form fieldset {
       display: flex;
       flex-direction: column; }
   .login-img {
+    width: 15rem;
+    margin: 1rem; }
+
+.create-admin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100vw;
+  height: 100vh;
+  padding-top: 1rem; }
+  .create-admin-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 20rem;
+    height: auto;
+    padding-bottom: 5rem; }
+  .create-admin form {
+    width: 100%; }
+    .create-admin form fieldset {
+      display: flex;
+      flex-direction: column; }
+  .create-admin-img {
     width: 15rem;
     margin: 1rem; }
 
@@ -7612,14 +7638,15 @@ a.text-dark:focus, a.text-dark:hover {
   justify-content: flex-start;
   width: 100vw;
   height: 100vh;
-  padding-top: 4rem; }
+  padding-top: 1rem; }
   .reset-password-panel {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 20rem;
-    height: 30rem; }
+    height: auto;
+    padding-bottom: 5rem; }
   .reset-password form {
     width: 100%; }
     .reset-password form fieldset {
@@ -7636,14 +7663,15 @@ a.text-dark:focus, a.text-dark:hover {
   justify-content: flex-start;
   width: 100vw;
   height: 100vh;
-  padding-top: 4rem; }
+  padding-top: 1rem; }
   .send-reset-panel {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 20rem;
-    height: 30rem; }
+    height: auto;
+    padding-bottom: 5rem; }
   .send-reset form {
     width: 100%; }
     .send-reset form fieldset {

@@ -11,14 +11,15 @@
   height: 100vh;
 }
 
-@mixin login-form {
+@mixin standard-form {
   @include full-page-container;
-  padding-top: 4rem;
+  padding-top: 1rem;
 
   &-panel {
     @include flex-items(column, center, center);
     width: 20rem;
-    height: 30rem;
+    height: auto;
+    padding-bottom: 5rem;
   }
 
   & form {
