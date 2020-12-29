@@ -1,6 +1,7 @@
 module.exports.getLogin = (_req, res) => {
   res.render('pages/login', {
-    loginError: false,
+    formMessage: null,
+    formAttributes: {},
   });
 };
 
@@ -11,7 +12,8 @@ module.exports.postLogin = (req) => {
 
 module.exports.getSendReset = (_req, res) => {
   res.render('pages/send-reset', {
-    emailError: false,
+    formMessage: null,
+    formAttributes: {},
   });
 };
 
@@ -22,17 +24,13 @@ module.exports.postSendReset = (req) => {
 
 module.exports.getResetPassword = (_req, res) => {
   res.render('pages/reset-password', {
-    passwordMatchError: false,
+    formMessage: null,
+    formAttributes: {},
   });
 };
 
-module.exports.postResetPassword = (req, res) => {
+module.exports.postResetPassword = (req) => {
   const { password1, password2 } = req.body;
-  if (password1 !== password2) {
-    res.render('pages/reset-password', {
-      passwordMatchError: true,
-    });
-  }
   console.info(password1, password2, 'You are trying to reset your password');
 };
 

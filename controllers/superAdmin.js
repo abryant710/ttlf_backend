@@ -1,5 +1,6 @@
 module.exports.getCreateAdmin = (_req, res) => {
   res.render('pages/create-admin', {
+    formMessage: null,
     formAttributes: {},
   });
 };
@@ -38,7 +39,7 @@ module.exports.postCreateAdmin = (req, res) => {
       },
     });
   }
-  res.render('pages/create-admin', {
+  return res.render('pages/create-admin', {
     formMessage: { success: `New admin user ${email} created successfully.` },
     formAttributes: {},
   });

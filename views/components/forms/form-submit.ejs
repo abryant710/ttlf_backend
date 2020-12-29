@@ -1,8 +1,8 @@
 <button type="submit" class="btn btn-primary mb-2"><%= submitButtonText %></button>
 <% if (formMessage) { %> 
   <% if (formMessage.error) { %>
-    <p class="text-center text-danger">Error: <%= formMessage.error %></p>
+    <p class="text-center text-danger mt-1 mb-1">Error: <%= formMessage.error %></p>
   <% } else if (formMessage.success) { %> 
-    <p class="text-center text-success">Success: <%= formMessage.success %></p>
+    <p class="text-center text-success mt-1 mb-1">Success: <%= formMessage.success %></p>
   <% } %>
 <% } %>
