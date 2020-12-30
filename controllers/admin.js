@@ -7,5 +7,7 @@ module.exports.getConfig = (req, res) => {
   if (checkAuth) return checkAuth();
   return res
     .status(200)
-    .render(configHomePage);
+    .render(configHomePage, {
+      configPage: 'live',
+    });
 };
