@@ -13,7 +13,7 @@
 
 @mixin standard-form {
   @include full-page-container;
-  padding-top: 1rem;
+  padding-top: 2rem;
 
   &-panel {
     @include flex-items(column, center, center);

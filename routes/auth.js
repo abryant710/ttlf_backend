@@ -3,6 +3,7 @@ const express = require('express');
 const {
   getLogin,
   postLogin,
+  postLogout,
   getSendReset,
   postSendReset,
   getResetPassword,
@@ -12,6 +13,7 @@ const {
 const router = express.Router();
 router.get('/login', getLogin);
 router.post('/login', postLogin);
+router.post('/logout', postLogout);
 router.get('/send-reset', getSendReset);
 router.post('/send-reset', postSendReset);
 router.get('/reset-password', getResetPassword);

@@ -46,16 +46,16 @@ app.use(session({
   store,
 }));
 
-const defaultRoute = '/config';
+const DEFAULT_ROUTE = '/config';
 
 app.use(authRoutes);
 app.use(superAdminRoutes);
 app.use(adminRoutes);
 app.use('/api', apiRoutes);
 
-app.get(/^\/$/, (_req, res) => {
-  res.status(200).redirect(defaultRoute);
-});
+app.get(/^\/$/, (_req, res) => res
+  .status(200)
+  .redirect(DEFAULT_ROUTE));
 
 app.use(get404);
 

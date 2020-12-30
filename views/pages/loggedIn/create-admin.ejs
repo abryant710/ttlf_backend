@@ -2,8 +2,8 @@
 <%- include('../../partials/nav.ejs') %>
 <% const { firstName, lastName, email } = formAttributes; %> 
 <div class="create-admin">
+  <h2 class="create-admin-title">Create a new admin user</h2>
   <div class="create-admin-panel">
-    <img src="images/ttlf_0001.png" class="create-admin-img" />
     <form action="/create-admin" method="POST">
       <fieldset>
         <%- include('../../components/forms/first-name-input.ejs', { firstName }) %>

@@ -1,5 +1,8 @@
-@import 'bootstrap';
+@import 'external/bootstrap';
+
 @import 'mixins';
+
+@import 'components/nav';
 
 @import 'pages/404';
 @import 'pages/login';

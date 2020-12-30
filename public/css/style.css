@@ -7572,6 +7572,10 @@ a.text-dark:focus, a.text-dark:hover {
 .close:hover {
   color: #b9a78a; }
 
+.nav-img {
+  height: 2rem;
+  width: auto; }
+
 .no-page {
   display: flex;
   flex-direction: column;
@@ -7588,7 +7592,7 @@ a.text-dark:focus, a.text-dark:hover {
   justify-content: flex-start;
   width: 100vw;
   height: 100vh;
-  padding-top: 1rem; }
+  padding-top: 2rem; }
   .login-panel {
     display: flex;
     flex-direction: column;
@@ -7613,7 +7617,7 @@ a.text-dark:focus, a.text-dark:hover {
   justify-content: flex-start;
   width: 100vw;
   height: 100vh;
-  padding-top: 1rem; }
+  padding-top: 2rem; }
   .create-admin-panel {
     display: flex;
     flex-direction: column;
@@ -7630,6 +7634,9 @@ a.text-dark:focus, a.text-dark:hover {
   .create-admin-img {
     width: 15rem;
     margin: 1rem; }
+  .create-admin-title {
+    margin: 0 0 2rem;
+    text-align: center; }
 
 .reset-password {
   display: flex;
@@ -7638,7 +7645,7 @@ a.text-dark:focus, a.text-dark:hover {
   justify-content: flex-start;
   width: 100vw;
   height: 100vh;
-  padding-top: 1rem; }
+  padding-top: 2rem; }
   .reset-password-panel {
     display: flex;
     flex-direction: column;
@@ -7663,7 +7670,7 @@ a.text-dark:focus, a.text-dark:hover {
   justify-content: flex-start;
   width: 100vw;
   height: 100vh;
-  padding-top: 1rem; }
+  padding-top: 2rem; }
   .send-reset-panel {
     display: flex;
     flex-direction: column;
