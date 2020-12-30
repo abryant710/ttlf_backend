@@ -1,11 +1,14 @@
 const { isSuperAdmin } = require('../utils/auth');
 
+const createAdminPage = 'pages/loggedIn/create-admin';
+
 // TODO: add super admin logic for these routes
 
 module.exports.getCreateAdmin = (req, res) => {
-  const checkAuth = isSuperAdmin(req, res);
-  if (checkAuth) return checkAuth();
-  return res.render('pages/create-admin', {
+  // const checkAuth = isSuperAdmin(req, res);
+  // if (checkAuth) return checkAuth();
+  console.log();
+  return res.status(200).render(createAdminPage, {
     formMessage: null,
     formAttributes: {},
   });
@@ -18,13 +21,7 @@ module.exports.postCreateAdmin = (req, res) => {
     firstName, lastName, email, password1, password2,
   } = req.body;
   if (!firstName || !lastName || !email || !password1 || !password2) {
-    console.log({
-      formMessage: { error: 'Please complete the form' },
-      formAttributes: {
-        firstName, lastName, email,
-      },
-    });
-    return res.render('pages/create-admin', {
+    return res.status(400).render(createAdminPage, {
       formMessage: { error: 'Please complete the form' },
       formAttributes: {
         firstName, lastName, email,
@@ -32,7 +29,7 @@ module.exports.postCreateAdmin = (req, res) => {
     });
   }
   if (password1 !== password2) {
-    return res.render('pages/create-admin', {
+    return res.status(400).render(createAdminPage, {
       formMessage: { error: 'The passwords do not match' },
       formAttributes: {
         firstName, lastName, email,
@@ -40,14 +37,14 @@ module.exports.postCreateAdmin = (req, res) => {
     });
   }
   if (password1.length < 12) {
-    return res.render('pages/create-admin', {
+    return res.status(400).render(createAdminPage, {
       formMessage: { error: 'The password must be at least 12 characters long' },
       formAttributes: {
         firstName, lastName, email,
       },
     });
   }
-  return res.render('pages/create-admin', {
+  return res.status(201).render(createAdminPage, {
     formMessage: { success: `New admin user ${email} created successfully.` },
     formAttributes: {},
   });

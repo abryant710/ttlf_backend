@@ -1,5 +1,5 @@
 module.exports.getLogin = (_req, res) => {
-  res.render('pages/login', {
+  res.status(200).render('pages/loggedOut/login', {
     formMessage: null,
     formAttributes: {},
   });
@@ -11,11 +11,11 @@ module.exports.postLogin = (req, res) => {
   req.session.isLoggedIn = true;
   // TODO: implement this
   // req.session.isSuperAdmin = true;
-  res.redirect('/config');
+  res.status(200).redirect('/config');
 };
 
 module.exports.getSendReset = (_req, res) => {
-  res.render('pages/send-reset', {
+  res.status(200).render('pages/loggedOut/send-reset', {
     formMessage: null,
     formAttributes: {},
   });
@@ -27,7 +27,7 @@ module.exports.postSendReset = (req) => {
 };
 
 module.exports.getResetPassword = (_req, res) => {
-  res.render('pages/reset-password', {
+  res.status(200).render('pages/loggedOut/reset-password', {
     formMessage: null,
     formAttributes: {},
   });

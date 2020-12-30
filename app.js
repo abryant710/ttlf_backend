@@ -54,7 +54,7 @@ app.use(adminRoutes);
 app.use('/api', apiRoutes);
 
 app.get(/^\/$/, (_req, res) => {
-  res.redirect(defaultRoute);
+  res.status(200).redirect(defaultRoute);
 });
 
 app.use(get404);

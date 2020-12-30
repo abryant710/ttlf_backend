@@ -1,16 +1,16 @@
 const isAuth = (req, res) => {
   if (!req.session.isLoggedIn) {
-    return () => res.redirect('/login');
+    return () => res.status(401).redirect('/login');
   }
   return false;
 };
 
 const isSuperAdmin = (req, res) => {
   if (!req.session.isLoggedIn) {
-    return () => res.redirect('/login');
+    return () => res.status(401).redirect('/login');
   }
   if (!req.session.isSuperAdmin) {
-    return () => res.redirect('/404');
+    return () => res.status(401).redirect('/404');
   }
   return false;
 };
