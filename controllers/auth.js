@@ -8,8 +8,9 @@ module.exports.getLogin = (_req, res) => {
 module.exports.postLogin = (req, res) => {
   const { email, password } = req.body;
   console.info(email, password, 'You are trying to login');
-  req.isAuthenticated = true;
-  // req.isSuperAdmin = true;
+  req.session.isLoggedIn = true;
+  // TODO: implement this
+  // req.session.isSuperAdmin = true;
   res.redirect('/config');
 };
 

@@ -1,6 +1,7 @@
 const { isAuth } = require('../utils/auth');
 
-module.exports.getConfig = (_req, res) => {
-  isAuth(res)();
+module.exports.getConfig = (req, res) => {
+  const checkAuth = isAuth(req, res);
+  if (checkAuth) return checkAuth();
   return res.render('pages/config');
 };

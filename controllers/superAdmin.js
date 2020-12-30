@@ -1,9 +1,10 @@
-const { isAuth } = require('../utils/auth');
+const { isSuperAdmin } = require('../utils/auth');
 
 // TODO: add super admin logic for these routes
 
-module.exports.getCreateAdmin = (_req, res) => {
-  isAuth(res)();
+module.exports.getCreateAdmin = (req, res) => {
+  const checkAuth = isSuperAdmin(req, res);
+  if (checkAuth) return checkAuth();
   return res.render('pages/create-admin', {
     formMessage: null,
     formAttributes: {},
@@ -11,7 +12,8 @@ module.exports.getCreateAdmin = (_req, res) => {
 };
 
 module.exports.postCreateAdmin = (req, res) => {
-  isAuth(res)();
+  const checkAuth = isSuperAdmin(req, res);
+  if (checkAuth) return checkAuth();
   const {
     firstName, lastName, email, password1, password2,
   } = req.body;

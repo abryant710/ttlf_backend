@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 // const rootDir = require('./utils/path');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 const {
   TTLF_MONGO_USER,
@@ -16,7 +17,13 @@ const {
   TTLF_SESSION_SECRET,
 } = process.env;
 
+const MONGO_DB_URI = `mongodb+srv://${TTLF_MONGO_USER}:${TTLF_MONGO_PW}@${TTLF_MONGO_URI}/${TTLF_MONGO_DB}`;
+
 const app = express();
+const store = new MongoDBStore({
+  uri: MONGO_DB_URI,
+  collection: 'sessions',
+});
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -36,17 +43,24 @@ app.use(session({
   cookie: {
     maxAge: 2 * 24 * 60 * 60 * 1000,
   },
+  store,
 }));
+
+const defaultRoute = '/config';
 
 app.use(authRoutes);
 app.use(superAdminRoutes);
 app.use(adminRoutes);
 app.use('/api', apiRoutes);
 
+app.get(/^\/$/, (_req, res) => {
+  res.redirect(defaultRoute);
+});
+
 app.use(get404);
 
 mongoose.connect(
-  `mongodb+srv://${TTLF_MONGO_USER}:${TTLF_MONGO_PW}@${TTLF_MONGO_URI}/${TTLF_MONGO_DB}?retryWrites=true&w=majority`,
+  `${MONGO_DB_URI}?retryWrites=true&w=majority`,
   { useNewUrlParser: true, useUnifiedTopology: true },
 )
   .then(() => {
