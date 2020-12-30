@@ -314,6 +314,15 @@ aproba@^1.0.3:
   resolved "https://registry.yarnpkg.com/aproba/-/aproba-1.2.0.tgz#6802e6264efd18c790a1b0d517f0f2627bf2c94a"
   integrity sha512-Y9J6ZjXtoYh8RnXVCMOU/ttDmk1aBjunq9vO0ta5x85WDQiQfUF9sIPBITdbiiIVcBo03Hi3jMxigBtsddlXRw==
 
+archetype@0.12.x:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/archetype/-/archetype-0.12.0.tgz#90f1090917b34cbb398ae6a2520e451219365581"
+  integrity sha512-kSuMmbcSC69EhmUtwM3pmE1dghtjqrsv9MhgTsShtHY5zOOzT5KVeLROwVYsBeq78ELPKstNw7LyTvcXgOC/cA==
+  dependencies:
+    lodash.clonedeep "4.x"
+    lodash.set "4.x"
+    mpath "0.5.1"
+
 are-we-there-yet@~1.1.2:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/are-we-there-yet/-/are-we-there-yet-1.1.5.tgz#4b35c2944f062a8bfcda66410760350fe9ddfc21"
@@ -792,6 +801,14 @@ confusing-browser-globals@^1.0.10:
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/confusing-browser-globals/-/confusing-browser-globals-1.0.10.tgz#30d1e7f3d1b882b25ec4933d1d1adac353d20a59"
   integrity sha512-gNld/3lySHwuhaVluJUKLePYirM3QNCKzVxqAdhJII9/WXKVX5PURzMVJspS1jTslSqjeuG4KMVTSouit5YPHA==
+
+connect-mongodb-session@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/connect-mongodb-session/-/connect-mongodb-session-2.4.1.tgz#58b9cf42da129339e3a78db749f4dcb7cbda4a75"
+  integrity sha512-pfTy1fAVYPhE7nFS4k/MoBm4C14PIQYz008TrZc/HIGeJhsZuxfYI5fsfC+neBZezFK28sBGHhao+9iFIjOggw==
+  dependencies:
+    archetype "0.12.x"
+    mongodb "3.6.x"
 
 console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   version "1.1.0"
@@ -2514,6 +2531,11 @@ lodash.capitalize@^4.1.0:
   resolved "https://registry.yarnpkg.com/lodash.capitalize/-/lodash.capitalize-4.2.1.tgz#f826c9b4e2a8511d84e3aca29db05e1a4f3b72a9"
   integrity sha1-+CbJtOKoUR2E46yinbBeGk87cqk=
 
+lodash.clonedeep@4.x:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+  integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
+
 lodash.difference@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.difference/-/lodash.difference-4.5.0.tgz#9ccb4e505d486b91651345772885a2df27fd017c"
@@ -2538,6 +2560,11 @@ lodash.kebabcase@^4.0.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.kebabcase/-/lodash.kebabcase-4.1.1.tgz#8489b1cb0d29ff88195cceca448ff6d6cc295c36"
   integrity sha1-hImxyw0p/4gZXM7KRI/21swpXDY=
+
+lodash.set@4.x:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/lodash.set/-/lodash.set-4.3.2.tgz#d8757b1da807dde24816b0d6a84bea1a76230b23"
+  integrity sha1-2HV7HagH3eJIFrDWqEvqGnYjCyM=
 
 lodash.sortby@^4.7.0:
   version "4.7.0"
@@ -2716,7 +2743,7 @@ mkdirp@^1.0.3:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
-mongodb@3.6.3, mongodb@^3.6.3:
+mongodb@3.6.3, mongodb@3.6.x, mongodb@^3.6.3:
   version "3.6.3"
   resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.6.3.tgz#eddaed0cc3598474d7a15f0f2a5b04848489fd05"
   integrity sha512-rOZuR0QkodZiM+UbQE5kDsJykBqWi0CL4Ec2i1nrGrUI3KO11r6Fbxskqmq3JK2NH7aW4dcccBuUujAP0ERl5w==
@@ -2751,6 +2778,11 @@ mongoose@^5.11.9:
     safe-buffer "5.2.1"
     sift "7.0.1"
     sliced "1.0.1"
+
+mpath@0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/mpath/-/mpath-0.5.1.tgz#17131501f1ff9e6e4fbc8ffa875aa7065b5775ab"
+  integrity sha512-H8OVQ+QEz82sch4wbODFOz+3YQ61FYz/z3eJ5pIdbMEaUzDqA268Wd+Vt4Paw9TJfvDgVKaayC0gBzMIw2jhsg==
 
 mpath@0.8.1:
   version "0.8.1"
