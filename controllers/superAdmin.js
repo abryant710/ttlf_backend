@@ -1,11 +1,17 @@
+const { isAuth } = require('../utils/auth');
+
+// TODO: add super admin logic for these routes
+
 module.exports.getCreateAdmin = (_req, res) => {
-  res.render('pages/create-admin', {
+  isAuth(res)();
+  return res.render('pages/create-admin', {
     formMessage: null,
     formAttributes: {},
   });
 };
 
 module.exports.postCreateAdmin = (req, res) => {
+  isAuth(res)();
   const {
     firstName, lastName, email, password1, password2,
   } = req.body;
