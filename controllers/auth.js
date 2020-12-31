@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const { pages: { LOGIN_PAGE } } = require('../utils/pages');
+const { sendMail } = require('../utils/mailer');
 
 module.exports.getLogin = (_req, res) => res
   .status(200)
@@ -57,7 +58,11 @@ module.exports.getSendReset = (_req, res) => res
 
 module.exports.postSendReset = (req) => {
   const { email } = req.body;
-  console.info(email, 'You are trying to send an email to reset password');
+  sendMail({
+    email,
+    subject: 'You have requested to reset your TTLF admin password',
+    template: 'passwordReset',
+  });
 };
 
 module.exports.getResetPassword = (_req, res) => res

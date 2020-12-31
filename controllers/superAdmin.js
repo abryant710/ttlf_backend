@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const { pages: { CREATE_ADMIN_PAGE } } = require('../utils/pages');
+const { sendMail } = require('../utils/mailer');
 
 module.exports.getCreateAdmin = (_req, res) => res
   .status(200)
@@ -50,6 +51,11 @@ module.exports.postCreateAdmin = async (req, res) => {
         isSuperAdmin: false,
       });
       await newUser.save();
+      sendMail({
+        email,
+        subject: 'You have been added as a TTLF admin',
+        template: 'newAdmin',
+      });
       return res
         .status(201)
         .render(CREATE_ADMIN_PAGE, {
