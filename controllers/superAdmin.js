@@ -1,16 +1,12 @@
 const bcrypt = require('bcryptjs');
-const { checkSuperAdmin } = require('../utils/auth');
 const User = require('../models/User');
-
-const createAdminPage = 'pages/loggedIn/create-admin';
+const { pages: { CREATE_ADMIN_PAGE } } = require('../utils/pages');
 
 module.exports.getCreateAdmin = (req, res) => {
-  const notAuthorised = checkSuperAdmin(req, res);
-  if (notAuthorised) return notAuthorised();
   const { isSuperAdmin, email: userEmail } = req.session.user;
   return res
     .status(200)
-    .render(createAdminPage, {
+    .render(CREATE_ADMIN_PAGE, {
       isSuperAdmin,
       userEmail,
       formMessage: null,
@@ -20,8 +16,6 @@ module.exports.getCreateAdmin = (req, res) => {
 };
 
 module.exports.postCreateAdmin = async (req, res) => {
-  const notAuthorised = checkSuperAdmin(req, res);
-  if (notAuthorised) return notAuthorised();
   const { isSuperAdmin, email: userEmail } = req.session.user;
   const {
     firstName, lastName, email, password1, password2,
@@ -29,7 +23,7 @@ module.exports.postCreateAdmin = async (req, res) => {
   if (!firstName || !lastName || !email || !password1 || !password2) {
     return res
       .status(400)
-      .render(createAdminPage, {
+      .render(CREATE_ADMIN_PAGE, {
         isSuperAdmin,
         userEmail,
         formMessage: { error: 'Please complete the form' },
@@ -42,7 +36,7 @@ module.exports.postCreateAdmin = async (req, res) => {
   if (password1 !== password2) {
     return res
       .status(400)
-      .render(createAdminPage, {
+      .render(CREATE_ADMIN_PAGE, {
         isSuperAdmin,
         userEmail,
         formMessage: { error: 'The passwords do not match' },
@@ -55,7 +49,7 @@ module.exports.postCreateAdmin = async (req, res) => {
   if (password1.length < 12) {
     return res
       .status(400)
-      .render(createAdminPage, {
+      .render(CREATE_ADMIN_PAGE, {
         isSuperAdmin,
         userEmail,
         formMessage: { error: 'The password must be at least 12 characters long' },
@@ -83,7 +77,7 @@ module.exports.postCreateAdmin = async (req, res) => {
       await newUser.save();
       return res
         .status(201)
-        .render(createAdminPage, {
+        .render(CREATE_ADMIN_PAGE, {
           isSuperAdmin,
           userEmail,
           formMessage: { success: `New admin user ${email} created successfully.` },
@@ -97,7 +91,7 @@ module.exports.postCreateAdmin = async (req, res) => {
   }
   return res
     .status(400)
-    .render(createAdminPage, {
+    .render(CREATE_ADMIN_PAGE, {
       isSuperAdmin,
       userEmail,
       formMessage: { error: existingUserError },

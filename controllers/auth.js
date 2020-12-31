@@ -1,11 +1,10 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
-
-const loginPage = 'pages/loggedOut/login';
+const { pages: { LOGIN_PAGE } } = require('../utils/pages');
 
 module.exports.getLogin = (_req, res) => res
   .status(200)
-  .render(loginPage, {
+  .render(LOGIN_PAGE, {
     formMessage: '',
     formAttributes: {},
   });
@@ -31,7 +30,7 @@ module.exports.postLogin = async (req, res) => {
   }
   return res
     .status(403)
-    .render(loginPage, {
+    .render(LOGIN_PAGE, {
       formMessage: {
         error: loginError,
       },
@@ -41,7 +40,9 @@ module.exports.postLogin = async (req, res) => {
 
 module.exports.postLogout = (req, res) => {
   req.session.destroy((err) => {
-    console.error(err);
+    if (err) {
+      console.error(err);
+    }
     return res
       .status(201)
       .redirect('/login');

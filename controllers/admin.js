@@ -1,14 +1,10 @@
-const { checkAuth } = require('../utils/auth');
-
-const configHomePage = 'pages/loggedIn/config';
+const { pages: { CONFIG_HOME_PAGE } } = require('../utils/pages');
 
 module.exports.getConfig = (req, res) => {
-  const notAuthorised = checkAuth(req, res);
-  if (notAuthorised) return notAuthorised();
   const { isSuperAdmin, email: userEmail } = req.session.user;
   return res
     .status(200)
-    .render(configHomePage, {
+    .render(CONFIG_HOME_PAGE, {
       configPage: 'live',
       isSuperAdmin,
       userEmail,
