@@ -2,21 +2,15 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const { pages: { CREATE_ADMIN_PAGE } } = require('../utils/pages');
 
-module.exports.getCreateAdmin = (req, res) => {
-  const { isSuperAdmin, email: userEmail } = req.session.user;
-  return res
-    .status(200)
-    .render(CREATE_ADMIN_PAGE, {
-      isSuperAdmin,
-      userEmail,
-      formMessage: null,
-      configPage: 'admin-users',
-      formAttributes: {},
-    });
-};
+module.exports.getCreateAdmin = (req, res) => res
+  .status(200)
+  .render(CREATE_ADMIN_PAGE, {
+    formMessage: null,
+    configPage: 'admin-users',
+    formAttributes: {},
+  });
 
 module.exports.postCreateAdmin = async (req, res) => {
-  const { isSuperAdmin, email: userEmail } = req.session.user;
   const {
     firstName, lastName, email, password1, password2,
   } = req.body;
@@ -24,8 +18,6 @@ module.exports.postCreateAdmin = async (req, res) => {
     return res
       .status(400)
       .render(CREATE_ADMIN_PAGE, {
-        isSuperAdmin,
-        userEmail,
         formMessage: { error: 'Please complete the form' },
         configPage: 'admin-users',
         formAttributes: {
@@ -37,8 +29,6 @@ module.exports.postCreateAdmin = async (req, res) => {
     return res
       .status(400)
       .render(CREATE_ADMIN_PAGE, {
-        isSuperAdmin,
-        userEmail,
         formMessage: { error: 'The passwords do not match' },
         configPage: 'admin-users',
         formAttributes: {
@@ -50,8 +40,6 @@ module.exports.postCreateAdmin = async (req, res) => {
     return res
       .status(400)
       .render(CREATE_ADMIN_PAGE, {
-        isSuperAdmin,
-        userEmail,
         formMessage: { error: 'The password must be at least 12 characters long' },
         configPage: 'admin-users',
         formAttributes: {
@@ -78,8 +66,6 @@ module.exports.postCreateAdmin = async (req, res) => {
       return res
         .status(201)
         .render(CREATE_ADMIN_PAGE, {
-          isSuperAdmin,
-          userEmail,
           formMessage: { success: `New admin user ${email} created successfully.` },
           configPage: 'admin-users',
           formAttributes: {},
@@ -92,8 +78,6 @@ module.exports.postCreateAdmin = async (req, res) => {
   return res
     .status(400)
     .render(CREATE_ADMIN_PAGE, {
-      isSuperAdmin,
-      userEmail,
       formMessage: { error: existingUserError },
       configPage: 'admin-users',
       formAttributes: {

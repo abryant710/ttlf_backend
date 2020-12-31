@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
+const csrf = require('csurf');
 
 const {
   TTLF_MONGO_USER,
@@ -24,6 +25,7 @@ const store = new MongoDBStore({
   uri: MONGO_DB_URI,
   collection: 'sessions',
 });
+const csrfProtection = csrf();
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -45,6 +47,15 @@ app.use(session({
   },
   store,
 }));
+app.use(csrfProtection);
+
+app.use((req, res, next) => {
+  const { isSuperAdmin, email: userEmail } = req.session.user || {};
+  res.locals.csrfToken = req.csrfToken();
+  res.locals.isSuperAdmin = isSuperAdmin;
+  res.locals.userEmail = userEmail;
+  next();
+});
 
 const DEFAULT_ROUTE = '/config';
 
