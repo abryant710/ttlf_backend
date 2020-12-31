@@ -7572,6 +7572,18 @@ a.text-dark:focus, a.text-dark:hover {
 .close:hover {
   color: #b9a78a; }
 
+.danger-background {
+  background-color: #f0d9d9;
+  border: 1px solid #d9534f;
+  border-radius: 3px;
+  padding: .5rem; }
+
+.success-background {
+  background-color: #f1f7e8;
+  border: 1px solid #93c54b;
+  border-radius: 3px;
+  padding: .5rem; }
+
 .nav-img {
   height: 2rem;
   width: auto; }

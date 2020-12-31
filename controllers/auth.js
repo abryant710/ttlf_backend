@@ -11,7 +11,12 @@ module.exports.getLogin = (_req, res) => res
 
 module.exports.postLogin = async (req, res) => {
   const { email, password1 } = req.body;
-  const loginError = 'Could not sign in successfully';
+  const errorResponse = () => res
+    .status(403)
+    .render(LOGIN_PAGE, {
+      formMessage: { error: req.flash('error') },
+      formAttributes: {},
+    });
   try {
     const user = await User.findOne({ email });
     if (user) {
@@ -28,14 +33,8 @@ module.exports.postLogin = async (req, res) => {
   } catch (err) {
     console.error(err);
   }
-  return res
-    .status(403)
-    .render(LOGIN_PAGE, {
-      formMessage: {
-        error: loginError,
-      },
-      formAttributes: {},
-    });
+  req.flash('error', 'Could not sign in successfully');
+  return errorResponse();
 };
 
 module.exports.postLogout = (req, res) => {

@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
+const flash = require('connect-flash');
 
 const {
   TTLF_MONGO_USER,
@@ -48,6 +49,7 @@ app.use(session({
   store,
 }));
 app.use(csrfProtection);
+app.use(flash());
 
 app.use((req, res, next) => {
   const { isSuperAdmin, email: userEmail } = req.session.user || {};

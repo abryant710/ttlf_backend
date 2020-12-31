@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const { pages: { CREATE_ADMIN_PAGE } } = require('../utils/pages');
 
-module.exports.getCreateAdmin = (req, res) => res
+module.exports.getCreateAdmin = (_req, res) => res
   .status(200)
   .render(CREATE_ADMIN_PAGE, {
     formMessage: null,
@@ -14,44 +14,31 @@ module.exports.postCreateAdmin = async (req, res) => {
   const {
     firstName, lastName, email, password1, password2,
   } = req.body;
+  const errorResponse = () => res
+    .status(400)
+    .render(CREATE_ADMIN_PAGE, {
+      formMessage: { error: req.flash('error') },
+      configPage: 'admin-users',
+      formAttributes: {
+        firstName, lastName, email,
+      },
+    });
   if (!firstName || !lastName || !email || !password1 || !password2) {
-    return res
-      .status(400)
-      .render(CREATE_ADMIN_PAGE, {
-        formMessage: { error: 'Please complete the form' },
-        configPage: 'admin-users',
-        formAttributes: {
-          firstName, lastName, email,
-        },
-      });
+    req.flash('error', 'Please complete the form');
+    return errorResponse();
   }
   if (password1 !== password2) {
-    return res
-      .status(400)
-      .render(CREATE_ADMIN_PAGE, {
-        formMessage: { error: 'The passwords do not match' },
-        configPage: 'admin-users',
-        formAttributes: {
-          firstName, lastName, email,
-        },
-      });
+    req.flash('error', 'The passwords do not match');
+    return errorResponse();
   }
   if (password1.length < 12) {
-    return res
-      .status(400)
-      .render(CREATE_ADMIN_PAGE, {
-        formMessage: { error: 'The password must be at least 12 characters long' },
-        configPage: 'admin-users',
-        formAttributes: {
-          firstName, lastName, email,
-        },
-      });
+    req.flash('error', 'The password must be at least 12 characters long');
+    return errorResponse();
   }
-  let existingUserError = '';
   try {
     const user = await User.findOne({ email });
     if (user) {
-      existingUserError = `${email} already exists in the database`;
+      req.flash('error', `${email} already exists in the database`);
     } else {
       const hashedPassword = await bcrypt.hash(password1, 12);
       const newUser = new User({
@@ -66,22 +53,14 @@ module.exports.postCreateAdmin = async (req, res) => {
       return res
         .status(201)
         .render(CREATE_ADMIN_PAGE, {
-          formMessage: { success: `New admin user ${email} created successfully.` },
+          formMessage: { success: `New admin user ${email} created.` },
           configPage: 'admin-users',
           formAttributes: {},
         });
     }
   } catch (err) {
     console.error(err);
-    existingUserError = `Could not create the user ${email}`;
+    req.flash('error', `Could not create the user ${email}`);
   }
-  return res
-    .status(400)
-    .render(CREATE_ADMIN_PAGE, {
-      formMessage: { error: existingUserError },
-      configPage: 'admin-users',
-      formAttributes: {
-        firstName, lastName, email,
-      },
-    });
+  return errorResponse();
 };

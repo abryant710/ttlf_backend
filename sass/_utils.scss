@@ -1,0 +1,7 @@
+.danger-background {
+  @include message-background(#d9534f, #f0d9d9);
+}
+
+.success-background {
+  @include message-background(#93c54b, #f1f7e8);
+}
