@@ -1,18 +1,26 @@
-const isAuth = (req, res) => {
-  if (!req.session.isLoggedIn) {
-    return () => res.status(401).redirect('/login');
+const checkAuth = (req, res) => {
+  const { isLoggedIn } = req.session;
+  if (!isLoggedIn) {
+    return () => res
+      .status(403)
+      .redirect('/login');
   }
   return false;
 };
 
-const isSuperAdmin = (req, res) => {
-  if (!req.session.isLoggedIn) {
-    return () => res.status(401).redirect('/login');
+const checkSuperAdmin = (req, res) => {
+  const { user: { isSuperAdmin }, isLoggedIn } = req.session;
+  if (!isLoggedIn) {
+    return () => res
+      .status(403)
+      .redirect('/login');
   }
-  if (!req.session.isSuperAdmin) {
-    return () => res.status(401).redirect('/404');
+  if (!isSuperAdmin) {
+    return () => res
+      .status(403)
+      .redirect('/404');
   }
   return false;
 };
 
-module.exports = { isAuth, isSuperAdmin };
+module.exports = { checkAuth, checkSuperAdmin };

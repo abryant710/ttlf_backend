@@ -1,24 +1,28 @@
-const { isAuth, isSuperAdmin } = require('../utils/auth');
+const bcrypt = require('bcryptjs');
+const { checkSuperAdmin } = require('../utils/auth');
+const User = require('../models/User');
 
 const createAdminPage = 'pages/loggedIn/create-admin';
 
-// TODO: add super admin logic for these routes
-
 module.exports.getCreateAdmin = (req, res) => {
-  // TODO: change this to isSuperAdmin
-  const checkAuth = isAuth(req, res);
-  if (checkAuth) return checkAuth();
+  const notAuthorised = checkSuperAdmin(req, res);
+  if (notAuthorised) return notAuthorised();
+  const { isSuperAdmin, email: userEmail } = req.session.user;
   return res
     .status(200)
     .render(createAdminPage, {
+      isSuperAdmin,
+      userEmail,
       formMessage: null,
+      configPage: 'admin-users',
       formAttributes: {},
     });
 };
 
-module.exports.postCreateAdmin = (req, res) => {
-  const checkAuth = isSuperAdmin(req, res);
-  if (checkAuth) return checkAuth();
+module.exports.postCreateAdmin = async (req, res) => {
+  const notAuthorised = checkSuperAdmin(req, res);
+  if (notAuthorised) return notAuthorised();
+  const { isSuperAdmin, email: userEmail } = req.session.user;
   const {
     firstName, lastName, email, password1, password2,
   } = req.body;
@@ -26,7 +30,10 @@ module.exports.postCreateAdmin = (req, res) => {
     return res
       .status(400)
       .render(createAdminPage, {
+        isSuperAdmin,
+        userEmail,
         formMessage: { error: 'Please complete the form' },
+        configPage: 'admin-users',
         formAttributes: {
           firstName, lastName, email,
         },
@@ -36,7 +43,10 @@ module.exports.postCreateAdmin = (req, res) => {
     return res
       .status(400)
       .render(createAdminPage, {
+        isSuperAdmin,
+        userEmail,
         formMessage: { error: 'The passwords do not match' },
+        configPage: 'admin-users',
         formAttributes: {
           firstName, lastName, email,
         },
@@ -46,16 +56,54 @@ module.exports.postCreateAdmin = (req, res) => {
     return res
       .status(400)
       .render(createAdminPage, {
+        isSuperAdmin,
+        userEmail,
         formMessage: { error: 'The password must be at least 12 characters long' },
+        configPage: 'admin-users',
         formAttributes: {
           firstName, lastName, email,
         },
       });
   }
+  let existingUserError = '';
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      existingUserError = `${email} already exists in the database`;
+    } else {
+      const hashedPassword = await bcrypt.hash(password1, 12);
+      const newUser = new User({
+        firstName,
+        lastName,
+        email,
+        password: hashedPassword,
+        isAdmin: true,
+        isSuperAdmin: false,
+      });
+      await newUser.save();
+      return res
+        .status(201)
+        .render(createAdminPage, {
+          isSuperAdmin,
+          userEmail,
+          formMessage: { success: `New admin user ${email} created successfully.` },
+          configPage: 'admin-users',
+          formAttributes: {},
+        });
+    }
+  } catch (err) {
+    console.error(err);
+    existingUserError = `Could not create the user ${email}`;
+  }
   return res
-    .status(201)
+    .status(400)
     .render(createAdminPage, {
-      formMessage: { success: `New admin user ${email} created successfully.` },
-      formAttributes: {},
+      isSuperAdmin,
+      userEmail,
+      formMessage: { error: existingUserError },
+      configPage: 'admin-users',
+      formAttributes: {
+        firstName, lastName, email,
+      },
     });
 };

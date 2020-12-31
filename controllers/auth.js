@@ -1,19 +1,42 @@
+const bcrypt = require('bcryptjs');
+const User = require('../models/User');
+
+const loginPage = 'pages/loggedOut/login';
+
 module.exports.getLogin = (_req, res) => res
   .status(200)
-  .render('pages/loggedOut/login', {
-    formMessage: null,
+  .render(loginPage, {
+    formMessage: '',
     formAttributes: {},
   });
 
-module.exports.postLogin = (req, res) => {
-  const { email, password } = req.body;
-  console.info(email, password, 'You are trying to login');
-  req.session.isLoggedIn = true;
-  // TODO: implement this
-  // req.session.isSuperAdmin = true;
+module.exports.postLogin = async (req, res) => {
+  const { email, password1 } = req.body;
+  const loginError = 'Could not sign in successfully';
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      const { isAdmin, password } = user;
+      const passwordsMatch = await bcrypt.compare(password1, password);
+      if (passwordsMatch) {
+        req.session.user = user;
+        req.session.isLoggedIn = isAdmin;
+        return res
+          .status(200)
+          .redirect('/config');
+      }
+    }
+  } catch (err) {
+    console.error(err);
+  }
   return res
-    .status(200)
-    .redirect('/config');
+    .status(403)
+    .render(loginPage, {
+      formMessage: {
+        error: loginError,
+      },
+      formAttributes: {},
+    });
 };
 
 module.exports.postLogout = (req, res) => {
