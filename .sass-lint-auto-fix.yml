@@ -2,5 +2,6 @@ files:
   include:
     - 'sass/**/*.scss'
   ignore:
+    - 'sass/**/*bootstrap.scss'
     - 'node_modules/**'
     - 'public/*'
