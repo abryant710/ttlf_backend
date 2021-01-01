@@ -7580,8 +7580,8 @@ a.text-dark:focus, a.text-dark:hover {
 
 .toast-position {
   position: fixed !important;
-  top: .5rem;
-  right: .5rem; }
+  right: .5rem;
+  top: .5rem; }
 
 .nav-img {
   height: 2rem;
