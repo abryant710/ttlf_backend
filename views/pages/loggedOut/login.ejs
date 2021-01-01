@@ -6,7 +6,7 @@
     <form action="/login" method="POST">
       <fieldset>
         <%- include('../../components/forms/email-input.ejs', { email, readOnly: false }) %>
-        <%- include('../../components/forms/password.ejs') %>
+        <%- include('../../components/forms/password-input.ejs') %>
         <%- include('../../components/forms/form-submit.ejs', {
           sendMessage,
           submitButtonText: 'Login',
