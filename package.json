@@ -22,7 +22,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "build:app": "npm run clean:build && git archive -v -o www/ttlf-backend.zip --format=zip HEAD",
+    "build:app": "npm run build:css && npm run clean:build && git archive -v -o www/ttlf-backend.zip --format=zip HEAD",
     "deploy": "npm run build:app && eb deploy $(echo $TTLF_EB_ENV) --profile $(echo $TTLF_EB_PROFILE)",
     "clean:build": "rm -rf www/* || true",
     "clean:yarn": "rm -rf node_modules || true && rm yarn.lock  || true && yarn cache clean && yarn install",
@@ -31,7 +31,6 @@
     "lint:css": "sass-lint-auto-fix --config-sass-lint .sass-lint.yml -c .sass-lint-auto-fix.yml",
     "watch:sass": "node-sass sass/main.scss public/css/style.css -w",
     "compile:sass": "node-sass sass/main.scss public/css/style.comp.css",
-    "concat:css": "concat -o public/css/style.concat.css public/css/icon-font.css public/css/style.comp.css",
     "prefix:css": "postcss --use autoprefixer -b 'last 10 versions' public/css/style.comp.css -o public/css/style.prefix.css",
     "compress:css": "node-sass public/css/style.prefix.css public/css/style.min.css --output-style compressed",
     "remove_unused:css": "rm public/css/style.comp.css && rm public/css/style.prefix.css",
@@ -39,7 +38,6 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.1.0",
-    "concat": "^1.0.3",
     "eslint": "^7.16.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",

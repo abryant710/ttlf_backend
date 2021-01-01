@@ -16,6 +16,7 @@ const {
   TTLF_MONGO_URI,
   TTLF_MONGO_DB,
   TTLF_SESSION_SECRET,
+  TTLF_ENV,
 } = process.env;
 
 const MONGO_DB_URI = `mongodb+srv://${TTLF_MONGO_USER}:${TTLF_MONGO_PW}@${TTLF_MONGO_URI}/${TTLF_MONGO_DB}`;
@@ -86,3 +87,5 @@ mongoose.connect(
   .catch((err) => {
     console.error(err);
   });
+
+console.info(`Running the ${TTLF_ENV} environment`);
