@@ -1,13 +1,48 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
-const { pages: { CREATE_ADMIN_PAGE } } = require('../utils/pages');
+const {
+  pages: {
+    CREATE_ADMIN_PAGE,
+    MANAGE_ADMINS_PAGE,
+  },
+} = require('../utils/pages');
 const { sendMail } = require('../utils/mailer');
 const { getOrigin } = require('../utils/general');
+
+const PROTECTED_ADMINS = ['alexbryant710@gmail.com'];
+
+module.exports.getManageAdmins = async (req, res) => {
+  try {
+    let adminUsers = await User.find({});
+    adminUsers = adminUsers.map(({ email, firstName, lastName }) => ({
+      email, firstName, lastName,
+    })).filter(({ email }) => !PROTECTED_ADMINS.includes(email));
+    return res
+      .status(200)
+      .render(MANAGE_ADMINS_PAGE, {
+        sendMessage: null,
+        adminUsers,
+        configPage: 'admin-users',
+      });
+  } catch (err) {
+    console.error(err);
+  }
+  req.flash('error', 'Could not fetch the admin users');
+  return res
+    .status(400)
+    .render(MANAGE_ADMINS_PAGE, {
+      sendMessage: {
+        error: req.flash('error'),
+      },
+      adminUsers: [],
+      configPage: 'admin-users',
+    });
+};
 
 module.exports.getCreateAdmin = (_req, res) => res
   .status(200)
   .render(CREATE_ADMIN_PAGE, {
-    formMessage: null,
+    sendMessage: null,
     configPage: 'admin-users',
     formAttributes: {},
   });
@@ -19,7 +54,7 @@ module.exports.postCreateAdmin = async (req, res) => {
   const errorResponse = () => res
     .status(400)
     .render(CREATE_ADMIN_PAGE, {
-      formMessage: { error: req.flash('error') },
+      sendMessage: { error: req.flash('error') },
       configPage: 'admin-users',
       formAttributes: {
         firstName, lastName, email,
@@ -63,7 +98,7 @@ module.exports.postCreateAdmin = async (req, res) => {
       return res
         .status(201)
         .render(CREATE_ADMIN_PAGE, {
-          formMessage: { success: `New admin user ${email} created.` },
+          sendMessage: { success: `New admin user ${email} created.` },
           configPage: 'admin-users',
           formAttributes: {},
         });

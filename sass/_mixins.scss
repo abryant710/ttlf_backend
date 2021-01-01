@@ -5,6 +5,20 @@
   justify-content: $justify;
 }
 
+@mixin table-content($font-weight) {
+  @include flex-items(row, center, center);
+  text-align: center;
+  border-bottom: 2px solid black;
+  & p {
+    width: 15rem;
+    margin: 1rem 0;
+    font-weight: $font-weight;
+  }
+  & form {
+    width: 15rem;
+  }
+}
+
 @mixin full-page-container {
   @include flex-items(column, center, flex-start);
   height: 100vh;

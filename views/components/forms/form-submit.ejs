@@ -1,17 +1,17 @@
 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 <button type="submit" class="btn btn-primary mb-2"><%= submitButtonText %></button>
-<% if (formMessage) { %> 
-  <% if (formMessage.error) { %>
+<% if (sendMessage) { %> 
+  <% if (sendMessage.error) { %>
     <%- include('../toast.ejs', {
       toastCss: 'danger',
       toastType: 'Error',
-      toastMsg: formMessage.error ,
+      toastMsg: sendMessage.error ,
     }) %>
-  <% } else if (formMessage.success) { %> 
+  <% } else if (sendMessage.success) { %> 
     <%- include('../toast.ejs', {
       toastCss: 'success',
       toastType: 'Success',
-      toastMsg: formMessage.success ,
+      toastMsg: sendMessage.success ,
     }) %>
   <% } %>
 <% } %>

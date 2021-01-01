@@ -1,0 +1,30 @@
+<%- include('../../partials/head.ejs') %>
+<%- include('../../partials/nav.ejs') %>
+<div class="manage-admins">
+  <h2 class="manage-admins-title">Manage admin users</h2>
+  <div class="manage-admins-panel">
+    <div class="manage-admins-panel__header">
+      <p class="text-primary">First name</p>
+      <p class="text-primary">Last name</p>
+      <p class="text-primary">Email</p>
+      <p class="text-danger">Delete?</p>
+    </div>
+    <% adminUsers.forEach(({ firstName, lastName, email }) => { %>
+      <div class="manage-admins-panel__admin">
+        <p><%= firstName %></p>
+        <p><%= lastName %></p>
+        <p><%= email %></p>
+        <form class="mt-2" action="/config/delete-admin" method="POST">
+          <fieldset>
+            <input type="hidden" id="email" name="email" value="<%= email %>">
+            <%- include('../../components/forms/form-submit.ejs', {
+              sendMessage,
+              submitButtonText: 'Delete',
+            }) %>
+          </fieldset>
+        </form>
+      </div>
+    <% }); %> 
+  </div>
+</div>
+<%- include('../../partials/foot.ejs') %> 

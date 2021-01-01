@@ -7,7 +7,7 @@
       <fieldset>
         <%- include('../../components/forms/email-input.ejs', { email, readOnly: false }) %>
         <%- include('../../components/forms/form-submit.ejs', {
-          formMessage,
+          sendMessage,
           submitButtonText: 'Send reset email',
         }) %>
         <a class="text-center m-2" href="/login">Login?</a>

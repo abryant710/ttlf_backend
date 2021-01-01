@@ -6,40 +6,19 @@ const {
     LOGIN_PAGE, SEND_RESET_PAGE, RESET_PW_PAGE,
   },
 } = require('../utils/pages');
-const { getOrigin } = require('../utils/general');
+const { getOrigin, sendResponse } = require('../utils/general');
 const { sendMail } = require('../utils/mailer');
 
-const sendResponse = (
-  req,
-  res,
-  status,
-  page,
-  successOrError = 'error',
-  formAttributes = {},
-) => res
-  .status(status)
-  .render(page, {
-    formMessage: {
-      [successOrError]: req.flash(successOrError),
-    },
-    formAttributes,
-  });
-
 module.exports.getLogin = (req, res) => {
-  let formMessage = '';
+  let messageType = null;
   const flashError = req.flash('error');
   const flashSuccess = req.flash('success');
   if (flashError.length) {
-    formMessage = { error: formMessage };
+    messageType = 'error';
   } else if (flashSuccess.length) {
-    formMessage = { success: flashSuccess };
+    messageType = 'success';
   }
-  return res
-    .status(200)
-    .render(LOGIN_PAGE, {
-      formMessage,
-      formAttributes: {},
-    });
+  return sendResponse(req, res, 200, LOGIN_PAGE, messageType);
 };
 
 module.exports.postLogin = async (req, res) => {
@@ -61,7 +40,7 @@ module.exports.postLogin = async (req, res) => {
     console.error(err);
   }
   req.flash('error', 'Could not sign in successfully');
-  return sendResponse(req, res, 403, LOGIN_PAGE);
+  return sendResponse(req, res, 403, LOGIN_PAGE, 'error');
 };
 
 module.exports.postLogout = (req, res) => {
@@ -75,12 +54,7 @@ module.exports.postLogout = (req, res) => {
   });
 };
 
-module.exports.getSendReset = (_req, res) => res
-  .status(200)
-  .render(SEND_RESET_PAGE, {
-    formMessage: null,
-    formAttributes: {},
-  });
+module.exports.getSendReset = (req, res) => sendResponse(req, res, 200, SEND_RESET_PAGE);
 
 module.exports.postSendReset = async (req, res) => {
   const { email } = req.body;
@@ -111,7 +85,7 @@ module.exports.postSendReset = async (req, res) => {
     console.error(err);
   }
   req.flash('error', 'Unable to send a reset email for this user');
-  return sendResponse(req, res, 403, SEND_RESET_PAGE);
+  return sendResponse(req, res, 403, SEND_RESET_PAGE, 'error');
 };
 
 module.exports.getResetPassword = async (req, res) => {
@@ -122,12 +96,7 @@ module.exports.getResetPassword = async (req, res) => {
       if (user) {
         const { resetPasswordToken, resetPasswordExpires } = user;
         if (token === resetPasswordToken && new Date() < resetPasswordExpires) {
-          return res
-            .status(200)
-            .render(RESET_PW_PAGE, {
-              formMessage: null,
-              formAttributes: { email, token },
-            });
+          return sendResponse(req, res, 200, RESET_PW_PAGE, null, { email, token });
         }
       }
     }
