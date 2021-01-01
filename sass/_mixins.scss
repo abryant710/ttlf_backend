@@ -1,24 +1,32 @@
 @mixin flex-items($type, $align, $justify) {
+  align-items: $align;
   display: flex;
   flex-direction: $type;
-  align-items: $align;
   justify-content: $justify;
+}
+
+@mixin message-background($color, $fill-color) {
+  background-color: $fill-color;
+  border: 1px solid $color;
+  border-radius: 3px;
+  padding: .5rem;
 }
 
 @mixin full-page-container {
   @include flex-items(column, center, flex-start);
-  width: 100vw;
   height: 100vh;
+  width: 100vw;
 }
 
-@mixin login-form {
+@mixin standard-form {
   @include full-page-container;
-  padding-top: 4rem;
+  padding-top: 2rem;
 
   &-panel {
     @include flex-items(column, center, center);
+    height: auto;
+    padding-bottom: 5rem;
     width: 20rem;
-    height: 30rem;
   }
 
   & form {
@@ -30,7 +38,7 @@
   }
 
   &-img {
-    width: 15rem;
     margin: 1rem;
+    width: 15rem;
   }
 }

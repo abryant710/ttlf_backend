@@ -1,0 +1,18 @@
+<%- include('../../partials/head.ejs') %>
+<% const { email } = formAttributes; %> 
+<div class="send-reset">
+  <div class="send-reset-panel">
+    <img src="images/ttlf_0001.png" class="send-reset-img" />
+    <form action="/send-reset" method="POST">
+      <fieldset>
+        <%- include('../../components/forms/email-input.ejs', { email, readOnly: false }) %>
+        <%- include('../../components/forms/form-submit.ejs', {
+          formMessage,
+          submitButtonText: 'Send reset email',
+        }) %>
+        <a class="text-center m-2" href="/login">Login?</a>
+      </fieldset>
+    </form>
+  </div>
+</div>
+<%- include('../../partials/foot.ejs') %> 

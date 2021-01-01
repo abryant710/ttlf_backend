@@ -1,7 +1,12 @@
-@import 'bootstrap';
+@import 'external/bootstrap';
+
 @import 'mixins';
+@import 'utils';
+
+@import 'components/nav';
 
 @import 'pages/404';
 @import 'pages/login';
+@import 'pages/create_admin';
 @import 'pages/reset_password';
 @import 'pages/send_reset';

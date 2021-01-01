@@ -7572,83 +7572,130 @@ a.text-dark:focus, a.text-dark:hover {
 .close:hover {
   color: #b9a78a; }
 
+.danger-background {
+  background-color: #f0d9d9;
+  border: 1px solid #d9534f;
+  border-radius: 3px;
+  padding: .5rem; }
+
+.success-background {
+  background-color: #f1f7e8;
+  border: 1px solid #93c54b;
+  border-radius: 3px;
+  padding: .5rem; }
+
+.nav-img {
+  height: 2rem;
+  width: auto; }
+
 .no-page {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: flex-start;
-  width: 100vw;
   height: 100vh;
+  width: 100vw;
   padding: 3rem; }
 
 .login {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: flex-start;
-  width: 100vw;
   height: 100vh;
-  padding-top: 4rem; }
+  width: 100vw;
+  padding-top: 2rem; }
   .login-panel {
+    align-items: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    width: 20rem;
-    height: 30rem; }
+    height: auto;
+    padding-bottom: 5rem;
+    width: 20rem; }
   .login form {
     width: 100%; }
     .login form fieldset {
       display: flex;
       flex-direction: column; }
   .login-img {
-    width: 15rem;
-    margin: 1rem; }
+    margin: 1rem;
+    width: 15rem; }
 
-.reset-password {
+.create-admin {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: flex-start;
-  width: 100vw;
   height: 100vh;
-  padding-top: 4rem; }
-  .reset-password-panel {
+  width: 100vw;
+  padding-top: 2rem; }
+  .create-admin-panel {
+    align-items: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    width: 20rem;
-    height: 30rem; }
+    height: auto;
+    padding-bottom: 5rem;
+    width: 20rem; }
+  .create-admin form {
+    width: 100%; }
+    .create-admin form fieldset {
+      display: flex;
+      flex-direction: column; }
+  .create-admin-img {
+    margin: 1rem;
+    width: 15rem; }
+  .create-admin-title {
+    margin: 0 0 2rem;
+    text-align: center; }
+
+.reset-password {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100vh;
+  width: 100vw;
+  padding-top: 2rem; }
+  .reset-password-panel {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: auto;
+    padding-bottom: 5rem;
+    width: 20rem; }
   .reset-password form {
     width: 100%; }
     .reset-password form fieldset {
       display: flex;
       flex-direction: column; }
   .reset-password-img {
-    width: 15rem;
-    margin: 1rem; }
+    margin: 1rem;
+    width: 15rem; }
 
 .send-reset {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: flex-start;
-  width: 100vw;
   height: 100vh;
-  padding-top: 4rem; }
+  width: 100vw;
+  padding-top: 2rem; }
   .send-reset-panel {
+    align-items: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    width: 20rem;
-    height: 30rem; }
+    height: auto;
+    padding-bottom: 5rem;
+    width: 20rem; }
   .send-reset form {
     width: 100%; }
     .send-reset form fieldset {
       display: flex;
       flex-direction: column; }
   .send-reset-img {
-    width: 15rem;
-    margin: 1rem; }
+    margin: 1rem;
+    width: 15rem; }

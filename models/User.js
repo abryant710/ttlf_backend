@@ -1,21 +1,36 @@
-const { getDb } = require('../utils/database');
+const mongoose = require('mongoose');
 
-module.exports = class User {
-  constructor(firstName, lastName, email, password, isAdmin) {
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
-    this.password = password;
-    this.isAdmin = isAdmin;
-  }
+const { Schema } = mongoose;
 
-  async save() {
-    const db = getDb();
-    try {
-      const user = await db.collection('users').insertOne(this);
-      console.info('New user', user);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-};
+const userSchema = new Schema({
+  firstName: {
+    type: String,
+    required: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    index: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  isAdmin: {
+    type: Boolean,
+    required: true,
+  },
+  isSuperAdmin: {
+    type: Boolean,
+    required: true,
+  },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
+});
+
+module.exports = mongoose.model('User', userSchema);
