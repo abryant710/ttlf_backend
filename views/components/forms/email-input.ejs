@@ -1,4 +1,12 @@
 <div class="form-group">
   <label for="ttlfInputEmail">Email address</label>
-  <input name="email" type="text" class="form-control" id="ttlfInputEmail" placeholder="Email address" value="<%= email %>">
+  <input
+    name="email"
+    type="text"
+    class="form-control"
+    id="ttlfInputEmail"
+    placeholder="Email address"
+    value="<%= email %>"
+    <%= readOnly ? 'readOnly' : '' %>
+  >
 </div>

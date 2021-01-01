@@ -8,7 +8,7 @@
       <fieldset>
         <%- include('../../components/forms/first-name-input.ejs', { firstName }) %>
         <%- include('../../components/forms/last-name-input.ejs', { lastName }) %>
-        <%- include('../../components/forms/email-input.ejs', { email }) %>
+        <%- include('../../components/forms/email-input.ejs', { email, readOnly: false }) %>
         <%- include('../../components/forms/password.ejs') %>
         <%- include('../../components/forms/repeat-password.ejs') %>
         <%- include('../../components/forms/form-submit.ejs', {

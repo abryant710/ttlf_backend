@@ -14,6 +14,8 @@ const userSchema = new Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
+    index: true,
   },
   password: {
     type: String,
@@ -27,6 +29,8 @@ const userSchema = new Schema({
     type: Boolean,
     required: true,
   },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
 });
 
 module.exports = mongoose.model('User', userSchema);

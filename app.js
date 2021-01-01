@@ -73,7 +73,11 @@ app.use(get404);
 
 mongoose.connect(
   `${MONGO_DB_URI}?retryWrites=true&w=majority`,
-  { useNewUrlParser: true, useUnifiedTopology: true },
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  },
 )
   .then(() => {
     console.info(`Successfully connected to the ${TTLF_MONGO_DB} database`);

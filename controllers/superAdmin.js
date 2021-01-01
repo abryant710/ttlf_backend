@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const { pages: { CREATE_ADMIN_PAGE } } = require('../utils/pages');
 const { sendMail } = require('../utils/mailer');
+const { getOrigin } = require('../utils/general');
 
 module.exports.getCreateAdmin = (_req, res) => res
   .status(200)
@@ -55,6 +56,9 @@ module.exports.postCreateAdmin = async (req, res) => {
         email,
         subject: 'You have been added as a TTLF admin',
         template: 'newAdmin',
+        attrs: {
+          origin: getOrigin(req),
+        },
       });
       return res
         .status(201)

@@ -5,7 +5,7 @@
     <img src="images/ttlf_0001.png" class="send-reset-img" />
     <form action="/send-reset" method="POST">
       <fieldset>
-        <%- include('../../components/forms/email-input.ejs', { email }) %>
+        <%- include('../../components/forms/email-input.ejs', { email, readOnly: false }) %>
         <%- include('../../components/forms/form-submit.ejs', {
           formMessage,
           submitButtonText: 'Send reset email',

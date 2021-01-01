@@ -9,19 +9,24 @@ const transporter = nodemailer.createTransport(sendgridTransport({
   },
 }));
 
-const emailTemplates = {
-  newAdmin: '<h1>You have been added as a TTLF administrator</h1>',
-  passwordReset: `
-    <h1>You have request to reset your password</h1>
-    <a href="${''}/reset-password?id=${''}">Click here to reset it</a>
+const emailTemplates = (attrs) => ({
+  newAdmin: `
+    <h3>You have been added as a TTLF administrator</h3>
+    <a href="${attrs.origin}/login">Click here to login</a>
   `,
-};
+  passwordReset: `
+    <h3>You have requested to reset your password</h3>
+    <a href="${attrs.origin}/reset-password?token=${attrs.token}&email=${attrs.email}">Click here to reset it</a>
+  `,
+});
 
-module.exports.sendMail = ({ email, subject, template }) => {
+module.exports.sendMail = ({
+  email, subject, template, attrs,
+}) => {
   transporter.sendMail({
     to: email,
     from: 'admin@ttlf.net',
     subject,
-    html: emailTemplates[template],
+    html: emailTemplates(attrs)[template],
   });
 };
