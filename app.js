@@ -4,7 +4,6 @@ const path = require('path');
 // 3rd party packages
 const express = require('express');
 const bodyParser = require('body-parser');
-// const rootDir = require('./utils/path');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
