@@ -3,11 +3,15 @@ const { v4: uuidv4 } = require('uuid');
 const User = require('../models/User');
 const {
   pages: {
-    LOGIN_PAGE, SEND_RESET_PAGE, RESET_PW_PAGE,
+    LOGIN_PAGE,
+    SEND_RESET_PAGE,
+    RESET_PW_PAGE,
   },
 } = require('../utils/pages');
 const { getOrigin, sendResponse } = require('../utils/general');
 const { sendMail } = require('../utils/mailer');
+
+const defaultFormAttrs = [['formAttributes', {}]];
 
 module.exports.getLogin = (req, res) => {
   let messageType = null;
@@ -18,7 +22,7 @@ module.exports.getLogin = (req, res) => {
   } else if (flashSuccess.length) {
     messageType = 'success';
   }
-  return sendResponse(req, res, 200, LOGIN_PAGE, messageType);
+  return sendResponse(req, res, 200, LOGIN_PAGE, messageType, defaultFormAttrs);
 };
 
 module.exports.postLogin = async (req, res) => {
@@ -40,7 +44,7 @@ module.exports.postLogin = async (req, res) => {
     console.error(err);
   }
   req.flash('error', 'Could not sign in successfully');
-  return sendResponse(req, res, 403, LOGIN_PAGE, 'error');
+  return sendResponse(req, res, 403, LOGIN_PAGE, 'error', defaultFormAttrs);
 };
 
 module.exports.postLogout = (req, res) => {
@@ -54,7 +58,9 @@ module.exports.postLogout = (req, res) => {
   });
 };
 
-module.exports.getSendReset = (req, res) => sendResponse(req, res, 200, SEND_RESET_PAGE);
+module.exports.getSendReset = (req, res) => sendResponse(
+  req, res, 200, SEND_RESET_PAGE, null, defaultFormAttrs,
+);
 
 module.exports.postSendReset = async (req, res) => {
   const { email } = req.body;
@@ -79,13 +85,13 @@ module.exports.postSendReset = async (req, res) => {
         },
       });
       req.flash('success', 'A password reset email has been sent. Please check your email.');
-      return sendResponse(req, res, 200, SEND_RESET_PAGE, 'success');
+      return sendResponse(req, res, 200, SEND_RESET_PAGE, 'success', defaultFormAttrs);
     }
   } catch (err) {
     console.error(err);
   }
   req.flash('error', 'Unable to send a reset email for this user');
-  return sendResponse(req, res, 403, SEND_RESET_PAGE, 'error');
+  return sendResponse(req, res, 403, SEND_RESET_PAGE, 'error', defaultFormAttrs);
 };
 
 module.exports.getResetPassword = async (req, res) => {
@@ -96,7 +102,7 @@ module.exports.getResetPassword = async (req, res) => {
       if (user) {
         const { resetPasswordToken, resetPasswordExpires } = user;
         if (token === resetPasswordToken && new Date() < resetPasswordExpires) {
-          return sendResponse(req, res, 200, RESET_PW_PAGE, null, { email, token });
+          return sendResponse(req, res, 200, RESET_PW_PAGE, null, [['formAttributes', { email, token }]]);
         }
       }
     }
@@ -113,15 +119,15 @@ module.exports.postResetPassword = async (req, res) => {
   } = req.body;
   if (password1 !== password2) {
     req.flash('error', 'The passwords do not match');
-    return sendResponse(req, res, 403, RESET_PW_PAGE, 'error', {
-      email, token,
-    });
+    return sendResponse(req, res, 403, RESET_PW_PAGE, 'error', [
+      ['formAttributes', { email, token }],
+    ]);
   }
   if (password1.length < 12) {
     req.flash('error', 'The password must be at least 12 characters long');
-    return sendResponse(req, res, 403, RESET_PW_PAGE, 'error', {
-      email, token,
-    });
+    return sendResponse(req, res, 403, RESET_PW_PAGE, 'error', [
+      ['formAttributes', { email, token }],
+    ]);
   }
   try {
     const user = await User.findOne({ email });
@@ -139,7 +145,7 @@ module.exports.postResetPassword = async (req, res) => {
     console.error(err);
   }
   req.flash('error', 'Failed to reset the password for this user');
-  return sendResponse(req, res, 403, RESET_PW_PAGE, 'error', {
-    email, token,
-  });
+  return sendResponse(req, res, 403, RESET_PW_PAGE, 'error', [
+    ['formAttributes', { email, token }],
+  ]);
 };

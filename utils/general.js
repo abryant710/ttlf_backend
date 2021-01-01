@@ -12,16 +12,20 @@ module.exports.sendResponse = (
   status,
   page,
   successOrError = null,
-  formAttributes = {},
+  additionalAttrs = [],
 ) => {
   const sendMessage = successOrError ? {
     [successOrError]: req.flash(successOrError),
   } : {};
+  const extraAttrs = {};
+  additionalAttrs.forEach(([key, val]) => {
+    extraAttrs[key] = val;
+  });
   return res
     .status(status)
     .render(page, {
       sendMessage,
-      formAttributes,
+      ...extraAttrs,
     });
 };
 
