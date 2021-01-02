@@ -24,7 +24,7 @@ module.exports.getConfig = async (req, res) => {
   const siteConfig = await SiteConfig.find({});
   console.log(siteConfig);
   return sendResponse(
-    req, res, 200, CONFIG_LIVE_PAGE, null, [['configPage', 'live']],
+    req, res, 200, CONFIG_LIVE_PAGE, [['configPage', 'live']],
   );
 };
 
@@ -36,7 +36,7 @@ module.exports.getYouTubeVideos = async (req, res) => {
     const videos = youTubeVideos.map(({ title, url }) => ({
       title, url: `${youTubeVideoPrefix}${url}`,
     }));
-    return sendResponse(req, res, 200, CONFIG_VIDEOS_PAGE, null, [
+    return sendResponse(req, res, 200, CONFIG_VIDEOS_PAGE, [
       ['configPage', 'videos'],
       ['videos', videos],
     ]);
@@ -44,5 +44,24 @@ module.exports.getYouTubeVideos = async (req, res) => {
     console.error(err);
   }
   req.flash('error', 'Could not fetch the videos from the database');
-  return sendResponse(req, res, 400, CONFIG_VIDEOS_PAGE, 'error');
+  return sendResponse(req, res, 400, CONFIG_VIDEOS_PAGE);
+};
+
+module.exports.deleteVideo = async (req, res) => {
+  const { url } = req.body;
+  try {
+    const siteConfig = await SiteConfig.findOne({});
+    const { youTubeVideoPrefix } = siteConfig;
+    const truncatedUrl = url.replace(youTubeVideoPrefix, '');
+    const video = await YouTubeVideo.findOne({ url: truncatedUrl });
+    if (video) {
+      await video.deleteOne({ url: truncatedUrl });
+      req.flash('success', `Deleted YouTube video ${url}`);
+      return res.redirect('/config/videos');
+    }
+  } catch (err) {
+    console.error(err);
+  }
+  req.flash('error', `Could not delete the video ${url}`);
+  return res.redirect('/config/videos');
 };

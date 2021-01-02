@@ -7,6 +7,7 @@
   }
 
   &-panel {
+    padding-bottom: 2rem;
     &__header {
       @include table-content(600);
     }

@@ -7,72 +7,60 @@ const {
   },
 } = require('../utils/pages');
 const { sendMail } = require('../utils/mailer');
-const { getOrigin, sendResponse, getFlashMessage } = require('../utils/general');
+const { getOrigin, sendResponse } = require('../utils/general');
 
 const PROTECTED_ADMINS = ['alexbryant710@gmail.com'];
+const CONFIG_PAGE_ATTR = ['configPage', 'admin-users'];
 
 module.exports.getManageAdmins = async (req, res) => {
-  const [messageType, messageText] = getFlashMessage(req);
-  if (messageText) {
-    // Handles flash since the error will redirect here
-    req.flash(messageType, messageText);
-  }
   try {
     let adminUsers = await User.find({});
     adminUsers = adminUsers.map(({ email, firstName, lastName }) => ({
       email, firstName, lastName,
     })).filter(({ email }) => !PROTECTED_ADMINS.includes(email));
-    return sendResponse(req, res, 200, MANAGE_ADMINS_PAGE, messageType, [
+    return sendResponse(req, res, 200, MANAGE_ADMINS_PAGE, [
+      CONFIG_PAGE_ATTR,
       ['adminUsers', adminUsers],
-      ['configPage', 'admin-users'],
     ]);
   } catch (err) {
     console.error(err);
   }
   req.flash('error', 'Could not fetch the admin users');
-  return res
-    .status(400)
-    .render(MANAGE_ADMINS_PAGE, {
-      sendMessage: {
-        error: req.flash('error'),
-      },
-      adminUsers: [],
-      configPage: 'admin-users',
-    });
+  return sendResponse(req, res, 400, MANAGE_ADMINS_PAGE, [
+    CONFIG_PAGE_ATTR,
+    ['adminUsers', []],
+  ]);
 };
 
-module.exports.getCreateAdmin = (_req, res) => res
-  .status(200)
-  .render(CREATE_ADMIN_PAGE, {
-    sendMessage: null,
-    configPage: 'admin-users',
-    formAttributes: {},
-  });
+module.exports.getCreateAdmin = (req, res) => sendResponse(req, res, 200, CREATE_ADMIN_PAGE, [
+  CONFIG_PAGE_ATTR,
+  ['formAttributes', {}],
+]);
 
 module.exports.postCreateAdmin = async (req, res) => {
   const {
     firstName, lastName, email, password1, password2,
   } = req.body;
-  const errorResponse = () => res
-    .status(400)
-    .render(CREATE_ADMIN_PAGE, {
-      sendMessage: { error: req.flash('error') },
-      configPage: 'admin-users',
-      formAttributes: {
-        firstName, lastName, email,
-      },
-    });
   if (!firstName || !lastName || !email || !password1 || !password2) {
     req.flash('error', 'Please complete the form');
-    return errorResponse();
+    return sendResponse(req, res, 400, CREATE_ADMIN_PAGE, [
+      CONFIG_PAGE_ATTR,
+      ['formAttributes', { firstName, lastName, email }],
+    ]);
   }
   if (password1 !== password2) {
     req.flash('error', 'The passwords do not match');
-    return errorResponse();
+    return sendResponse(req, res, 400, CREATE_ADMIN_PAGE, [
+      CONFIG_PAGE_ATTR,
+      ['formAttributes', { firstName, lastName, email }],
+    ]);
   }
   if (password1.length < 12) {
     req.flash('error', 'The password must be at least 12 characters long');
-    return errorResponse();
+    return sendResponse(req, res, 400, CREATE_ADMIN_PAGE, [
+      CONFIG_PAGE_ATTR,
+      ['formAttributes', { firstName, lastName, email }],
+    ]);
   }
   try {
     const user = await User.findOne({ email });
@@ -97,22 +85,23 @@ module.exports.postCreateAdmin = async (req, res) => {
           origin: getOrigin(req),
         },
       });
-      return res
-        .status(201)
-        .render(CREATE_ADMIN_PAGE, {
-          sendMessage: { success: `New admin user ${email} created.` },
-          configPage: 'admin-users',
-          formAttributes: {},
-        });
+      req.flash('success', `New admin user ${email} created.`);
+      return sendResponse(req, res, 201, CREATE_ADMIN_PAGE, [
+        CONFIG_PAGE_ATTR,
+        ['formAttributes', {}],
+      ]);
     }
   } catch (err) {
     console.error(err);
-    req.flash('error', `Could not create the user ${email}`);
   }
-  return errorResponse();
+  req.flash('error', `Could not create the admin user ${email}`);
+  return sendResponse(req, res, 400, CREATE_ADMIN_PAGE, [
+    CONFIG_PAGE_ATTR,
+    ['formAttributes', { firstName, lastName, email }],
+  ]);
 };
 
-module.exports.postDeleteAdmin = async (req, res) => {
+module.exports.deleteAdmin = async (req, res) => {
   const { email } = req.body;
   try {
     const user = await User.findOne({ email });

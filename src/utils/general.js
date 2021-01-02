@@ -6,7 +6,7 @@ module.exports.getOrigin = (req) => {
   return `${httpPart}://${host}`;
 };
 
-module.exports.getFlashMessage = (req) => {
+const getFlashMessage = (req) => {
   let messageType = null;
   let messageText = '';
   const flashError = req.flash('error');
@@ -26,11 +26,11 @@ module.exports.sendResponse = (
   res,
   status,
   page,
-  successOrError = null,
   additionalAttrs = [],
 ) => {
-  const sendMessage = successOrError ? {
-    [successOrError]: req.flash(successOrError),
+  const [messageType, messageText] = getFlashMessage(req);
+  const sendMessage = messageType ? {
+    [messageType]: messageText,
   } : {};
   const extraAttrs = {};
   additionalAttrs.forEach(([key, val]) => {
