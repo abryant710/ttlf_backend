@@ -1,0 +1,23 @@
+<%- include('../../partials/head.ejs') %>
+<%- include('../../partials/nav.ejs') %>
+<% const { title, url, urlPrefix } = formAttributes; %> 
+<div class="update-page">
+  <h2 class="update-page-title">Update YouTube video data</h2>
+  <div class="update-page-panel">
+    <form action="/config/update-video" method="POST">
+      <fieldset>
+        <%- include('../../components/forms/title-input.ejs', { title }) %>
+        <input type="hidden" id="originalTitle" name="originalTitle" value="<%= title %>">
+        <%- include('../../components/forms/url-input.ejs', { url }) %>
+        <input type="hidden" id="originalUrl" name="originalUrl" value="<%= url %>">
+        <input type="hidden" id="urlPrefix" name="urlPrefix" value="<%= urlPrefix %>">
+        <%- include('../../components/forms/form-submit.ejs', {
+          sendMessage,
+          submitButtonText: 'Update video',
+        }) %>
+      </fieldset>
+    </form>
+    <a class="mt-2" href="/config/manage-videos">Return to list</a>
+  </div>
+</div>
+<%- include('../../partials/foot.ejs') %> 

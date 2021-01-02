@@ -1,12 +1,14 @@
 <%- include('../../partials/head.ejs') %>
 <%- include('../../partials/nav.ejs') %>
+<% const { urlPrefix } = formAttributes; %> 
 <div class="create-page">
   <h2 class="create-page-title">Add a YouTube video to the site</h2>
   <div class="create-page-panel">
     <form action="/config/create-video" method="POST">
       <fieldset>
-        <%- include('../../components/forms/title-input.ejs') %>
-        <%- include('../../components/forms/url-input.ejs') %>
+        <%- include('../../components/forms/title-input.ejs', { title: '' }) %>
+        <%- include('../../components/forms/url-input.ejs', { url: '' }) %>
+        <input type="hidden" id="urlPrefix" name="urlPrefix" value="<%= urlPrefix %>">
         <%- include('../../components/forms/form-submit.ejs', {
           sendMessage,
           submitButtonText: 'Add video',

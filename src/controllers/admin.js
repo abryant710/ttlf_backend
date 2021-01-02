@@ -3,6 +3,7 @@ const {
     CONFIG_LIVE_PAGE,
     MANAGE_VIDEOS_PAGE,
     CREATE_VIDEO_PAGE,
+    UPDATE_VIDEO_PAGE,
   },
 } = require('../utils/pages');
 const SiteConfig = require('../models/SiteConfig');
@@ -51,6 +52,63 @@ module.exports.getYouTubeVideos = async (req, res) => {
   return sendResponse(req, res, 400, MANAGE_VIDEOS_PAGE);
 };
 
+module.exports.getUpdateVideo = async (req, res) => {
+  const { url: fullUrl } = req.query;
+  try {
+    const siteConfig = await SiteConfig.findOne({});
+    const { youTubeVideoPrefix } = siteConfig;
+    const video = await YouTubeVideo.findOne({ url: fullUrl.replace(youTubeVideoPrefix, '') });
+    if (video) {
+      const { url, title } = video;
+      return sendResponse(req, res, 200, UPDATE_VIDEO_PAGE, [
+        CONTENT_PAGE_ATTR,
+        ['urlPrefix', youTubeVideoPrefix],
+        ['formAttributes', { url, title, urlPrefix: youTubeVideoPrefix }],
+      ]);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+  req.flash('error', 'Error loading page');
+  return sendResponse(req, res, 400, UPDATE_VIDEO_PAGE, [
+    CONTENT_PAGE_ATTR,
+    ['formAttributes', {}],
+  ]);
+};
+
+module.exports.postUpdateVideo = async (req, res) => {
+  const {
+    title, originalTitle, url, originalUrl, urlPrefix,
+  } = req.body;
+  if (!title || !url) {
+    req.flash('error', 'Please complete the form');
+    return sendResponse(req, res, 400, UPDATE_VIDEO_PAGE, [
+      CONTENT_PAGE_ATTR,
+      ['formAttributes', { title: originalTitle, url: originalUrl, urlPrefix }],
+    ]);
+  }
+  try {
+    const video = await YouTubeVideo.findOne({ url: originalUrl });
+    if (video) {
+      await video.updateOne({
+        title, url,
+      });
+      req.flash('success', `Updated video ${urlPrefix}${url}.`);
+      return sendResponse(req, res, 201, UPDATE_VIDEO_PAGE, [
+        CONTENT_PAGE_ATTR,
+        ['formAttributes', { title, url, urlPrefix }],
+      ]);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+  req.flash('error', `Could not update the video ${urlPrefix}${url}`);
+  return sendResponse(req, res, 400, UPDATE_VIDEO_PAGE, [
+    CONTENT_PAGE_ATTR,
+    ['formAttributes', { title: originalTitle, url: originalUrl, urlPrefix }],
+  ]);
+};
+
 module.exports.getCreateVideo = async (req, res) => {
   try {
     const siteConfig = await SiteConfig.findOne({});
@@ -58,7 +116,7 @@ module.exports.getCreateVideo = async (req, res) => {
     return sendResponse(req, res, 200, CREATE_VIDEO_PAGE, [
       CONTENT_PAGE_ATTR,
       ['urlPrefix', youTubeVideoPrefix],
-      ['formAttributes', {}],
+      ['formAttributes', { urlPrefix: youTubeVideoPrefix }],
     ]);
   } catch (err) {
     console.error(err);
@@ -72,31 +130,16 @@ module.exports.getCreateVideo = async (req, res) => {
 
 module.exports.postCreateVideo = async (req, res) => {
   const {
-    title, url,
+    title, url, urlPrefix,
   } = req.body;
-  let urlPrefix = '';
-  try {
-    const siteConfig = await SiteConfig.findOne({});
-    const { youTubeVideoPrefix } = siteConfig;
-    urlPrefix = youTubeVideoPrefix;
-  } catch (err) {
-    console.error(err);
-    req.flash('error', `Could not create the video ${title}`);
+  if (!title || !url) {
+    req.flash('error', 'Please complete the form');
     return sendResponse(req, res, 400, CREATE_VIDEO_PAGE, [
       CONTENT_PAGE_ATTR,
-      ['urlPrefix', urlPrefix],
-      ['formAttributes', {}],
+      ['formAttributes', { urlPrefix }],
     ]);
   }
   try {
-    if (!title || !url) {
-      req.flash('error', 'Please complete the form');
-      return sendResponse(req, res, 400, CREATE_VIDEO_PAGE, [
-        CONTENT_PAGE_ATTR,
-        ['urlPrefix', urlPrefix],
-        ['formAttributes', {}],
-      ]);
-    }
     const video = await YouTubeVideo.findOne({ url });
     if (video) {
       req.flash('error', `${urlPrefix}${video.url} already exists in the database`);
@@ -109,18 +152,16 @@ module.exports.postCreateVideo = async (req, res) => {
       req.flash('success', `New video ${urlPrefix}${url} created.`);
       return sendResponse(req, res, 201, CREATE_VIDEO_PAGE, [
         CONTENT_PAGE_ATTR,
-        ['urlPrefix', urlPrefix],
-        ['formAttributes', {}],
+        ['formAttributes', { urlPrefix }],
       ]);
     }
   } catch (err) {
     console.error(err);
+    req.flash('error', `Could not create the video ${urlPrefix}${url}`);
   }
-  req.flash('error', `Could not create the video ${title}`);
   return sendResponse(req, res, 400, CREATE_VIDEO_PAGE, [
     CONTENT_PAGE_ATTR,
-    ['urlPrefix', urlPrefix],
-    ['formAttributes', {}],
+    ['formAttributes', { urlPrefix }],
   ]);
 };
 

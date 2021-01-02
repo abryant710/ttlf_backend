@@ -14,7 +14,7 @@
       <div class="manage-page-panel__item">
         <p><%= title %></p>
         <p><a href="<%= url %>" target="_blank"><%= url %></a></p>
-        <p><a type="button" class="btn btn-secondary" href="/config/edit-video?url=<%= url %>">Edit</a></p>
+        <p><a type="button" class="btn btn-secondary" href="/config/update-video?url=<%= url %>">Edit</a></p>
         <p><button type="submit" class="btn btn-danger" onclick="updateFormValue('delete-video-url', '<%= url %>');">Delete</button></p>
       </div>
     <% }); %> 
