@@ -7,9 +7,9 @@
 }
 
 .toast-position {
+  min-height: 7rem;
+  min-width: 14rem;
   position: fixed !important;
   right: .5rem;
   top: .5rem;
-  min-width: 14rem;
-  min-height: 7rem;
 }

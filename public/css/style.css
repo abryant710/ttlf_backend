@@ -7579,11 +7579,11 @@ a.text-dark:focus, a.text-dark:hover {
   background-color: #f1f7e8; }
 
 .toast-position {
+  min-height: 7rem;
+  min-width: 14rem;
   position: fixed !important;
   right: .5rem;
-  top: .5rem;
-  min-width: 14rem;
-  min-height: 7rem; }
+  top: .5rem; }
 
 .nav-img {
   height: 2rem;
@@ -7639,12 +7639,12 @@ a.text-dark:focus, a.text-dark:hover {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    text-align: center;
-    border-bottom: 2px solid black; }
+    border-bottom: 2px solid #000000;
+    text-align: center; }
     .manage-admins-panel__header p {
-      width: 15rem;
+      font-weight: 600;
       margin: 1rem 0;
-      font-weight: 600; }
+      width: 15rem; }
     .manage-admins-panel__header form {
       width: 15rem; }
   .manage-admins-panel__admin {
@@ -7652,12 +7652,12 @@ a.text-dark:focus, a.text-dark:hover {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    text-align: center;
-    border-bottom: 2px solid black; }
+    border-bottom: 2px solid #000000;
+    text-align: center; }
     .manage-admins-panel__admin p {
-      width: 15rem;
+      font-weight: 300;
       margin: 1rem 0;
-      font-weight: 300; }
+      width: 15rem; }
     .manage-admins-panel__admin form {
       width: 15rem; }
 
@@ -7767,12 +7767,12 @@ a.text-dark:focus, a.text-dark:hover {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    text-align: center;
-    border-bottom: 2px solid black; }
+    border-bottom: 2px solid #000000;
+    text-align: center; }
     .videos-panel__header p {
-      width: 15rem;
+      font-weight: 600;
       margin: 1rem 0;
-      font-weight: 600; }
+      width: 15rem; }
     .videos-panel__header form {
       width: 15rem; }
   .videos-panel__admin {
@@ -7780,11 +7780,11 @@ a.text-dark:focus, a.text-dark:hover {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    text-align: center;
-    border-bottom: 2px solid black; }
+    border-bottom: 2px solid #000000;
+    text-align: center; }
     .videos-panel__admin p {
-      width: 15rem;
+      font-weight: 300;
       margin: 1rem 0;
-      font-weight: 300; }
+      width: 15rem; }
     .videos-panel__admin form {
       width: 15rem; }
