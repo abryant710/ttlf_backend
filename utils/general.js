@@ -6,6 +6,21 @@ module.exports.getOrigin = (req) => {
   return `${httpPart}://${host}`;
 };
 
+module.exports.getFlashMessage = (req) => {
+  let messageType = null;
+  let messageText = '';
+  const flashError = req.flash('error');
+  const flashSuccess = req.flash('success');
+  if (flashError.length) {
+    messageType = 'error';
+    [messageText] = flashError;
+  } else if (flashSuccess.length) {
+    messageType = 'success';
+    [messageText] = flashSuccess;
+  }
+  return [messageType, messageText];
+};
+
 module.exports.sendResponse = (
   req,
   res,

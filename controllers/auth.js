@@ -8,20 +8,13 @@ const {
     RESET_PW_PAGE,
   },
 } = require('../utils/pages');
-const { getOrigin, sendResponse } = require('../utils/general');
+const { getOrigin, sendResponse, getFlashMessage } = require('../utils/general');
 const { sendMail } = require('../utils/mailer');
 
 const defaultFormAttrs = [['formAttributes', {}]];
 
 module.exports.getLogin = (req, res) => {
-  let messageType = null;
-  const flashError = req.flash('error');
-  const flashSuccess = req.flash('success');
-  if (flashError.length) {
-    messageType = 'error';
-  } else if (flashSuccess.length) {
-    messageType = 'success';
-  }
+  const [messageType] = getFlashMessage(req);
   return sendResponse(req, res, 200, LOGIN_PAGE, messageType, defaultFormAttrs);
 };
 

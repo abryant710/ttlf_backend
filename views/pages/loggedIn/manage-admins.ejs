@@ -14,17 +14,20 @@
         <p><%= firstName %></p>
         <p><%= lastName %></p>
         <p><%= email %></p>
-        <form class="mt-2" action="/config/delete-admin" method="POST">
-          <fieldset>
-            <input type="hidden" id="email" name="email" value="<%= email %>">
-            <%- include('../../components/forms/form-submit.ejs', {
-              sendMessage,
-              submitButtonText: 'Delete',
-            }) %>
-          </fieldset>
-        </form>
+        <p><button type="submit" class="btn btn-primary" onclick="deleteAdmin('<%= email %>');">Delete</button></p>
       </div>
     <% }); %> 
   </div>
 </div>
+<div class="hidden">
+  <%- include('../../components/forms/delete-admin-form.ejs', {
+    sendMessage,
+  }) %>
+</div>
+<%- include('../../components/modal.ejs', {
+  modalTitle: 'Delete',
+  modalText: `Are you sure you want to delete this user?`,
+  modalTitle: 'Delete admin',
+  formClass: 'delete-admin-form',
+}) %>
 <%- include('../../partials/foot.ejs') %> 

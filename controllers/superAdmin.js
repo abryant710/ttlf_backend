@@ -7,23 +7,25 @@ const {
   },
 } = require('../utils/pages');
 const { sendMail } = require('../utils/mailer');
-const { getOrigin } = require('../utils/general');
+const { getOrigin, sendResponse, getFlashMessage } = require('../utils/general');
 
 const PROTECTED_ADMINS = ['alexbryant710@gmail.com'];
 
 module.exports.getManageAdmins = async (req, res) => {
+  const [messageType, messageText] = getFlashMessage(req);
+  if (messageText) {
+    // Handles flash since the error will redirect here
+    req.flash(messageType, messageText);
+  }
   try {
     let adminUsers = await User.find({});
     adminUsers = adminUsers.map(({ email, firstName, lastName }) => ({
       email, firstName, lastName,
     })).filter(({ email }) => !PROTECTED_ADMINS.includes(email));
-    return res
-      .status(200)
-      .render(MANAGE_ADMINS_PAGE, {
-        sendMessage: null,
-        adminUsers,
-        configPage: 'admin-users',
-      });
+    return sendResponse(req, res, 200, MANAGE_ADMINS_PAGE, messageType, [
+      ['adminUsers', adminUsers],
+      ['configPage', 'admin-users'],
+    ]);
   } catch (err) {
     console.error(err);
   }
@@ -108,4 +110,20 @@ module.exports.postCreateAdmin = async (req, res) => {
     req.flash('error', `Could not create the user ${email}`);
   }
   return errorResponse();
+};
+
+module.exports.postDeleteAdmin = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      await user.deleteOne({ email });
+      req.flash('success', `Deleted admin user ${email}`);
+      return res.redirect('/config/manage-admins');
+    }
+  } catch (err) {
+    console.error(err);
+  }
+  req.flash('error', `Could not delete the admin user ${email}`);
+  return res.redirect('/config/manage-admins');
 };
