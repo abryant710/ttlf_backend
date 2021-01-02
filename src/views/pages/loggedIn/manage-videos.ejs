@@ -1,18 +1,21 @@
 <%- include('../../partials/head.ejs') %> 
 <%- include('../../partials/nav.ejs') %> 
-<div class="manage-videos">
-  <h2 class="manage-videos-title">Manage YouTube videos</h2>
-  <div class="manage-videos-panel">
-    <div class="manage-videos-panel__header">
+<div class="manage-page">
+  <h2 class="manage-page-title">Manage YouTube videos</h2>
+  <p><a type="button" class="btn btn-primary" href="/config/create-video">Add new</a></p>
+  <div class="manage-page-panel">
+    <div class="manage-page-panel__header">
       <p class="text-primary">Title</p>
       <p class="text-primary">URL</p>
+      <p class="text-secondary">Edit?</p>
       <p class="text-danger">Delete?</p>
     </div>
     <% videos.forEach(({ title, url }) => { %>
-      <div class="manage-videos-panel__video">
+      <div class="manage-page-panel__item">
         <p><%= title %></p>
         <p><a href="<%= url %>" target="_blank"><%= url %></a></p>
-        <p><button type="submit" class="btn btn-primary" onclick="updateFormValue('delete-video-url', '<%= url %>');">Delete</button></p>
+        <p><a type="button" class="btn btn-secondary" href="/config/edit-video?url=<%= url %>">Edit</a></p>
+        <p><button type="submit" class="btn btn-danger" onclick="updateFormValue('delete-video-url', '<%= url %>');">Delete</button></p>
       </div>
     <% }); %> 
   </div>

@@ -1,20 +1,21 @@
 <%- include('../../partials/head.ejs') %>
 <%- include('../../partials/nav.ejs') %>
-<div class="manage-admins">
-  <h2 class="manage-admins-title">Manage admin users</h2>
-  <div class="manage-admins-panel">
-    <div class="manage-admins-panel__header">
+<div class="manage-page">
+  <h2 class="manage-page-title">Manage admin users</h2>
+  <p><a type="button" class="btn btn-primary" href="/config/create-admin">Add new</a></p>
+  <div class="manage-page-panel">
+    <div class="manage-page-panel__header">
       <p class="text-primary">First name</p>
       <p class="text-primary">Last name</p>
       <p class="text-primary">Email</p>
       <p class="text-danger">Delete?</p>
     </div>
     <% adminUsers.forEach(({ firstName, lastName, email }) => { %>
-      <div class="manage-admins-panel__admin">
+      <div class="manage-page-panel__item">
         <p><%= firstName %></p>
         <p><%= lastName %></p>
         <p><%= email %></p>
-        <p><button type="submit" class="btn btn-primary" onclick="updateFormValue('delete-admin-email', '<%= email %>');">Delete</button></p>
+        <p><button type="submit" class="btn btn-danger" onclick="updateFormValue('delete-admin-email', '<%= email %>');">Delete</button></p>
       </div>
     <% }); %> 
   </div>

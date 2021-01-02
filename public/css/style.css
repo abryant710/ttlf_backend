@@ -7623,7 +7623,7 @@ a.text-dark:focus, a.text-dark:hover {
     margin: 1rem;
     width: 15rem; }
 
-.manage-admins {
+.manage-page {
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -7631,39 +7631,39 @@ a.text-dark:focus, a.text-dark:hover {
   height: 100vh;
   width: 100vw;
   padding-top: 2rem; }
-  .manage-admins-title {
+  .manage-page-title {
     margin: 0 0 2rem;
     text-align: center; }
-  .manage-admins-panel {
+  .manage-page-panel {
     padding-bottom: 2rem; }
-    .manage-admins-panel__header {
+    .manage-page-panel__header {
       align-items: center;
       display: flex;
       flex-direction: row;
       justify-content: center;
       border-bottom: 2px solid #000000;
       text-align: center; }
-      .manage-admins-panel__header p {
+      .manage-page-panel__header p {
         font-weight: 600;
         margin: 1rem 0;
         width: 15rem; }
-      .manage-admins-panel__header form {
+      .manage-page-panel__header form {
         width: 15rem; }
-    .manage-admins-panel__admin {
+    .manage-page-panel__item {
       align-items: center;
       display: flex;
       flex-direction: row;
       justify-content: center;
       border-bottom: 2px solid #000000;
       text-align: center; }
-      .manage-admins-panel__admin p {
+      .manage-page-panel__item p {
         font-weight: 300;
         margin: 1rem 0;
         width: 15rem; }
-      .manage-admins-panel__admin form {
+      .manage-page-panel__item form {
         width: 15rem; }
 
-.create-admin {
+.create-page {
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -7671,7 +7671,7 @@ a.text-dark:focus, a.text-dark:hover {
   height: 100vh;
   width: 100vw;
   padding-top: 2rem; }
-  .create-admin-panel {
+  .create-page-panel {
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -7679,15 +7679,15 @@ a.text-dark:focus, a.text-dark:hover {
     height: auto;
     padding-bottom: 5rem;
     width: 20rem; }
-  .create-admin form {
+  .create-page form {
     width: 100%; }
-    .create-admin form fieldset {
+    .create-page form fieldset {
       display: flex;
       flex-direction: column; }
-  .create-admin-img {
+  .create-page-img {
     margin: 1rem;
     width: 15rem; }
-  .create-admin-title {
+  .create-page-title {
     margin: 0 0 2rem;
     text-align: center; }
 
@@ -7752,43 +7752,3 @@ a.text-dark:focus, a.text-dark:hover {
   .live-title {
     margin: 0 0 2rem;
     text-align: center; }
-
-.manage-videos {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  height: 100vh;
-  width: 100vw;
-  padding-top: 2rem; }
-  .manage-videos-title {
-    margin: 0 0 2rem;
-    text-align: center; }
-  .manage-videos-panel {
-    padding-bottom: 2rem; }
-    .manage-videos-panel__header {
-      align-items: center;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      border-bottom: 2px solid #000000;
-      text-align: center; }
-      .manage-videos-panel__header p {
-        font-weight: 600;
-        margin: 1rem 0;
-        width: 15rem; }
-      .manage-videos-panel__header form {
-        width: 15rem; }
-    .manage-videos-panel__video {
-      align-items: center;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      border-bottom: 2px solid #000000;
-      text-align: center; }
-      .manage-videos-panel__video p {
-        font-weight: 300;
-        margin: 1rem 0;
-        width: 15rem; }
-      .manage-videos-panel__video form {
-        width: 15rem; }

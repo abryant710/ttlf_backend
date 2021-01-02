@@ -1,4 +1,4 @@
-.manage-admins {
+.manage-page {
   @include full-page-container;
   padding-top: 2rem;
   &-title {
@@ -12,7 +12,7 @@
       @include table-content(600);
     }
 
-    &__admin {
+    &__item {
       @include table-content(300);
     }
   }
