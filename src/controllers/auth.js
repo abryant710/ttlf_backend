@@ -14,7 +14,8 @@ const { sendMail } = require('../utils/mailer');
 const defaultFormAttrs = [['formAttributes', {}]];
 
 module.exports.getLogin = (req, res) => {
-  const [messageType] = getFlashMessage(req);
+  const [messageType, messageText] = getFlashMessage(req);
+  req.flash(messageType, messageText);
   return sendResponse(req, res, 200, LOGIN_PAGE, messageType, defaultFormAttrs);
 };
 

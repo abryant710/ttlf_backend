@@ -29,13 +29,13 @@ const store = new MongoDBStore({
 const csrfProtection = csrf();
 
 app.set('view engine', 'ejs');
-app.set('views', 'views');
+app.set('views', 'src/views');
 
-const { get404 } = require('./controllers/error');
-const authRoutes = require('./routes/auth');
-const superAdminRoutes = require('./routes/superAdmin');
-const adminRoutes = require('./routes/admin');
-const apiRoutes = require('./routes/api');
+const { get404 } = require('./src/controllers/error');
+const authRoutes = require('./src/routes/auth');
+const superAdminRoutes = require('./src/routes/superAdmin');
+const adminRoutes = require('./src/routes/admin');
+const apiRoutes = require('./src/routes/api');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
