@@ -1,9 +1,0 @@
-<form class="mt-2 delete-admin-form" action="/config/delete-admin" method="POST">
-  <fieldset>
-    <input class="delete-admin-email" type="hidden" id="email" name="email">
-    <%- include('../../components/forms/form-submit.ejs', {
-      sendMessage,
-      submitButtonText: 'Delete',
-    }) %>
-  </fieldset>
-</form>

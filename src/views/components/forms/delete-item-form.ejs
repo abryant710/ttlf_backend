@@ -1,0 +1,9 @@
+<form class="invisible mt-2 delete-<%= dataType %>-form" action="/config/delete-<%= dataType %>" method="POST">
+  <fieldset>
+    <input class="delete-<%= dataType %>-<%= formValueType %>" type="hidden" id="<%= formValueType %>" name="<%= formValueType %>">
+    <%- include('../../components/forms/form-submit.ejs', {
+      sendMessage,
+      submitButtonText: 'Delete',
+    }) %>
+  </fieldset>
+</form>

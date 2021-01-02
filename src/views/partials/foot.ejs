@@ -1,20 +1,4 @@
+<% const environ = process.env.TTLF_ENV; %> 
 </body>
-<script>
-  $('.toast-close').click(() => $('.toast').remove());
-
-  $('.modal-close').click(() => $('.modal').css({ display: 'none' }));
-
-  function showModal() {
-    $('.modal').css({ display: 'block' });
-  };
-  
-  function submitForm(formClass) {
-    $(`.${formClass}`).submit();
-  };
-
-  function deleteAdmin(email) {
-    showModal();
-    $('.delete-admin-email').attr('value', email);
-  };
-</script>
+<script type="text/javascript" src="/js/main<%= environ === 'production' ? '.min' : '' %>.js"></script>
 </html>
