@@ -7738,3 +7738,53 @@ a.text-dark:focus, a.text-dark:hover {
   .send-reset-img {
     margin: 1rem;
     width: 15rem; }
+
+.live {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100vh;
+  width: 100vw;
+  padding-top: 2rem; }
+  .live-title {
+    margin: 0 0 2rem;
+    text-align: center; }
+
+.videos {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100vh;
+  width: 100vw;
+  padding-top: 2rem; }
+  .videos-title {
+    margin: 0 0 2rem;
+    text-align: center; }
+  .videos-panel__header {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    border-bottom: 2px solid black; }
+    .videos-panel__header p {
+      width: 15rem;
+      margin: 1rem 0;
+      font-weight: 600; }
+    .videos-panel__header form {
+      width: 15rem; }
+  .videos-panel__admin {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    border-bottom: 2px solid black; }
+    .videos-panel__admin p {
+      width: 15rem;
+      margin: 1rem 0;
+      font-weight: 300; }
+    .videos-panel__admin form {
+      width: 15rem; }

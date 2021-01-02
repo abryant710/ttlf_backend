@@ -1,0 +1,16 @@
+.videos {
+  @include full-page-container;
+  padding-top: 2rem;
+  &-title {
+    margin: 0 0 2rem;
+    text-align: center;
+  }
+  &-panel {
+    &__header {
+      @include table-content(600);
+    }
+    &__admin {
+      @include table-content(300);
+    }
+  }
+}

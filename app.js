@@ -59,7 +59,7 @@ app.use((req, res, next) => {
   next();
 });
 
-const DEFAULT_ROUTE = '/config';
+const DEFAULT_ROUTE = '/config/live';
 
 app.use(authRoutes);
 app.use(superAdminRoutes);

@@ -30,7 +30,7 @@ module.exports.postLogin = async (req, res) => {
         req.session.isLoggedIn = isAdmin;
         return res
           .status(200)
-          .redirect('/config');
+          .redirect('/config/live');
       }
     }
   } catch (err) {

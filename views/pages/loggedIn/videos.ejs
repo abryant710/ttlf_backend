@@ -1,0 +1,20 @@
+<%- include('../../partials/head.ejs') %> 
+<%- include('../../partials/nav.ejs') %> 
+<div class="videos">
+  <h2 class="videos-title">Manage YouTube videos</h2>
+  <div class="videos-panel">
+    <div class="videos-panel__header">
+      <p class="text-primary">Title</p>
+      <p class="text-primary">URL</p>
+      <p class="text-danger">Delete?</p>
+    </div>
+    <% videos.forEach(({ title, url }) => { %>
+      <div class="videos-panel__admin">
+        <p><%= title %></p>
+        <p><%= url %></p>
+        <p><button type="submit" class="btn btn-primary" onclick="deleteVideo('<%= url %>');">Delete</button></p>
+      </div>
+    <% }); %> 
+  </div>
+</div>
+<%- include('../../partials/foot.ejs') %> 
