@@ -9,7 +9,7 @@ const {
 
 const router = express.Router();
 router.get('/config/live', checkAuth, getConfig);
-router.get('/config/videos', checkAuth, getYouTubeVideos);
+router.get('/config/manage-videos', checkAuth, getYouTubeVideos);
 router.post('/config/delete-video', checkAuth, deleteVideo);
 
 module.exports = router;

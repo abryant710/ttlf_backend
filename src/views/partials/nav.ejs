@@ -6,11 +6,15 @@
       <li class="nav-item <%= configPage === 'live' ? 'active' : '' %>">
         <a class="nav-link" href="/config/live">Live</a>
       </li>
-      <li class="nav-item <%= configPage === 'videos' ? 'active' : '' %>">
-        <a class="nav-link" href="/config/videos">Videos</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/config/tracks">Tracks</a>
+      <li class="nav-item dropdown <%= configPage === 'site-content' ? 'active' : '' %>">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Site content</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="/config/manage-videos">Manage videos</a>
+          <a class="dropdown-item" href="/config/manage-tracks">Manage tracks</a>
+          <a class="dropdown-item" href="/config/manage-bios">Manage DJ bios</a>
+          <a class="dropdown-item" href="/config/manage-schedule">Manage DJ schedule</a>
+          <a class="dropdown-item" href="/config/manage-schedule">Manage events</a>
+        </div>
       </li>
       <% if (isSuperAdmin) { %>
       <li class="nav-item dropdown <%= configPage === 'admin-users' ? 'active' : '' %>">
