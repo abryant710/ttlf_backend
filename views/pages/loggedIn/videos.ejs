@@ -11,7 +11,7 @@
     <% videos.forEach(({ title, url }) => { %>
       <div class="videos-panel__admin">
         <p><%= title %></p>
-        <p><%= url %></p>
+        <p><a href="<%= url %>" target="_blank"><%= url %></a></p>
         <p><button type="submit" class="btn btn-primary" onclick="deleteVideo('<%= url %>');">Delete</button></p>
       </div>
     <% }); %> 

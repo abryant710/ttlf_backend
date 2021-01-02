@@ -34,7 +34,7 @@ module.exports.getYouTubeVideos = async (req, res) => {
     const { youTubeVideoPrefix } = siteConfig;
     const youTubeVideos = await YouTubeVideo.find({});
     const videos = youTubeVideos.map(({ title, url }) => ({
-      title, url: `${youTubeVideoPrefix}/${url}`,
+      title, url: `${youTubeVideoPrefix}${url}`,
     }));
     return sendResponse(req, res, 200, CONFIG_VIDEOS_PAGE, null, [
       ['configPage', 'videos'],
@@ -43,4 +43,6 @@ module.exports.getYouTubeVideos = async (req, res) => {
   } catch (err) {
     console.error(err);
   }
+  req.flash('error', 'Could not fetch the videos from the database');
+  return sendResponse(req, res, 400, CONFIG_VIDEOS_PAGE, 'error');
 };
