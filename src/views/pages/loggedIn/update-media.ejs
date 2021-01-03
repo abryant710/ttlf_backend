@@ -1,16 +1,17 @@
 <%- include('../../partials/head.ejs') %>
 <%- include('../../partials/nav.ejs') %>
-<% const { title, url, urlPrefix } = formAttributes; %> 
+<% const { title, url, urlPrefix, mediaType } = formAttributes; %> 
 <div class="update-page">
   <h2 class="update-page-title">Update <%= mediaType === 'video' ? 'YouTube video' : 'Soundcloud track' %> data</h2>
   <div class="update-page-panel">
-    <form action="/config/update-<%= mediaType %>" method="POST">
+    <form action="/config/update-media" method="POST">
       <fieldset>
         <%- include('../../components/forms/title-input.ejs', { title }) %>
         <input type="hidden" id="originalTitle" name="originalTitle" value="<%= title %>">
         <%- include('../../components/forms/url-input.ejs', { url }) %>
         <input type="hidden" id="originalUrl" name="originalUrl" value="<%= url %>">
         <input type="hidden" id="urlPrefix" name="urlPrefix" value="<%= urlPrefix %>">
+        <input type="hidden" id="mediaType" name="mediaType" value="<%= mediaType %>">
         <%- include('../../components/forms/form-submit.ejs', {
           sendMessage,
           submitButtonText: `Update ${mediaType}`,

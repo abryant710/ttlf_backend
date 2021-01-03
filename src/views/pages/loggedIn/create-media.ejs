@@ -1,14 +1,15 @@
 <%- include('../../partials/head.ejs') %>
 <%- include('../../partials/nav.ejs') %>
-<% const { urlPrefix } = formAttributes; %> 
+<% const { urlPrefix, mediaType } = formAttributes; %> 
 <div class="create-page">
   <h2 class="create-page-title">Add a <%= mediaType === 'video' ? 'YouTube video' : 'Soundcloud track' %> to the site</h2>
   <div class="create-page-panel">
-    <form action="/config/create-<%= mediaType %>" method="POST">
+    <form action="/config/create-media" method="POST">
       <fieldset>
         <%- include('../../components/forms/title-input.ejs', { title: '' }) %>
         <%- include('../../components/forms/url-input.ejs', { url: '' }) %>
         <input type="hidden" id="urlPrefix" name="urlPrefix" value="<%= urlPrefix %>">
+        <input type="hidden" id="mediaType" name="mediaType" value="<%= mediaType %>">
         <%- include('../../components/forms/form-submit.ejs', {
           sendMessage,
           submitButtonText: `Add ${mediaType}`,

@@ -16,8 +16,8 @@ const CONTENT_PAGE_ATTR = ['configPage', 'site-content'];
 
 const getMediaTypeParams = (mediaType) => {
   const prefixIdentifier = mediaType === 'video' ? 'youTubeVideoPrefix' : 'soundcloudTrackPrefix';
-  const dataModel = mediaType === 'video' ? YouTubeVideo : SoundcloudTrack;
-  return { prefixIdentifier, dataModel };
+  const DataModel = mediaType === 'video' ? YouTubeVideo : SoundcloudTrack;
+  return { prefixIdentifier, DataModel };
 };
 
 module.exports.getConfig = async (req, res) => {
@@ -30,11 +30,11 @@ module.exports.getConfig = async (req, res) => {
 
 module.exports.getManageMedia = async (req, res) => {
   const { mediaType } = req.query;
-  const { prefixIdentifier, dataModel } = getMediaTypeParams(mediaType);
+  const { prefixIdentifier, DataModel } = getMediaTypeParams(mediaType);
   try {
     const siteConfig = await SiteConfig.findOne({});
     const { [prefixIdentifier]: urlPrefix } = siteConfig;
-    const fetchedItems = await dataModel.find({});
+    const fetchedItems = await DataModel.find({});
     const items = fetchedItems.map(({ title, url }) => ({
       title, url: `${urlPrefix}${url}`,
     }));
@@ -56,18 +56,18 @@ module.exports.getManageMedia = async (req, res) => {
 
 module.exports.getUpdateMedia = async (req, res) => {
   const { url: fullUrl, mediaType } = req.query;
-  const { prefixIdentifier, dataModel } = getMediaTypeParams(mediaType);
+  const { prefixIdentifier, DataModel } = getMediaTypeParams(mediaType);
   try {
     const siteConfig = await SiteConfig.findOne({});
     const { [prefixIdentifier]: urlPrefix } = siteConfig;
-    const mediaItem = await dataModel.findOne({ url: fullUrl.replace(urlPrefix, '') });
+    const mediaItem = await DataModel.findOne({ url: fullUrl.replace(urlPrefix, '') });
     if (mediaItem) {
       const { url, title } = mediaItem;
       return sendResponse(req, res, 200, UPDATE_MEDIA_PAGE, [
         CONTENT_PAGE_ATTR,
-        ['mediaType', mediaType],
-        ['urlPrefix', urlPrefix],
-        ['formAttributes', { url, title, urlPrefix }],
+        ['formAttributes', {
+          url, title, urlPrefix, mediaType,
+        }],
       ]);
     }
   } catch (err) {
@@ -76,42 +76,47 @@ module.exports.getUpdateMedia = async (req, res) => {
   req.flash('error', 'Error loading page');
   return sendResponse(req, res, 400, UPDATE_MEDIA_PAGE, [
     CONTENT_PAGE_ATTR,
-    ['mediaType', mediaType],
-    ['urlPrefix', ''],
-    ['formAttributes', {}],
+    ['formAttributes', { urlPrefix: '', mediaType }],
   ]);
 };
 
-module.exports.postUpdateVideo = async (req, res) => {
+module.exports.postUpdateMedia = async (req, res) => {
   const {
-    title, originalTitle, url, originalUrl, urlPrefix,
+    title, originalTitle, url, originalUrl, urlPrefix, mediaType,
   } = req.body;
+  const { DataModel } = getMediaTypeParams(mediaType);
   if (!title || !url) {
     req.flash('error', 'Please complete the form');
-    return sendResponse(req, res, 400, UPDATE_VIDEO_PAGE, [
+    return sendResponse(req, res, 400, UPDATE_MEDIA_PAGE, [
       CONTENT_PAGE_ATTR,
-      ['formAttributes', { title: originalTitle, url: originalUrl, urlPrefix }],
+      ['formAttributes', {
+        title: originalTitle, url: originalUrl, urlPrefix, mediaType,
+      }],
     ]);
   }
   try {
-    const video = await YouTubeVideo.findOne({ url: originalUrl });
-    if (video) {
-      await video.updateOne({
+    const item = await DataModel.findOne({ url: originalUrl });
+    if (item) {
+      await item.updateOne({
         title, url,
       });
-      req.flash('success', `Updated video ${urlPrefix}${url}.`);
-      return sendResponse(req, res, 201, UPDATE_VIDEO_PAGE, [
+      req.flash('success', `Updated ${mediaType} ${urlPrefix}${url}.`);
+      return sendResponse(req, res, 201, UPDATE_MEDIA_PAGE, [
         CONTENT_PAGE_ATTR,
-        ['formAttributes', { title, url, urlPrefix }],
+        ['formAttributes', {
+          title, url, urlPrefix, mediaType,
+        }],
       ]);
     }
   } catch (err) {
     console.error(err);
   }
-  req.flash('error', `Could not update the video ${urlPrefix}${url}`);
-  return sendResponse(req, res, 400, UPDATE_VIDEO_PAGE, [
+  req.flash('error', `Could not update the ${mediaType} ${urlPrefix}${url}`);
+  return sendResponse(req, res, 400, UPDATE_MEDIA_PAGE, [
     CONTENT_PAGE_ATTR,
-    ['formAttributes', { title: originalTitle, url: originalUrl, urlPrefix }],
+    ['formAttributes', {
+      title: originalTitle, url: originalUrl, urlPrefix, mediaType,
+    }],
   ]);
 };
 
@@ -123,9 +128,7 @@ module.exports.getCreateMedia = async (req, res) => {
     const { [prefixIdentifier]: urlPrefix } = siteConfig;
     return sendResponse(req, res, 200, CREATE_MEDIA_PAGE, [
       CONTENT_PAGE_ATTR,
-      ['mediaType', mediaType],
-      ['urlPrefix', urlPrefix],
-      ['formAttributes', { urlPrefix }],
+      ['formAttributes', { urlPrefix, mediaType }],
     ]);
   } catch (err) {
     console.error(err);
@@ -133,46 +136,42 @@ module.exports.getCreateMedia = async (req, res) => {
   req.flash('error', 'Error loading page');
   return sendResponse(req, res, 400, CREATE_MEDIA_PAGE, [
     CONTENT_PAGE_ATTR,
-    ['mediaType', mediaType],
-    ['urlPrefix', ''],
-    ['formAttributes', {}],
+    ['formAttributes', { urlPrefix: '', mediaType }],
   ]);
 };
 
-module.exports.postCreateVideo = async (req, res) => {
+module.exports.postCreateMedia = async (req, res) => {
   const {
-    title, url, urlPrefix,
+    title, url, urlPrefix, mediaType,
   } = req.body;
+  const { DataModel } = getMediaTypeParams(mediaType);
   if (!title || !url) {
     req.flash('error', 'Please complete the form');
-    return sendResponse(req, res, 400, CREATE_VIDEO_PAGE, [
+    return sendResponse(req, res, 400, CREATE_MEDIA_PAGE, [
       CONTENT_PAGE_ATTR,
-      ['formAttributes', { urlPrefix }],
+      ['formAttributes', { urlPrefix, mediaType }],
     ]);
   }
   try {
-    const video = await YouTubeVideo.findOne({ url });
-    if (video) {
-      req.flash('error', `${urlPrefix}${video.url} already exists in the database`);
+    const item = await DataModel.findOne({ url });
+    if (item) {
+      req.flash('error', `${urlPrefix}${item.url} already exists in the database`);
     } else {
-      const newVideo = new YouTubeVideo({
-        title,
-        url,
-      });
-      await newVideo.save();
-      req.flash('success', `New video ${urlPrefix}${url} created.`);
-      return sendResponse(req, res, 201, CREATE_VIDEO_PAGE, [
+      const newItem = new DataModel({ title, url });
+      await newItem.save();
+      req.flash('success', `New ${mediaType} ${urlPrefix}${url} created.`);
+      return sendResponse(req, res, 201, CREATE_MEDIA_PAGE, [
         CONTENT_PAGE_ATTR,
-        ['formAttributes', { urlPrefix }],
+        ['formAttributes', { urlPrefix, mediaType }],
       ]);
     }
   } catch (err) {
     console.error(err);
-    req.flash('error', `Could not create the video ${urlPrefix}${url}`);
+    req.flash('error', `Could not create the ${mediaType} ${urlPrefix}${url}`);
   }
-  return sendResponse(req, res, 400, CREATE_VIDEO_PAGE, [
+  return sendResponse(req, res, 400, CREATE_MEDIA_PAGE, [
     CONTENT_PAGE_ATTR,
-    ['formAttributes', { urlPrefix }],
+    ['formAttributes', { urlPrefix, mediaType }],
   ]);
 };
 

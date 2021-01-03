@@ -5,9 +5,9 @@ const {
   getConfig,
   getManageMedia,
   getCreateMedia,
-  postCreateVideo,
+  postCreateMedia,
   getUpdateMedia,
-  postUpdateVideo,
+  postUpdateMedia,
   deleteVideo,
 } = require('../controllers/admin');
 
@@ -15,9 +15,9 @@ const router = express.Router();
 router.get('/config/live', checkAuth, getConfig);
 router.get('/config/manage-media', checkAuth, getManageMedia);
 router.get('/config/create-media', checkAuth, getCreateMedia);
-router.post('/config/create-video', checkAuth, postCreateVideo);
+router.post('/config/create-media', checkAuth, postCreateMedia);
 router.get('/config/update-media', checkAuth, getUpdateMedia);
-router.post('/config/update-video', checkAuth, postUpdateVideo);
+router.post('/config/update-media', checkAuth, postUpdateMedia);
 router.post('/config/delete-video', checkAuth, deleteVideo);
 
 module.exports = router;
