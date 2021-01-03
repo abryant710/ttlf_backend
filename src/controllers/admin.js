@@ -3,9 +3,7 @@ const {
     CONFIG_LIVE_PAGE,
     MANAGE_MEDIA_PAGE,
     CREATE_VIDEO_PAGE,
-    UPDATE_VIDEO_PAGE,
-    CREATE_TRACK_PAGE,
-    UPDATE_TRACK_PAGE,
+    UPDATE_MEDIA_PAGE,
   },
 } = require('../utils/pages');
 const SiteConfig = require('../models/SiteConfig');
@@ -56,26 +54,30 @@ module.exports.getManageMedia = async (req, res) => {
   ]);
 };
 
-module.exports.getUpdateVideo = async (req, res) => {
-  const { url: fullUrl } = req.query;
+module.exports.getUpdateMedia = async (req, res) => {
+  const { url: fullUrl, mediaType } = req.query;
+  const { prefixIdentifier, dataModel } = getMediaTypeParams(mediaType);
   try {
     const siteConfig = await SiteConfig.findOne({});
-    const { youTubeVideoPrefix } = siteConfig;
-    const video = await YouTubeVideo.findOne({ url: fullUrl.replace(youTubeVideoPrefix, '') });
-    if (video) {
-      const { url, title } = video;
-      return sendResponse(req, res, 200, UPDATE_VIDEO_PAGE, [
+    const { [prefixIdentifier]: urlPrefix } = siteConfig;
+    const mediaItem = await dataModel.findOne({ url: fullUrl.replace(urlPrefix, '') });
+    if (mediaItem) {
+      const { url, title } = mediaItem;
+      return sendResponse(req, res, 200, UPDATE_MEDIA_PAGE, [
         CONTENT_PAGE_ATTR,
-        ['urlPrefix', youTubeVideoPrefix],
-        ['formAttributes', { url, title, urlPrefix: youTubeVideoPrefix }],
+        ['mediaType', mediaType],
+        ['urlPrefix', urlPrefix],
+        ['formAttributes', { url, title, urlPrefix }],
       ]);
     }
   } catch (err) {
     console.error(err);
   }
   req.flash('error', 'Error loading page');
-  return sendResponse(req, res, 400, UPDATE_VIDEO_PAGE, [
+  return sendResponse(req, res, 400, UPDATE_MEDIA_PAGE, [
     CONTENT_PAGE_ATTR,
+    ['mediaType', mediaType],
+    ['urlPrefix', ''],
     ['formAttributes', {}],
   ]);
 };

@@ -2,9 +2,9 @@
 <%- include('../../partials/nav.ejs') %>
 <% const { title, url, urlPrefix } = formAttributes; %> 
 <div class="update-page">
-  <h2 class="update-page-title">Update YouTube video data</h2>
+  <h2 class="update-page-title">Update <%= mediaType === 'video' ? 'YouTube video' : 'Soundcloud track' %> data</h2>
   <div class="update-page-panel">
-    <form action="/config/update-video" method="POST">
+    <form action="/config/update-<%= mediaType %>" method="POST">
       <fieldset>
         <%- include('../../components/forms/title-input.ejs', { title }) %>
         <input type="hidden" id="originalTitle" name="originalTitle" value="<%= title %>">
@@ -13,11 +13,11 @@
         <input type="hidden" id="urlPrefix" name="urlPrefix" value="<%= urlPrefix %>">
         <%- include('../../components/forms/form-submit.ejs', {
           sendMessage,
-          submitButtonText: 'Update video',
+          submitButtonText: `Update ${mediaType}`,
         }) %>
       </fieldset>
     </form>
-    <a class="mt-2" href="/config/manage-media?mediaType=video">Return to list</a>
+    <a class="mt-2" href="/config/manage-media?mediaType=<%= mediaType %>">Return to list</a>
   </div>
 </div>
 <%- include('../../partials/foot.ejs') %> 

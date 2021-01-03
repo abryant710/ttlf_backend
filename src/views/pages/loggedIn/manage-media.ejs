@@ -15,7 +15,7 @@
       <div class="manage-page-panel__item">
         <p><%= title %></p>
         <p><a href="<%= url %>" target="_blank"><%= url %></a></p>
-        <p class="action-button"><a type="button" class="btn btn-secondary" href="/config/update-<%= mediaType %>?url=<%= url %>">Edit</a></p>
+        <p class="action-button"><a type="button" class="btn btn-secondary" href="/config/update-media?url=<%= url %>&mediaType=<%= mediaType %>">Edit</a></p>
         <p class="action-button"><button type="submit" class="btn btn-danger" onclick="updateFormValue('<%= deleteClass %>', '<%= url %>');">Delete</button></p>
       </div>
     <% }); %> 
