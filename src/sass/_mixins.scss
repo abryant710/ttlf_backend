@@ -11,8 +11,12 @@
   text-align: center;
   & p {
     font-weight: $font-weight;
-    margin: 1rem 0;
+    margin: 1rem .5rem;
     width: 15rem;
+    word-break: break-word;
+    &.action-button {
+      width: 5rem;
+    }
   }
 
   & form {

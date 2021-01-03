@@ -7645,8 +7645,11 @@ a.text-dark:focus, a.text-dark:hover {
       text-align: center; }
       .manage-page-panel__header p {
         font-weight: 600;
-        margin: 1rem 0;
-        width: 15rem; }
+        margin: 1rem .5rem;
+        width: 15rem;
+        word-break: break-word; }
+        .manage-page-panel__header p.action-button {
+          width: 5rem; }
       .manage-page-panel__header form {
         width: 15rem; }
     .manage-page-panel__item {
@@ -7658,8 +7661,11 @@ a.text-dark:focus, a.text-dark:hover {
       text-align: center; }
       .manage-page-panel__item p {
         font-weight: 300;
-        margin: 1rem 0;
-        width: 15rem; }
+        margin: 1rem .5rem;
+        width: 15rem;
+        word-break: break-word; }
+        .manage-page-panel__item p.action-button {
+          width: 5rem; }
       .manage-page-panel__item form {
         width: 15rem; }
 

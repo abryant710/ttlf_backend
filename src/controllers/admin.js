@@ -4,11 +4,14 @@ const {
     MANAGE_VIDEOS_PAGE,
     CREATE_VIDEO_PAGE,
     UPDATE_VIDEO_PAGE,
+    MANAGE_TRACKS_PAGE,
+    CREATE_TRACK_PAGE,
+    UPDATE_TRACK_PAGE,
   },
 } = require('../utils/pages');
 const SiteConfig = require('../models/SiteConfig');
 const YouTubeVideo = require('../models/YouTubeVideo');
-// const SoundcloudTrack = require('../models/SoundcloudTrack');
+const SoundcloudTrack = require('../models/SoundcloudTrack');
 const { sendResponse } = require('../utils/general');
 
 const LIVE_PAGE_ATTR = ['configPage', 'live'];
@@ -22,23 +25,27 @@ module.exports.getConfig = async (req, res) => {
   );
 };
 
-module.exports.getYouTubeVideos = async (req, res) => {
+module.exports.getManageMedia = async (req, res) => {
+  const { mediaType } = req.query;
+  const managePage = mediaType === 'videos' ? MANAGE_VIDEOS_PAGE : MANAGE_TRACKS_PAGE;
+  const prefixIdentifier = mediaType === 'videos' ? 'youTubeVideoPrefix' : 'soundcloudTrackPrefix';
+  const dataModel = mediaType === 'videos' ? YouTubeVideo : SoundcloudTrack;
   try {
     const siteConfig = await SiteConfig.findOne({});
-    const { youTubeVideoPrefix } = siteConfig;
-    const youTubeVideos = await YouTubeVideo.find({});
-    const videos = youTubeVideos.map(({ title, url }) => ({
-      title, url: `${youTubeVideoPrefix}${url}`,
+    const { [prefixIdentifier]: urlPrefix } = siteConfig;
+    const fetchedItems = await dataModel.find({});
+    const items = fetchedItems.map(({ title, url }) => ({
+      title, url: `${urlPrefix}${url}`,
     }));
-    return sendResponse(req, res, 200, MANAGE_VIDEOS_PAGE, [
+    return sendResponse(req, res, 200, managePage, [
       CONTENT_PAGE_ATTR,
-      ['videos', videos],
+      [mediaType, items],
     ]);
   } catch (err) {
     console.error(err);
   }
-  req.flash('error', 'Could not fetch the videos from the database');
-  return sendResponse(req, res, 400, MANAGE_VIDEOS_PAGE);
+  req.flash('error', `Could not fetch the ${mediaType} from the database`);
+  return sendResponse(req, res, 400, managePage);
 };
 
 module.exports.getUpdateVideo = async (req, res) => {
