@@ -8,26 +8,15 @@ const {
 } = require('../utils/pages');
 const SiteConfig = require('../models/SiteConfig');
 const YouTubeVideo = require('../models/YouTubeVideo');
+// const SoundcloudTrack = require('../models/SoundcloudTrack');
 const { sendResponse } = require('../utils/general');
 
 const LIVE_PAGE_ATTR = ['configPage', 'live'];
 const CONTENT_PAGE_ATTR = ['configPage', 'site-content'];
 
 module.exports.getConfig = async (req, res) => {
-  // videos.forEach(async ({ title, url }) => {
-  //   const youTubeVideo = new YouTubeVideo({
-  //     title, url,
-  //   });
-  //   await youTubeVideo.save();
-  // });
-  // const youTubeVideos = await YouTubeVideo.find({});
-  // const newSiteConfig = new SiteConfig({
-  //   youTubeVideos: youTubeVideos.map((vid) => vid._id),
-  //   youTubeVideoPrefix,
-  // });
-  // await newSiteConfig.save();
-  const siteConfig = await SiteConfig.find({});
-  console.log(siteConfig);
+  const siteConfig = await SiteConfig.findOne({});
+  console.info(siteConfig);
   return sendResponse(
     req, res, 200, CONFIG_LIVE_PAGE, [LIVE_PAGE_ATTR],
   );

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const {
@@ -8,9 +9,44 @@ const {
 } = require('../utils/pages');
 const { sendMail } = require('../utils/mailer');
 const { getOrigin, sendResponse } = require('../utils/general');
+const SiteConfig = require('../models/SiteConfig');
+const YouTubeVideo = require('../models/YouTubeVideo');
+const SoundcloudTrack = require('../models/SoundcloudTrack');
 
 const PROTECTED_ADMINS = ['alexbryant710@gmail.com'];
 const CONFIG_PAGE_ATTR = ['configPage', 'admin-users'];
+
+const {
+  initYouTubeUrlPrefix,
+  initYouTubeVideos,
+  initSoundcloudUrlPrefix,
+  initSoundcloudTracks,
+} = require('../utils/initialConfig');
+
+module.exports.initialiseData = async (_req, res) => {
+  await YouTubeVideo.find({}).deleteMany({});
+  await SoundcloudTrack.find({}).deleteMany({});
+  initYouTubeVideos.forEach(async ({ title, url }) => {
+    const youTubeVideo = new YouTubeVideo({
+      title, url,
+    });
+    await youTubeVideo.save();
+  });
+  initSoundcloudTracks.forEach(async ({ title, url }) => {
+    const soundcloudTrack = new SoundcloudTrack({
+      title, url,
+    });
+    await soundcloudTrack.save();
+  });
+  const newSiteConfig = new SiteConfig({
+    youTubeVideos: initYouTubeVideos.map((vid) => vid._id),
+    youTubeVideoPrefix: initYouTubeUrlPrefix,
+    soundcloudTracks: initSoundcloudTracks.map((track) => track._id),
+    soundcloudTrackPrefix: initSoundcloudUrlPrefix,
+  });
+  await newSiteConfig.save();
+  return res.redirect('/config/live');
+};
 
 module.exports.getManageAdmins = async (req, res) => {
   try {
