@@ -16,6 +16,12 @@ const { sendResponse } = require('../utils/general');
 const LIVE_PAGE_ATTR = ['configPage', 'live'];
 const CONTENT_PAGE_ATTR = ['configPage', 'site-content'];
 
+const getMediaTypeParams = (mediaType) => {
+  const prefixIdentifier = mediaType === 'video' ? 'youTubeVideoPrefix' : 'soundcloudTrackPrefix';
+  const dataModel = mediaType === 'video' ? YouTubeVideo : SoundcloudTrack;
+  return { prefixIdentifier, dataModel };
+};
+
 module.exports.getConfig = async (req, res) => {
   const siteConfig = await SiteConfig.findOne({});
   console.info(siteConfig);
@@ -26,8 +32,7 @@ module.exports.getConfig = async (req, res) => {
 
 module.exports.getManageMedia = async (req, res) => {
   const { mediaType } = req.query;
-  const prefixIdentifier = mediaType === 'video' ? 'youTubeVideoPrefix' : 'soundcloudTrackPrefix';
-  const dataModel = mediaType === 'video' ? YouTubeVideo : SoundcloudTrack;
+  const { prefixIdentifier, dataModel } = getMediaTypeParams(mediaType);
   try {
     const siteConfig = await SiteConfig.findOne({});
     const { [prefixIdentifier]: urlPrefix } = siteConfig;
