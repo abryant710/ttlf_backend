@@ -1,10 +1,9 @@
 const {
   pages: {
     CONFIG_LIVE_PAGE,
-    MANAGE_VIDEOS_PAGE,
+    MANAGE_MEDIA_PAGE,
     CREATE_VIDEO_PAGE,
     UPDATE_VIDEO_PAGE,
-    MANAGE_TRACKS_PAGE,
     CREATE_TRACK_PAGE,
     UPDATE_TRACK_PAGE,
   },
@@ -27,9 +26,8 @@ module.exports.getConfig = async (req, res) => {
 
 module.exports.getManageMedia = async (req, res) => {
   const { mediaType } = req.query;
-  const managePage = mediaType === 'videos' ? MANAGE_VIDEOS_PAGE : MANAGE_TRACKS_PAGE;
-  const prefixIdentifier = mediaType === 'videos' ? 'youTubeVideoPrefix' : 'soundcloudTrackPrefix';
-  const dataModel = mediaType === 'videos' ? YouTubeVideo : SoundcloudTrack;
+  const prefixIdentifier = mediaType === 'video' ? 'youTubeVideoPrefix' : 'soundcloudTrackPrefix';
+  const dataModel = mediaType === 'video' ? YouTubeVideo : SoundcloudTrack;
   try {
     const siteConfig = await SiteConfig.findOne({});
     const { [prefixIdentifier]: urlPrefix } = siteConfig;
@@ -37,15 +35,20 @@ module.exports.getManageMedia = async (req, res) => {
     const items = fetchedItems.map(({ title, url }) => ({
       title, url: `${urlPrefix}${url}`,
     }));
-    return sendResponse(req, res, 200, managePage, [
+    return sendResponse(req, res, 200, MANAGE_MEDIA_PAGE, [
       CONTENT_PAGE_ATTR,
-      [mediaType, items],
+      ['mediaType', mediaType],
+      ['items', items],
     ]);
   } catch (err) {
     console.error(err);
   }
-  req.flash('error', `Could not fetch the ${mediaType} from the database`);
-  return sendResponse(req, res, 400, managePage);
+  req.flash('error', `Could not fetch the ${mediaType}s from the database`);
+  return sendResponse(req, res, 400, MANAGE_MEDIA_PAGE, [
+    CONTENT_PAGE_ATTR,
+    ['mediaType', mediaType],
+    ['items', []],
+  ]);
 };
 
 module.exports.getUpdateVideo = async (req, res) => {
@@ -171,11 +174,11 @@ module.exports.deleteVideo = async (req, res) => {
     if (video) {
       await video.deleteOne({ url: truncatedUrl });
       req.flash('success', `Deleted YouTube video ${url}`);
-      return res.redirect('/config/manage-videos');
+      return res.redirect('/config/manage-media?mediaType=video');
     }
   } catch (err) {
     console.error(err);
   }
   req.flash('error', `Could not delete the video ${url}`);
-  return res.redirect('/config/manage-videos');
+  return res.redirect('/config/manage-media?mediaType=video');
 };
