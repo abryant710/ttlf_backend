@@ -8,7 +8,7 @@ const {
   postCreateMedia,
   getUpdateMedia,
   postUpdateMedia,
-  deleteVideo,
+  deleteMedia,
 } = require('../controllers/admin');
 
 const router = express.Router();
@@ -18,6 +18,6 @@ router.get('/config/create-media', checkAuth, getCreateMedia);
 router.post('/config/create-media', checkAuth, postCreateMedia);
 router.get('/config/update-media', checkAuth, getUpdateMedia);
 router.post('/config/update-media', checkAuth, postUpdateMedia);
-router.post('/config/delete-video', checkAuth, deleteVideo);
+router.post('/config/delete-media', checkAuth, deleteMedia);
 
 module.exports = router;

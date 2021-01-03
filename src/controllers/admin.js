@@ -175,21 +175,22 @@ module.exports.postCreateMedia = async (req, res) => {
   ]);
 };
 
-module.exports.deleteVideo = async (req, res) => {
-  const { url } = req.body;
+module.exports.deleteMedia = async (req, res) => {
+  const { url, mediaType } = req.body;
+  const { prefixIdentifier, DataModel } = getMediaTypeParams(mediaType);
   try {
     const siteConfig = await SiteConfig.findOne({});
-    const { youTubeVideoPrefix } = siteConfig;
-    const truncatedUrl = url.replace(youTubeVideoPrefix, '');
-    const video = await YouTubeVideo.findOne({ url: truncatedUrl });
-    if (video) {
-      await video.deleteOne({ url: truncatedUrl });
-      req.flash('success', `Deleted YouTube video ${url}`);
-      return res.redirect('/config/manage-media?mediaType=video');
+    const { [prefixIdentifier]: urlPrefix } = siteConfig;
+    const truncatedUrl = url.replace(urlPrefix, '');
+    const item = await DataModel.findOne({ url: truncatedUrl });
+    if (item) {
+      await item.deleteOne({ url: truncatedUrl });
+      req.flash('success', `Deleted ${mediaType} ${url}`);
+      return res.redirect(`/config/manage-media?mediaType=${mediaType}`);
     }
   } catch (err) {
     console.error(err);
   }
-  req.flash('error', `Could not delete the video ${url}`);
-  return res.redirect('/config/manage-media?mediaType=video');
+  req.flash('error', `Could not delete the ${mediaType} ${url}`);
+  return res.redirect(`/config/manage-media?mediaType=${mediaType}`);
 };
