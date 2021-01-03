@@ -2,7 +2,7 @@ const {
   pages: {
     CONFIG_LIVE_PAGE,
     MANAGE_MEDIA_PAGE,
-    CREATE_VIDEO_PAGE,
+    CREATE_MEDIA_PAGE,
     UPDATE_MEDIA_PAGE,
   },
 } = require('../utils/pages');
@@ -115,21 +115,26 @@ module.exports.postUpdateVideo = async (req, res) => {
   ]);
 };
 
-module.exports.getCreateVideo = async (req, res) => {
+module.exports.getCreateMedia = async (req, res) => {
+  const { mediaType } = req.query;
+  const { prefixIdentifier } = getMediaTypeParams(mediaType);
   try {
     const siteConfig = await SiteConfig.findOne({});
-    const { youTubeVideoPrefix } = siteConfig;
-    return sendResponse(req, res, 200, CREATE_VIDEO_PAGE, [
+    const { [prefixIdentifier]: urlPrefix } = siteConfig;
+    return sendResponse(req, res, 200, CREATE_MEDIA_PAGE, [
       CONTENT_PAGE_ATTR,
-      ['urlPrefix', youTubeVideoPrefix],
-      ['formAttributes', { urlPrefix: youTubeVideoPrefix }],
+      ['mediaType', mediaType],
+      ['urlPrefix', urlPrefix],
+      ['formAttributes', { urlPrefix }],
     ]);
   } catch (err) {
     console.error(err);
   }
   req.flash('error', 'Error loading page');
-  return sendResponse(req, res, 400, CREATE_VIDEO_PAGE, [
+  return sendResponse(req, res, 400, CREATE_MEDIA_PAGE, [
     CONTENT_PAGE_ATTR,
+    ['mediaType', mediaType],
+    ['urlPrefix', ''],
     ['formAttributes', {}],
   ]);
 };

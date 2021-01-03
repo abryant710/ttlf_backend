@@ -4,7 +4,7 @@ const { checkAuth } = require('../middleware/auth');
 const {
   getConfig,
   getManageMedia,
-  getCreateVideo,
+  getCreateMedia,
   postCreateVideo,
   getUpdateMedia,
   postUpdateVideo,
@@ -14,7 +14,7 @@ const {
 const router = express.Router();
 router.get('/config/live', checkAuth, getConfig);
 router.get('/config/manage-media', checkAuth, getManageMedia);
-router.get('/config/create-video', checkAuth, getCreateVideo);
+router.get('/config/create-media', checkAuth, getCreateMedia);
 router.post('/config/create-video', checkAuth, postCreateVideo);
 router.get('/config/update-media', checkAuth, getUpdateMedia);
 router.post('/config/update-video', checkAuth, postUpdateVideo);

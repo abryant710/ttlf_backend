@@ -4,7 +4,7 @@ module.exports.pages = {
   MANAGE_ADMINS_PAGE: 'pages/loggedIn/manage-admins',
   CREATE_ADMIN_PAGE: 'pages/loggedIn/create-admin',
   MANAGE_MEDIA_PAGE: 'pages/loggedIn/manage-media',
-  CREATE_VIDEO_PAGE: 'pages/loggedIn/create-video',
+  CREATE_MEDIA_PAGE: 'pages/loggedIn/create-media',
   UPDATE_MEDIA_PAGE: 'pages/loggedIn/update-media',
   LOGIN_PAGE: 'pages/loggedOut/login',
   SEND_RESET_PAGE: 'pages/loggedOut/send-reset',
