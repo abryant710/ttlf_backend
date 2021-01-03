@@ -7641,7 +7641,7 @@ a.text-dark:focus, a.text-dark:hover {
       display: flex;
       flex-direction: row;
       justify-content: center;
-      border-bottom: 2px solid #000000;
+      border-bottom: 2px solid #000;
       text-align: center; }
       .manage-page-panel__header p {
         font-weight: 600;
@@ -7654,7 +7654,7 @@ a.text-dark:focus, a.text-dark:hover {
       display: flex;
       flex-direction: row;
       justify-content: center;
-      border-bottom: 2px solid #000000;
+      border-bottom: 2px solid #000;
       text-align: center; }
       .manage-page-panel__item p {
         font-weight: 300;

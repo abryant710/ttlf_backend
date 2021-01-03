@@ -7,7 +7,7 @@
 
 @mixin table-content($font-weight) {
   @include flex-items(row, center, center);
-  border-bottom: 2px solid #000000;
+  border-bottom: 2px solid #000;
   text-align: center;
   & p {
     font-weight: $font-weight;
