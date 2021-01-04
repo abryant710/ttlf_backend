@@ -4,11 +4,13 @@ const {
     MANAGE_MEDIA_PAGE,
     CREATE_MEDIA_PAGE,
     UPDATE_MEDIA_PAGE,
+    MANAGE_BIOS_PAGE,
   },
 } = require('../utils/pages');
 const SiteConfig = require('../models/SiteConfig');
 const YouTubeVideo = require('../models/YouTubeVideo');
 const SoundcloudTrack = require('../models/SoundcloudTrack');
+const DjProfile = require('../models/DjProfile');
 const { sendResponse } = require('../utils/general');
 
 const LIVE_PAGE_ATTR = ['configPage', 'live'];
@@ -21,15 +23,36 @@ const getMediaTypeParams = (mediaType) => {
   return { mediaRandomised, prefixIdentifier, DataModel };
 };
 
-module.exports.getConfig = async (req, res) => {
-  const siteConfig = await SiteConfig.findOne({});
-  console.info(siteConfig);
-  return sendResponse(
-    req, res, 200, CONFIG_LIVE_PAGE, [LIVE_PAGE_ATTR],
-  );
+module.exports.getConfig = async (req, res, next) => {
+  try {
+    const siteConfig = await SiteConfig.findOne({});
+    console.info(siteConfig);
+    return sendResponse(
+      req, res, 200, CONFIG_LIVE_PAGE, [LIVE_PAGE_ATTR],
+    );
+  } catch (err) {
+    const error = new Error(err);
+    return next(error);
+  }
 };
 
-module.exports.getManageMedia = async (req, res) => {
+module.exports.getManageBios = async (req, res, next) => {
+  try {
+    const fetchedItems = await DjProfile.find({});
+    const items = fetchedItems.map(({ name, nickname, bio }) => ({
+      name, nickname, bio,
+    }));
+    return sendResponse(req, res, 200, MANAGE_BIOS_PAGE, [
+      CONTENT_PAGE_ATTR,
+      ['bios', items],
+    ]);
+  } catch (err) {
+    const error = new Error(err);
+    return next(error);
+  }
+};
+
+module.exports.getManageMedia = async (req, res, next) => {
   const { mediaType } = req.query;
   const { mediaRandomised, prefixIdentifier, DataModel } = getMediaTypeParams(mediaType);
   try {
@@ -49,18 +72,12 @@ module.exports.getManageMedia = async (req, res) => {
       ['items', items],
     ]);
   } catch (err) {
-    console.error(err);
+    const error = new Error(err);
+    return next(error);
   }
-  req.flash('error', `Could not fetch the ${mediaType}s from the database`);
-  return sendResponse(req, res, 400, MANAGE_MEDIA_PAGE, [
-    CONTENT_PAGE_ATTR,
-    ['mediaRandomised', false],
-    ['mediaType', mediaType],
-    ['items', []],
-  ]);
 };
 
-module.exports.getUpdateMedia = async (req, res) => {
+module.exports.getUpdateMedia = async (req, res, next) => {
   const { url: fullUrl, mediaType } = req.query;
   const { prefixIdentifier, DataModel } = getMediaTypeParams(mediaType);
   try {
@@ -76,17 +93,15 @@ module.exports.getUpdateMedia = async (req, res) => {
         }],
       ]);
     }
+    const error = new Error('Media item not found in the database');
+    return next(error);
   } catch (err) {
-    console.error(err);
+    const error = new Error(err);
+    return next(error);
   }
-  req.flash('error', 'Error loading page');
-  return sendResponse(req, res, 400, UPDATE_MEDIA_PAGE, [
-    CONTENT_PAGE_ATTR,
-    ['formAttributes', { urlPrefix: '', mediaType }],
-  ]);
 };
 
-module.exports.postUpdateMedia = async (req, res) => {
+module.exports.postUpdateMedia = async (req, res, next) => {
   const {
     title, originalTitle, url, originalUrl, urlPrefix, mediaType,
   } = req.body;
@@ -114,19 +129,15 @@ module.exports.postUpdateMedia = async (req, res) => {
         }],
       ]);
     }
+    const error = new Error('Media item not found in the database');
+    return next(error);
   } catch (err) {
-    console.error(err);
+    const error = new Error(err);
+    return next(error);
   }
-  req.flash('error', `Could not update the ${mediaType} ${urlPrefix}${url}`);
-  return sendResponse(req, res, 400, UPDATE_MEDIA_PAGE, [
-    CONTENT_PAGE_ATTR,
-    ['formAttributes', {
-      title: originalTitle, url: originalUrl, urlPrefix, mediaType,
-    }],
-  ]);
 };
 
-module.exports.getCreateMedia = async (req, res) => {
+module.exports.getCreateMedia = async (req, res, next) => {
   const { mediaType } = req.query;
   const { prefixIdentifier } = getMediaTypeParams(mediaType);
   try {
@@ -137,16 +148,12 @@ module.exports.getCreateMedia = async (req, res) => {
       ['formAttributes', { urlPrefix, mediaType }],
     ]);
   } catch (err) {
-    console.error(err);
+    const error = new Error(err);
+    return next(error);
   }
-  req.flash('error', 'Error loading page');
-  return sendResponse(req, res, 400, CREATE_MEDIA_PAGE, [
-    CONTENT_PAGE_ATTR,
-    ['formAttributes', { urlPrefix: '', mediaType }],
-  ]);
 };
 
-module.exports.postCreateMedia = async (req, res) => {
+module.exports.postCreateMedia = async (req, res, next) => {
   const {
     title, url, urlPrefix, mediaType,
   } = req.body;
@@ -162,26 +169,25 @@ module.exports.postCreateMedia = async (req, res) => {
     const item = await DataModel.findOne({ url });
     if (item) {
       req.flash('error', `${urlPrefix}${item.url} already exists in the database`);
-    } else {
-      const newItem = new DataModel({ title, url });
-      await newItem.save();
-      req.flash('success', `New ${mediaType} ${urlPrefix}${url} created.`);
-      return sendResponse(req, res, 201, CREATE_MEDIA_PAGE, [
+      return sendResponse(req, res, 400, CREATE_MEDIA_PAGE, [
         CONTENT_PAGE_ATTR,
         ['formAttributes', { urlPrefix, mediaType }],
       ]);
     }
+    const newItem = new DataModel({ title, url });
+    await newItem.save();
+    req.flash('success', `New ${mediaType} ${urlPrefix}${url} created.`);
+    return sendResponse(req, res, 201, CREATE_MEDIA_PAGE, [
+      CONTENT_PAGE_ATTR,
+      ['formAttributes', { urlPrefix, mediaType }],
+    ]);
   } catch (err) {
-    console.error(err);
-    req.flash('error', `Could not create the ${mediaType} ${urlPrefix}${url}`);
+    const error = new Error(err);
+    return next(error);
   }
-  return sendResponse(req, res, 400, CREATE_MEDIA_PAGE, [
-    CONTENT_PAGE_ATTR,
-    ['formAttributes', { urlPrefix, mediaType }],
-  ]);
 };
 
-module.exports.deleteMedia = async (req, res) => {
+module.exports.deleteMedia = async (req, res, next) => {
   const { url, mediaType } = req.body;
   const { prefixIdentifier, DataModel } = getMediaTypeParams(mediaType);
   try {
@@ -194,14 +200,15 @@ module.exports.deleteMedia = async (req, res) => {
       req.flash('success', `Deleted ${mediaType} ${url}`);
       return res.redirect(`/config/manage-media?mediaType=${mediaType}`);
     }
+    const error = new Error('Media item not found in the database');
+    return next(error);
   } catch (err) {
-    console.error(err);
+    const error = new Error(err);
+    return next(error);
   }
-  req.flash('error', `Could not delete the ${mediaType} ${url}`);
-  return res.redirect(`/config/manage-media?mediaType=${mediaType}`);
 };
 
-module.exports.postRandomiseMedia = async (req, res) => {
+module.exports.postRandomiseMedia = async (req, res, next) => {
   const { mediaType } = req.body;
   const { mediaRandomised } = getMediaTypeParams(mediaType);
   try {
@@ -211,8 +218,7 @@ module.exports.postRandomiseMedia = async (req, res) => {
     req.flash('success', `${mediaType} randomisation set to ${!randomised}`);
     return res.redirect(`/config/manage-media?mediaType=${mediaType}`);
   } catch (err) {
-    console.error(err);
+    const error = new Error(err);
+    return next(error);
   }
-  req.flash('error', `${mediaType} randomisation could not be updated`);
-  return res.redirect(`/config/manage-media?mediaType=${mediaType}`);
 };

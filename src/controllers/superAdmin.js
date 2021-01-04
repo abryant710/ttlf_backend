@@ -64,7 +64,7 @@ module.exports.initialiseData = async (_req, res) => {
   return res.redirect('/config/live');
 };
 
-module.exports.getManageAdmins = async (req, res) => {
+module.exports.getManageAdmins = async (req, res, next) => {
   try {
     let adminUsers = await User.find({});
     adminUsers = adminUsers.map(({ email, firstName, lastName }) => ({
@@ -75,13 +75,9 @@ module.exports.getManageAdmins = async (req, res) => {
       ['adminUsers', adminUsers],
     ]);
   } catch (err) {
-    console.error(err);
+    const error = new Error(err);
+    return next(error);
   }
-  req.flash('error', 'Could not fetch the admin users');
-  return sendResponse(req, res, 400, MANAGE_ADMINS_PAGE, [
-    CONFIG_PAGE_ATTR,
-    ['adminUsers', []],
-  ]);
 };
 
 module.exports.getCreateAdmin = (req, res) => sendResponse(req, res, 200, CREATE_ADMIN_PAGE, [

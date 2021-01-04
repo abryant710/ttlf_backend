@@ -31,7 +31,7 @@ const csrfProtection = csrf();
 app.set('view engine', 'ejs');
 app.set('views', 'src/views');
 
-const { get404 } = require('./src/controllers/error');
+const { get404, get500 } = require('./src/controllers/error');
 const authRoutes = require('./src/routes/auth');
 const superAdminRoutes = require('./src/routes/superAdmin');
 const adminRoutes = require('./src/routes/admin');
@@ -70,7 +70,14 @@ app.get(/^\/$/, (_req, res) => res
   .status(200)
   .redirect(DEFAULT_ROUTE));
 
+app.get('/500', get500);
 app.use(get404);
+
+// eslint-disable-next-line no-unused-vars
+app.use((error, req, res, next) => {
+  console.log(error);
+  return res.redirect('/500');
+});
 
 mongoose.connect(
   `${MONGO_DB_URI}?retryWrites=true&w=majority`,

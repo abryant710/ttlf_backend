@@ -1,0 +1,21 @@
+<%- include('../../partials/head.ejs') %> 
+<%- include('../../partials/nav.ejs') %> 
+<div class="manage-page">
+  <h2 class="manage-page-title">Manage DJ profiles</h2>
+  <p><a type="button" class="btn btn-primary" href="/config/create-bio">Add new</a></p>
+  <div class="manage-page-panel">
+    
+  </div>
+</div>
+<%- include('../../components/forms/delete-item-form.ejs', {
+  dataType: 'bio',
+  formValueType: 'name',
+  sendMessage,
+}) %>
+<%- include('../../components/modal.ejs', {
+  modalTitle: 'Delete',
+  modalText: `Are you sure you want to delete this DJ profile?`,
+  modalTitle: `Delete DJ profile`,
+  formClass: `delete-bio-form`,
+}) %>
+<%- include('../../partials/foot.ejs') %> 

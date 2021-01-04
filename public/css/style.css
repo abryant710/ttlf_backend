@@ -7589,7 +7589,7 @@ a.text-dark:focus, a.text-dark:hover {
   height: 2rem;
   width: auto; }
 
-.no-page {
+.error-page {
   align-items: center;
   display: flex;
   flex-direction: column;
