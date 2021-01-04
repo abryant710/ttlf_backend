@@ -10,6 +10,7 @@ const {
 const { sendMail } = require('../utils/mailer');
 const { getOrigin, sendResponse } = require('../utils/general');
 const SiteConfig = require('../models/SiteConfig');
+const DjProfile = require('../models/DjProfile');
 const YouTubeVideo = require('../models/YouTubeVideo');
 const SoundcloudTrack = require('../models/SoundcloudTrack');
 
@@ -17,6 +18,7 @@ const PROTECTED_ADMINS = ['alexbryant710@gmail.com'];
 const CONFIG_PAGE_ATTR = ['configPage', 'admin-users'];
 
 const {
+  initDjProfiles,
   initYouTubeRandomise,
   initYouTubeUrlPrefix,
   initYouTubeVideos,
@@ -26,29 +28,39 @@ const {
 } = require('../utils/initialConfig');
 
 module.exports.initialiseData = async (_req, res) => {
-  await YouTubeVideo.find({}).deleteMany({});
-  await SoundcloudTrack.find({}).deleteMany({});
-  initYouTubeVideos.forEach(async ({ title, url }) => {
-    const youTubeVideo = new YouTubeVideo({
+  try {
+    await DjProfile.find({}).deleteMany({});
+    await YouTubeVideo.find({}).deleteMany({});
+    await SoundcloudTrack.find({}).deleteMany({});
+    const youTubeVideos = initYouTubeVideos.map(({ title, url }) => new YouTubeVideo({
       title, url,
-    });
-    await youTubeVideo.save();
-  });
-  initSoundcloudTracks.forEach(async ({ title, url }) => {
-    const soundcloudTrack = new SoundcloudTrack({
+    }));
+    const soundcloudTracks = initSoundcloudTracks.map(({ title, url }) => new SoundcloudTrack({
       title, url,
+    }));
+    const djProfiles = initDjProfiles.map(({ bio, nickname, name }) => new DjProfile({
+      bio, nickname, name,
+    }));
+    const youTubePromises = youTubeVideos.map((vid) => vid.save());
+    const soundcloudPromises = soundcloudTracks.map((track) => track.save());
+    const djProfilePromises = djProfiles.map((profile) => profile.save());
+    await Promise.all([...youTubePromises, ...soundcloudPromises, ...djProfilePromises]);
+    const newSiteConfig = new SiteConfig({
+      djProfiles: djProfiles.map((profile) => profile._id),
+      upcomingEvent: false,
+      liveNow: false,
+      currentLiveDj: djProfiles[0]._id,
+      youTubeVideos: youTubeVideos.map((vid) => vid._id),
+      youTubeVideosRandomised: initYouTubeRandomise,
+      youTubeVideoPrefix: initYouTubeUrlPrefix,
+      soundcloudTracks: soundcloudTracks.map((track) => track._id),
+      soundcloudTracksRandomised: initSoundcloudRandomise,
+      soundcloudTrackPrefix: initSoundcloudUrlPrefix,
     });
-    await soundcloudTrack.save();
-  });
-  const newSiteConfig = new SiteConfig({
-    youTubeVideos: initYouTubeVideos.map((vid) => vid._id),
-    youTubeVideosRandomised: initYouTubeRandomise,
-    youTubeVideoPrefix: initYouTubeUrlPrefix,
-    soundcloudTracks: initSoundcloudTracks.map((track) => track._id),
-    soundcloudTracksRandomised: initSoundcloudRandomise,
-    soundcloudTrackPrefix: initSoundcloudUrlPrefix,
-  });
-  await newSiteConfig.save();
+    await newSiteConfig.save();
+  } catch (err) {
+    console.error(err);
+  }
   return res.redirect('/config/live');
 };
 

@@ -27,7 +27,7 @@ var updateFormValue = function updateFormValue(attrClass, value) {
     });
 
     $('.random-order-switch').change(function () {
-      submitForm('randomise-media-form');
+      return submitForm('randomise-media-form');
     });
   });
 })(jQuery);

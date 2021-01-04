@@ -18,9 +18,7 @@ const updateFormValue = (attrClass, value, openModal = true) => {
 
     $('.modal-close').click(() => $('.modal').css({ display: 'none' }));
 
-    $('.random-order-switch').change(function () {
-      submitForm('randomise-media-form');
-    });
+    $('.random-order-switch').change(() => submitForm('randomise-media-form'));
   });
 })(jQuery);
 

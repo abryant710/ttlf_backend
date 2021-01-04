@@ -3,6 +3,22 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const siteConfigSchema = new Schema({
+  djProfiles: {
+    type: [Schema.Types.ObjectId],
+    required: true,
+  },
+  upcomingEvent: {
+    type: Boolean,
+    required: true,
+  },
+  liveNow: {
+    type: Boolean,
+    required: true,
+  },
+  currentLiveDj: {
+    type: Schema.Types.ObjectId,
+    required: true,
+  },
   youTubeVideoPrefix: {
     type: String,
     required: true,
