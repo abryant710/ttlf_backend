@@ -7573,10 +7573,10 @@ a.text-dark:focus, a.text-dark:hover {
   color: #b9a78a; }
 
 .danger-background {
-  background-color: #f0d9d9; }
+  background-color: #d23430; }
 
 .success-background {
-  background-color: #f1f7e8; }
+  background-color: #93c54b; }
 
 .toast-position {
   min-height: 7rem;
