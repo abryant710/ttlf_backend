@@ -1,9 +1,10 @@
 <%- include('../../partials/head.ejs') %> 
 <%- include('../../partials/nav.ejs') %> 
+<% const environ = process.env.TTLF_ENV; %> 
 <div class="live">
   <h2 class="live-title">Manage live configuration</h2>
   <div class="live-panel">
-    <a href="https://ttlf.net" target="_blank">Vist the live site</a>
+    <a href="<%= environ === 'production' ? 'https://ttlf.net' : 'http://localhost:3000' %>" target="_blank">Vist the live site</a>
   </div>
 </div>
 <%- include('../../partials/foot.ejs') %> 
