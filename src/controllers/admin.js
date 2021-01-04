@@ -15,9 +15,10 @@ const LIVE_PAGE_ATTR = ['configPage', 'live'];
 const CONTENT_PAGE_ATTR = ['configPage', 'site-content'];
 
 const getMediaTypeParams = (mediaType) => {
+  const mediaRandomised = mediaType === 'video' ? 'youTubeVideosRandomised' : 'soundcloudTracksRandomised';
   const prefixIdentifier = mediaType === 'video' ? 'youTubeVideoPrefix' : 'soundcloudTrackPrefix';
   const DataModel = mediaType === 'video' ? YouTubeVideo : SoundcloudTrack;
-  return { prefixIdentifier, DataModel };
+  return { mediaRandomised, prefixIdentifier, DataModel };
 };
 
 module.exports.getConfig = async (req, res) => {
@@ -30,16 +31,20 @@ module.exports.getConfig = async (req, res) => {
 
 module.exports.getManageMedia = async (req, res) => {
   const { mediaType } = req.query;
-  const { prefixIdentifier, DataModel } = getMediaTypeParams(mediaType);
+  const { mediaRandomised, prefixIdentifier, DataModel } = getMediaTypeParams(mediaType);
   try {
     const siteConfig = await SiteConfig.findOne({});
-    const { [prefixIdentifier]: urlPrefix } = siteConfig;
+    const {
+      [prefixIdentifier]: urlPrefix,
+      [mediaRandomised]: randomised,
+    } = siteConfig;
     const fetchedItems = await DataModel.find({});
     const items = fetchedItems.map(({ title, url }) => ({
       title, url: `${urlPrefix}${url}`,
     }));
     return sendResponse(req, res, 200, MANAGE_MEDIA_PAGE, [
       CONTENT_PAGE_ATTR,
+      ['mediaRandomised', randomised],
       ['mediaType', mediaType],
       ['items', items],
     ]);
@@ -49,6 +54,7 @@ module.exports.getManageMedia = async (req, res) => {
   req.flash('error', `Could not fetch the ${mediaType}s from the database`);
   return sendResponse(req, res, 400, MANAGE_MEDIA_PAGE, [
     CONTENT_PAGE_ATTR,
+    ['mediaRandomised', false],
     ['mediaType', mediaType],
     ['items', []],
   ]);
@@ -192,5 +198,21 @@ module.exports.deleteMedia = async (req, res) => {
     console.error(err);
   }
   req.flash('error', `Could not delete the ${mediaType} ${url}`);
+  return res.redirect(`/config/manage-media?mediaType=${mediaType}`);
+};
+
+module.exports.postRandomiseMedia = async (req, res) => {
+  const { mediaType } = req.body;
+  const { mediaRandomised } = getMediaTypeParams(mediaType);
+  try {
+    const siteConfig = await SiteConfig.findOne({});
+    const { [mediaRandomised]: randomised } = siteConfig;
+    await siteConfig.updateOne({ [mediaRandomised]: !randomised });
+    req.flash('success', `${mediaType} randomisation set to ${!randomised}`);
+    return res.redirect(`/config/manage-media?mediaType=${mediaType}`);
+  } catch (err) {
+    console.error(err);
+  }
+  req.flash('error', `${mediaType} randomisation could not be updated`);
   return res.redirect(`/config/manage-media?mediaType=${mediaType}`);
 };

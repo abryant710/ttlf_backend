@@ -24,7 +24,7 @@
     "dev": "nodemon app.js",
     "deploy": "npm run build:app && eb deploy $(echo $TTLF_EB_ENV) --profile $(echo $TTLF_EB_PROFILE)",
     "clean:build": "rm -rf www/* || true",
-    "clean:yarn": "rm -rf node_modules || true && rm yarn.lock || true && yarn cache clean && yarn install",
+    "clean:yarn": "rm -rf node_modules || true && rm yarn.lock || true && yarn cache clean && yarn install && npm rebuild node-sass",
     "lint": "npm-run-all lint:js lint:css",
     "lint:js": "npx eslint --fix .",
     "lint:css": "sass-lint-auto-fix --config-sass-lint .sass-lint.yml -c .sass-lint-auto-fix.yml",
@@ -40,7 +40,12 @@
     "build:css": "npm-run-all compile:sass prefix:css minify:css remove_unused:css"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-minify": "^0.5.1",
+    "babel-preset-es2015": "^6.24.1",
     "autoprefixer": "^10.1.0",
+    "chokidar-cli": "^2.1.0",
     "eslint": "^7.16.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
@@ -54,13 +59,8 @@
     "sass-lint-auto-fix": "^0.21.2"
   },
   "dependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-minify": "^0.5.1",
-    "babel-preset-es2015": "^6.24.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
-    "chokidar-cli": "^2.1.0",
     "connect-flash": "^0.1.1",
     "connect-mongodb-session": "^2.4.1",
     "csurf": "^1.11.0",

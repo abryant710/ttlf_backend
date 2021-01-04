@@ -1,3 +1,4 @@
+module.exports.initYouTubeRandomise = false;
 module.exports.initYouTubeUrlPrefix = 'https://www.youtube.com/watch?v=';
 module.exports.initYouTubeVideos = [
   {
@@ -57,6 +58,7 @@ module.exports.initYouTubeVideos = [
     url: 'F9ZgZsWjOq0',
   },
 ];
+module.exports.initSoundcloudRandomise = true;
 module.exports.initSoundcloudUrlPrefix = 'https://soundcloud.com';
 module.exports.initSoundcloudTracks = [
   {

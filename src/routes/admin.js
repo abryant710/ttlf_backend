@@ -9,6 +9,7 @@ const {
   getUpdateMedia,
   postUpdateMedia,
   deleteMedia,
+  postRandomiseMedia,
 } = require('../controllers/admin');
 
 const router = express.Router();
@@ -19,5 +20,6 @@ router.post('/config/create-media', checkAuth, postCreateMedia);
 router.get('/config/update-media', checkAuth, getUpdateMedia);
 router.post('/config/update-media', checkAuth, postUpdateMedia);
 router.post('/config/delete-media', checkAuth, deleteMedia);
+router.post('/config/randomise-media', checkAuth, postRandomiseMedia);
 
 module.exports = router;

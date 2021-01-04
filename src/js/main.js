@@ -17,6 +17,10 @@ const updateFormValue = (attrClass, value, openModal = true) => {
     $('.toast-close').click(() => $('.toast').remove());
 
     $('.modal-close').click(() => $('.modal').css({ display: 'none' }));
+
+    $('.random-order-switch').change(function () {
+      submitForm('randomise-media-form');
+    });
   });
 })(jQuery);
 

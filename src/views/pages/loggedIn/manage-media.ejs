@@ -3,6 +3,17 @@
 <% const deleteClass = `delete-${mediaType}-url`; %> 
 <div class="manage-page">
   <h2 class="manage-page-title">Manage <%= mediaType === 'video' ? 'YouTube videos' : 'Soundcloud tracks' %></h2>
+  <div class="form-group">
+    <div class="custom-control custom-switch">
+      <input
+        type="checkbox"
+        class="custom-control-input random-order-switch"
+        id="random-order-switch"
+        <%= mediaRandomised ? 'checked' : '' %>
+      >
+      <label class="custom-control-label" for="random-order-switch">Randomise the order of <%= mediaType %>s every time the website loads</label>
+    </div>
+  </div>
   <p><a type="button" class="btn btn-primary" href="/config/create-media?mediaType=<%= mediaType %>">Add new</a></p>
   <div class="manage-page-panel">
     <div class="manage-page-panel__header">
@@ -21,6 +32,10 @@
     <% }); %> 
   </div>
 </div>
+<%- include('../../components/forms/randomise-media-form.ejs', {
+  dataType: mediaType,
+  sendMessage,
+}) %>
 <%- include('../../components/forms/delete-item-form.ejs', {
   dataType: mediaType,
   formValueType: 'url',

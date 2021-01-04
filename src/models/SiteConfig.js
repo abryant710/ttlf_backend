@@ -11,12 +11,20 @@ const siteConfigSchema = new Schema({
     type: [Schema.Types.ObjectId],
     required: true,
   },
+  youTubeVideosRandomised: {
+    type: Boolean,
+    required: true,
+  },
   soundcloudTrackPrefix: {
     type: String,
     required: true,
   },
   soundcloudTracks: {
     type: [Schema.Types.ObjectId],
+    required: true,
+  },
+  soundcloudTracksRandomised: {
+    type: Boolean,
     required: true,
   },
 });

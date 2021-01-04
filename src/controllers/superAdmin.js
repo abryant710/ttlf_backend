@@ -17,8 +17,10 @@ const PROTECTED_ADMINS = ['alexbryant710@gmail.com'];
 const CONFIG_PAGE_ATTR = ['configPage', 'admin-users'];
 
 const {
+  initYouTubeRandomise,
   initYouTubeUrlPrefix,
   initYouTubeVideos,
+  initSoundcloudRandomise,
   initSoundcloudUrlPrefix,
   initSoundcloudTracks,
 } = require('../utils/initialConfig');
@@ -40,8 +42,10 @@ module.exports.initialiseData = async (_req, res) => {
   });
   const newSiteConfig = new SiteConfig({
     youTubeVideos: initYouTubeVideos.map((vid) => vid._id),
+    youTubeVideosRandomised: initYouTubeRandomise,
     youTubeVideoPrefix: initYouTubeUrlPrefix,
     soundcloudTracks: initSoundcloudTracks.map((track) => track._id),
+    soundcloudTracksRandomised: initSoundcloudRandomise,
     soundcloudTrackPrefix: initSoundcloudUrlPrefix,
   });
   await newSiteConfig.save();

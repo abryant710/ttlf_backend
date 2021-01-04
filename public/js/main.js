@@ -25,5 +25,9 @@ var updateFormValue = function updateFormValue(attrClass, value) {
     $('.modal-close').click(function () {
       return $('.modal').css({ display: 'none' });
     });
+
+    $('.random-order-switch').change(function () {
+      submitForm('randomise-media-form');
+    });
   });
 })(jQuery);
