@@ -33,15 +33,15 @@ const getDjBios = async () => {
 
 module.exports.getConfig = async (req, res, next) => {
   try {
-    // const siteConfig = await SiteConfig.findOne({});
-    // const bios = await getDjBios();
-    // const { liveNow, currentLiveDj } = siteConfig;
-    // const dj = await DjProfile.findOne({ _id: currentLiveDj });
+    const siteConfig = await SiteConfig.findOne({});
+    const bios = await getDjBios();
+    const { liveNow, currentLiveDj } = siteConfig;
+    const dj = await DjProfile.findOne({ _id: currentLiveDj });
     return sendResponse(req, res, 200, CONFIG_LIVE_PAGE, [
       LIVE_PAGE_ATTR,
-      ['liveNow', ''],
-      ['currentLiveDj', ''],
-      ['bios', []],
+      ['liveNow', liveNow],
+      ['currentLiveDj', dj.name],
+      ['bios', bios],
     ]);
   } catch (err) {
     const error = new Error(err);
