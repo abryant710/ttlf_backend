@@ -341,3 +341,17 @@ module.exports.postLiveNow = async (_req, res, next) => {
     return next(error);
   }
 };
+
+module.exports.postUpdateLiveDj = async (req, res, next) => {
+  const { name } = req.body;
+  try {
+    const siteConfig = await SiteConfig.findOne({});
+    const liveDj = await DjProfile.findOne({ name });
+    // eslint-disable-next-line no-underscore-dangle
+    await siteConfig.updateOne({ currentLiveDj: liveDj._id });
+    return res.redirect('/config/live');
+  } catch (err) {
+    const error = new Error(err);
+    return next(error);
+  }
+};

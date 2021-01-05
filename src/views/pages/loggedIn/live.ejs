@@ -24,6 +24,17 @@
         <% }); %> 
       </select>
     </div>
+    <form action="/config/update-live-dj" method="POST">
+      <fieldset>
+        <input class="dj-name" type="hidden" id="dj-name" name="name" value="<%= currentLiveDj %>">
+        <div class="text-center">
+          <%- include('../../components/forms/form-submit.ejs', {
+            sendMessage,
+            submitButtonText: 'Update live DJ',
+          }) %>
+        </div>
+      </fieldset>
+    </form>
   </div>
 </div>
 <%- include('../../components/forms/live-now-form.ejs', {
@@ -32,13 +43,13 @@
 <% if (liveNow && currentLiveDj) { %>
   <%- include('../../components/toast.ejs', {
     toastCss: 'success',
-    toastType: 'Update',
+    toastType: 'Info',
     toastMsg: `You are live now with ${currentLiveDj}` ,
   }) %>
 <% } else { %>
   <%- include('../../components/toast.ejs', {
     toastCss: 'info',
-    toastType: 'Update',
+    toastType: 'Info',
     toastMsg: `You are not streaming live right now` ,
   }) %>
 <% } %>

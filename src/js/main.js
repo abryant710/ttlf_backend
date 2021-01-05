@@ -24,7 +24,7 @@ const updateFormValue = (attrClass, value, openModal = true) => {
 
     $('.bio-select').change((e) => window.location.assign(`/config/manage-bios?chosenProfile=${e.target.value}`));
 
-    $('.live-dj').change(() => window.location.assign(`/config/live`));
+    $('.live-dj-select').change((e) => updateFormValue('dj-name', e.target.value));
   });
 })(jQuery);
 

@@ -38,8 +38,8 @@ var updateFormValue = function updateFormValue(attrClass, value) {
       return window.location.assign('/config/manage-bios?chosenProfile=' + e.target.value);
     });
 
-    $('.live-dj').change(function () {
-      return window.location.assign('/config/live');
+    $('.live-dj-select').change(function (e) {
+      return updateFormValue('dj-name', e.target.value);
     });
   });
 })(jQuery);
