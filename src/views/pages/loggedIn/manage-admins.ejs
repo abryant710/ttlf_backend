@@ -1,0 +1,34 @@
+<%- include('../../partials/head.ejs') %>
+<%- include('../../partials/nav.ejs') %>
+<div class="manage-page">
+  <h2 class="manage-page-title">Manage admin users</h2>
+  <p><a type="button" class="btn btn-primary" href="/config/create-admin">Add new admin</a></p>
+  <div class="manage-page-panel">
+    <div class="manage-page-panel__header">
+      <p class="text-primary">First name</p>
+      <p class="text-primary">Last name</p>
+      <p class="text-primary">Email</p>
+      <p class="text-danger action-button">Delete?</p>
+    </div>
+    <% adminUsers.forEach(({ firstName, lastName, email }) => { %>
+      <div class="manage-page-panel__item">
+        <p><%= firstName %></p>
+        <p><%= lastName %></p>
+        <p><%= email %></p>
+        <p class="action-button"><button type="submit" class="btn btn-danger" onclick="updateFormValue('delete-admin-email', '<%= email %>');">Delete</button></p>
+      </div>
+    <% }); %> 
+  </div>
+</div>
+<%- include('../../components/forms/delete-item-form.ejs', {
+  dataType: 'admin',
+  formValueType: 'email',
+  sendMessage,
+}) %>
+<%- include('../../components/modal.ejs', {
+  modalTitle: 'Delete',
+  modalText: `Are you sure you want to delete this user?`,
+  modalTitle: 'Delete admin',
+  formClass: 'delete-admin-form',
+}) %>
+<%- include('../../partials/foot.ejs') %> 

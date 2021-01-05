@@ -1,0 +1,23 @@
+<%- include('../../partials/head.ejs') %>
+<%- include('../../partials/nav.ejs') %>
+<% const { firstName, lastName, email } = formAttributes; %> 
+<div class="create-page">
+  <h2 class="create-page-title">Create a new admin user</h2>
+  <div class="create-page-panel">
+    <form action="/config/create-admin" method="POST">
+      <fieldset>
+        <%- include('../../components/forms/first-name-input.ejs', { firstName }) %>
+        <%- include('../../components/forms/last-name-input.ejs', { lastName }) %>
+        <%- include('../../components/forms/email-input.ejs', { email, readOnly: false }) %>
+        <%- include('../../components/forms/password-input.ejs') %>
+        <%- include('../../components/forms/repeat-password-input.ejs') %>
+        <%- include('../../components/forms/form-submit.ejs', {
+          sendMessage,
+          submitButtonText: 'Create admin user',
+        }) %>
+      </fieldset>
+    </form>
+    <a class="mt-2" href="/config/manage-admins">Return to list</a>
+  </div>
+</div>
+<%- include('../../partials/foot.ejs') %> 

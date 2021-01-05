@@ -1,0 +1,9 @@
+<form class="invisible mt-2 live-now-form" action="/config/live-now" method="POST">
+  <fieldset>
+    <input type="hidden" id="liveNow" name="liveNow" value="liveNow">
+    <%- include('../../components/forms/form-submit.ejs', {
+      sendMessage,
+      submitButtonText: 'Live now',
+    }) %>
+  </fieldset>
+</form>

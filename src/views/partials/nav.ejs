@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <span class="navbar-brand"><img src="/images/ttlf_0006.png" class="nav-img" /></span>
+
+  <div class="collapse navbar-collapse" id="navbarColor03">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item <%= configPage === 'live' ? 'active' : '' %>">
+        <a class="nav-link" href="/config/live">Live</a>
+      </li>
+      <li class="nav-item dropdown <%= configPage === 'site-content' ? 'active' : '' %>">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Site content</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="/config/manage-media?mediaType=video">Manage videos</a>
+          <a class="dropdown-item" href="/config/manage-media?mediaType=track">Manage tracks</a>
+          <a class="dropdown-item" href="/config/manage-bios">Manage DJ bios</a>
+          <a class="dropdown-item" href="/config/manage-schedule">Manage DJ schedule</a>
+          <a class="dropdown-item" href="/config/manage-events">Manage events</a>
+        </div>
+      </li>
+      <% if (isSuperAdmin) { %>
+      <li class="nav-item dropdown <%= configPage === 'admin-users' ? 'active' : '' %>">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin users</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="/config/manage-admins">Manage admins</a>
+        </div>
+      </li>
+      <% } %>
+    </ul>
+    <p class="form-inline mr-2 my-2 my-lg-0"><%= userEmail %></p>
+    <form action="/logout" method="POST" class="form-inline my-2 my-lg-0">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <button class="btn btn-secondary my-2 my-sm-0" type="submit">Logout</button>
+    </form>
+  </div>
+</nav>

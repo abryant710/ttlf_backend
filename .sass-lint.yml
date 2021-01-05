@@ -1,8 +1,8 @@
 files:
   include:
-    - 'sass/**/*.scss'
+    - 'src/sass/**/*.scss'
   ignore:
-    - 'sass/**/*bootstrap.scss'
+    - 'src/sass/**/*bootstrap.scss'
     - 'node_modules/**'
     - 'public/**'
 resolvers:

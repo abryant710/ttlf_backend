@@ -16,6 +16,7 @@ const {
   TTLF_MONGO_URI,
   TTLF_MONGO_DB,
   TTLF_SESSION_SECRET,
+  TTLF_ENV,
 } = process.env;
 
 const MONGO_DB_URI = `mongodb+srv://${TTLF_MONGO_USER}:${TTLF_MONGO_PW}@${TTLF_MONGO_URI}/${TTLF_MONGO_DB}`;
@@ -28,15 +29,16 @@ const store = new MongoDBStore({
 const csrfProtection = csrf();
 
 app.set('view engine', 'ejs');
-app.set('views', 'views');
+app.set('views', 'src/views');
 
-const { get404 } = require('./controllers/error');
-const authRoutes = require('./routes/auth');
-const superAdminRoutes = require('./routes/superAdmin');
-const adminRoutes = require('./routes/admin');
-const apiRoutes = require('./routes/api');
+const { get404, get500 } = require('./src/controllers/error');
+const authRoutes = require('./src/routes/auth');
+const superAdminRoutes = require('./src/routes/superAdmin');
+const adminRoutes = require('./src/routes/admin');
+const apiRoutes = require('./src/routes/api');
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json()); // json api data
+app.use(bodyParser.urlencoded({ extended: false })); // form data
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: TTLF_SESSION_SECRET,
@@ -47,8 +49,14 @@ app.use(session({
   },
   store,
 }));
-app.use(csrfProtection);
-app.use(flash());
+app.use(csrfProtection); // protect form submission from csrf
+app.use(flash()); // allow messages to be flashed
+app.use((_req, res, next) => { // add headers to allow REST api to recieve requests
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 
 app.use((req, res, next) => {
   const { isSuperAdmin, email: userEmail } = req.session.user || {};
@@ -58,7 +66,7 @@ app.use((req, res, next) => {
   next();
 });
 
-const DEFAULT_ROUTE = '/config';
+const DEFAULT_ROUTE = '/config/live';
 
 app.use(authRoutes);
 app.use(superAdminRoutes);
@@ -69,7 +77,14 @@ app.get(/^\/$/, (_req, res) => res
   .status(200)
   .redirect(DEFAULT_ROUTE));
 
+app.get('/500', get500);
 app.use(get404);
+
+// eslint-disable-next-line no-unused-vars
+app.use((error, req, res, next) => {
+  console.log(error);
+  return res.redirect('/500');
+});
 
 mongoose.connect(
   `${MONGO_DB_URI}?retryWrites=true&w=majority`,
@@ -86,3 +101,5 @@ mongoose.connect(
   .catch((err) => {
     console.error(err);
   });
+
+console.info(`Running the ${TTLF_ENV} environment`);

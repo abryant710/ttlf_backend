@@ -1,5 +1,7 @@
+.DS_Store
 node_modules/
 www/*
+yarn-error.log
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

@@ -1,0 +1,20 @@
+<%- include('../../partials/head.ejs') %>
+<%- include('../../partials/nav.ejs') %>
+<div class="create-page">
+  <h2 class="create-page-title">Create a new DJ profile</h2>
+  <div class="create-page-panel">
+    <form action="/config/create-bio" method="POST">
+      <fieldset>
+        <%- include('../../components/forms/name-input.ejs', { name: '' }) %>
+        <%- include('../../components/forms/nickname-input.ejs', { nickname: '' }) %>
+        <textarea name="bio" class="form-control bio-text mb-2" rows="8"></textarea>
+        <%- include('../../components/forms/form-submit.ejs', {
+          sendMessage,
+          submitButtonText: 'Create DJ profile',
+        }) %>
+      </fieldset>
+    </form>
+    <a class="mt-2" href="/config/manage-bios">Return to profiles</a>
+  </div>
+</div>
+<%- include('../../partials/foot.ejs') %> 

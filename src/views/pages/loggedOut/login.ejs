@@ -1,0 +1,19 @@
+<%- include('../../partials/head.ejs') %>
+<% const { email } = formAttributes; %> 
+<div class="login">
+  <div class="login-panel">
+    <img src="images/ttlf_0006.png" class="login-img" />
+    <form action="/login" method="POST">
+      <fieldset>
+        <%- include('../../components/forms/email-input.ejs', { email, readOnly: false }) %>
+        <%- include('../../components/forms/password-input.ejs') %>
+        <%- include('../../components/forms/form-submit.ejs', {
+          sendMessage,
+          submitButtonText: 'Login',
+        }) %>
+        <a class="text-center m-2" href="/send-reset">Reset Password?</a>
+      </fieldset>
+    </form>
+  </div>
+</div>
+<%- include('../../partials/foot.ejs') %> 

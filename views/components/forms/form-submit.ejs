@@ -1,9 +1,0 @@
-<input type="hidden" name="_csrf" value="<%= csrfToken %>">
-<button type="submit" class="btn btn-primary mb-2"><%= submitButtonText %></button>
-<% if (formMessage) { %> 
-  <% if (formMessage.error) { %>
-    <p class="text-center text-danger danger-background mt-1 mb-1">Error: <%= formMessage.error %></p>
-  <% } else if (formMessage.success) { %> 
-    <p class="text-center text-success success-background mt-1 mb-1">Success: <%= formMessage.success %></p>
-  <% } %>
-<% } %>

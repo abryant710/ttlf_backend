@@ -1,0 +1,23 @@
+.manage-page {
+  @include full-page-container;
+  padding-top: 2rem;
+  &-title {
+    margin: 0 0 2rem;
+    text-align: center;
+  }
+
+  &-panel {
+    padding-bottom: 2rem;
+    &__header {
+      @include table-content(600);
+    }
+
+    &__item {
+      @include table-content(300);
+    }
+  }
+
+  &__wide-form {
+    width: 30rem;
+  }
+}

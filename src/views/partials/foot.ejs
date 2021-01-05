@@ -1,0 +1,4 @@
+<% const environ = process.env.TTLF_ENV; %> 
+</body>
+<script type="text/javascript" src="/js/main<%= environ === 'production' ? '.min' : '' %>.js"></script>
+</html>

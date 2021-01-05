@@ -1,0 +1,56 @@
+@mixin flex-items($type, $align, $justify) {
+  align-items: $align;
+  display: flex;
+  flex-direction: $type;
+  justify-content: $justify;
+}
+
+@mixin table-content($font-weight) {
+  @include flex-items(row, center, center);
+  border-bottom: 2px solid #000;
+  text-align: center;
+  & p {
+    font-weight: $font-weight;
+    margin: 1rem .5rem;
+    width: 15rem;
+    word-break: break-word;
+    &.action-button {
+      width: 5rem;
+    }
+  }
+
+  & form {
+    width: 15rem;
+  }
+}
+
+@mixin full-page-container {
+  @include flex-items(column, center, flex-start);
+  height: 100vh;
+  width: 100vw;
+}
+
+@mixin standard-form {
+  @include full-page-container;
+  padding-top: 2rem;
+
+  &-panel {
+    @include flex-items(column, center, center);
+    height: auto;
+    padding-bottom: 5rem;
+    width: 20rem;
+  }
+
+  & form {
+    width: 100%;
+    & fieldset {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  &-img {
+    margin: 1rem;
+    width: 15rem;
+  }
+}

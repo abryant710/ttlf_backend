@@ -1,0 +1,7 @@
+.create-page {
+  @include standard-form;
+  &-title {
+    margin: 0 0 2rem;
+    text-align: center;
+  }
+}

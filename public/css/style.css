@@ -7573,22 +7573,39 @@ a.text-dark:focus, a.text-dark:hover {
   color: #b9a78a; }
 
 .danger-background {
-  background-color: #f0d9d9;
-  border: 1px solid #d9534f;
-  border-radius: 3px;
-  padding: .5rem; }
+  background-color: #d23430; }
+
+.info-background {
+  background-color: #284a6c; }
 
 .success-background {
-  background-color: #f1f7e8;
-  border: 1px solid #93c54b;
-  border-radius: 3px;
-  padding: .5rem; }
+  background-color: #93c54b; }
+
+.faded-background {
+  width: 100vw;
+  height: 100vh;
+  opacity: .4;
+  background-color: black;
+  z-index: 900;
+  position: fixed;
+  top: 0;
+  left: 0; }
+
+.w-100 {
+  width: 100%; }
+
+.toast-position {
+  min-height: 7rem;
+  min-width: 14rem;
+  position: fixed !important;
+  right: .5rem;
+  top: .5rem; }
 
 .nav-img {
   height: 2rem;
   width: auto; }
 
-.no-page {
+.error-page {
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -7622,7 +7639,7 @@ a.text-dark:focus, a.text-dark:hover {
     margin: 1rem;
     width: 15rem; }
 
-.create-admin {
+.manage-page {
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -7630,7 +7647,55 @@ a.text-dark:focus, a.text-dark:hover {
   height: 100vh;
   width: 100vw;
   padding-top: 2rem; }
-  .create-admin-panel {
+  .manage-page-title {
+    margin: 0 0 2rem;
+    text-align: center; }
+  .manage-page-panel {
+    padding-bottom: 2rem; }
+    .manage-page-panel__header {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      border-bottom: 2px solid #000;
+      text-align: center; }
+      .manage-page-panel__header p {
+        font-weight: 600;
+        margin: 1rem .5rem;
+        width: 15rem;
+        word-break: break-word; }
+        .manage-page-panel__header p.action-button {
+          width: 5rem; }
+      .manage-page-panel__header form {
+        width: 15rem; }
+    .manage-page-panel__item {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      border-bottom: 2px solid #000;
+      text-align: center; }
+      .manage-page-panel__item p {
+        font-weight: 300;
+        margin: 1rem .5rem;
+        width: 15rem;
+        word-break: break-word; }
+        .manage-page-panel__item p.action-button {
+          width: 5rem; }
+      .manage-page-panel__item form {
+        width: 15rem; }
+  .manage-page__wide-form {
+    width: 30rem; }
+
+.create-page {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100vh;
+  width: 100vw;
+  padding-top: 2rem; }
+  .create-page-panel {
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -7638,15 +7703,43 @@ a.text-dark:focus, a.text-dark:hover {
     height: auto;
     padding-bottom: 5rem;
     width: 20rem; }
-  .create-admin form {
+  .create-page form {
     width: 100%; }
-    .create-admin form fieldset {
+    .create-page form fieldset {
       display: flex;
       flex-direction: column; }
-  .create-admin-img {
+  .create-page-img {
     margin: 1rem;
     width: 15rem; }
-  .create-admin-title {
+  .create-page-title {
+    margin: 0 0 2rem;
+    text-align: center; }
+
+.update-page {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100vh;
+  width: 100vw;
+  padding-top: 2rem; }
+  .update-page-panel {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: auto;
+    padding-bottom: 5rem;
+    width: 20rem; }
+  .update-page form {
+    width: 100%; }
+    .update-page form fieldset {
+      display: flex;
+      flex-direction: column; }
+  .update-page-img {
+    margin: 1rem;
+    width: 15rem; }
+  .update-page-title {
     margin: 0 0 2rem;
     text-align: center; }
 
@@ -7699,3 +7792,15 @@ a.text-dark:focus, a.text-dark:hover {
   .send-reset-img {
     margin: 1rem;
     width: 15rem; }
+
+.live {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100vh;
+  width: 100vw;
+  padding-top: 2rem; }
+  .live-title {
+    margin: 0 0 2rem;
+    text-align: center; }
