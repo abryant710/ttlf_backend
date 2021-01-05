@@ -3,11 +3,22 @@
 }
 
 .info-background {
-  background-color: #29abe0;
+  background-color: #284a6c;
 }
 
 .success-background {
   background-color: #93c54b;
+}
+
+.faded-background {
+  width: 100vw;
+  height: 100vh;
+  opacity: .4;
+  background-color: black;
+  z-index: 900;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 .w-100 {

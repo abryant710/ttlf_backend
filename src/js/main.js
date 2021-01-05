@@ -1,5 +1,6 @@
 /* eslint-disable */
 const showModal = () => {
+  $('.faded-background').removeClass('invisible');
   $('.modal').css({ display: 'block' });
 }
 
@@ -16,7 +17,10 @@ const updateFormValue = (attrClass, value, openModal = true) => {
   $(document).ready(function () {
     $('.toast-close').click(() => $('.toast').remove());
 
-    $('.modal-close').click(() => $('.modal').css({ display: 'none' }));
+    $('.modal-close').click(() => {
+      $('.faded-background').addClass('invisible');
+      $('.modal').css({ display: 'none' })
+    });
 
     $('.random-order-switch').change(() => submitForm('randomise-media-form'));
 

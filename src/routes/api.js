@@ -1,10 +1,10 @@
 const express = require('express');
 
 const {
-  getApi,
+  getWebsiteConfig,
 } = require('../controllers/api');
 
 const router = express.Router();
-router.get('/', getApi);
+router.get('/v1/siteConfig', getWebsiteConfig);
 
 module.exports = router;

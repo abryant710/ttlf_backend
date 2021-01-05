@@ -2,6 +2,7 @@
 
 /* eslint-disable */
 var showModal = function showModal() {
+  $('.faded-background').removeClass('invisible');
   $('.modal').css({ display: 'block' });
 };
 
@@ -23,7 +24,8 @@ var updateFormValue = function updateFormValue(attrClass, value) {
     });
 
     $('.modal-close').click(function () {
-      return $('.modal').css({ display: 'none' });
+      $('.faded-background').addClass('invisible');
+      $('.modal').css({ display: 'none' });
     });
 
     $('.random-order-switch').change(function () {

@@ -37,7 +37,8 @@ const superAdminRoutes = require('./src/routes/superAdmin');
 const adminRoutes = require('./src/routes/admin');
 const apiRoutes = require('./src/routes/api');
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json()); // json api data
+app.use(bodyParser.urlencoded({ extended: false })); // form data
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: TTLF_SESSION_SECRET,
@@ -48,8 +49,14 @@ app.use(session({
   },
   store,
 }));
-app.use(csrfProtection);
-app.use(flash());
+app.use(csrfProtection); // protect form submission from csrf
+app.use(flash()); // allow messages to be flashed
+app.use((_req, res, next) => { // add headers to allow REST api to recieve requests
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 
 app.use((req, res, next) => {
   const { isSuperAdmin, email: userEmail } = req.session.user || {};
