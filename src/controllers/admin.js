@@ -330,7 +330,7 @@ module.exports.postRandomiseMedia = async (req, res, next) => {
   }
 };
 
-module.exports.postLiveNow = async (req, res, next) => {
+module.exports.postLiveNow = async (_req, res, next) => {
   try {
     const siteConfig = await SiteConfig.findOne({});
     const { liveNow } = siteConfig;

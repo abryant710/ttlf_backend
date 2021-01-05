@@ -31,17 +31,15 @@ var updateFormValue = function updateFormValue(attrClass, value) {
     });
 
     $('.live-now-switch').change(function () {
-      return submitForm('randomise-media-form');
+      return submitForm('live-now-form');
     });
 
     $('.bio-select').change(function (e) {
-      var newName = e.target.value;
-      window.location.assign('/config/manage-bios?chosenProfile=' + newName);
+      return window.location.assign('/config/manage-bios?chosenProfile=' + e.target.value);
     });
 
-    $('.live-dj').change(function (e) {
-      var newName = e.target.value;
-      window.location.assign('/config/manage-bios?chosenProfile=' + newName);
+    $('.live-dj').change(function () {
+      return window.location.assign('/config/live');
     });
   });
 })(jQuery);

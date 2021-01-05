@@ -20,17 +20,11 @@ const updateFormValue = (attrClass, value, openModal = true) => {
 
     $('.random-order-switch').change(() => submitForm('randomise-media-form'));
 
-    $('.live-now-switch').change(() => submitForm('randomise-media-form'));
+    $('.live-now-switch').change(() => submitForm('live-now-form'));
 
-    $('.bio-select').change((e) => {
-      const newName = e.target.value;
-      window.location.assign(`/config/manage-bios?chosenProfile=${newName}`);
-    });
+    $('.bio-select').change((e) => window.location.assign(`/config/manage-bios?chosenProfile=${e.target.value}`));
 
-    $('.live-dj').change((e) => {
-      const newName = e.target.value;
-      window.location.assign(`/config/manage-bios?chosenProfile=${newName}`);
-    });
+    $('.live-dj').change(() => window.location.assign(`/config/live`));
   });
 })(jQuery);
 
