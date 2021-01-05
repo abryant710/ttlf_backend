@@ -92,21 +92,21 @@ module.exports.postCreateAdmin = async (req, res) => {
   } = req.body;
   if (!firstName || !lastName || !email || !password1 || !password2) {
     req.flash('error', 'Please complete the form');
-    return sendResponse(req, res, 400, CREATE_ADMIN_PAGE, [
+    return sendResponse(req, res, 422, CREATE_ADMIN_PAGE, [
       CONFIG_PAGE_ATTR,
       ['formAttributes', { firstName, lastName, email }],
     ]);
   }
   if (password1 !== password2) {
     req.flash('error', 'The passwords do not match');
-    return sendResponse(req, res, 400, CREATE_ADMIN_PAGE, [
+    return sendResponse(req, res, 422, CREATE_ADMIN_PAGE, [
       CONFIG_PAGE_ATTR,
       ['formAttributes', { firstName, lastName, email }],
     ]);
   }
   if (password1.length < 12) {
     req.flash('error', 'The password must be at least 12 characters long');
-    return sendResponse(req, res, 400, CREATE_ADMIN_PAGE, [
+    return sendResponse(req, res, 422, CREATE_ADMIN_PAGE, [
       CONFIG_PAGE_ATTR,
       ['formAttributes', { firstName, lastName, email }],
     ]);
@@ -144,7 +144,7 @@ module.exports.postCreateAdmin = async (req, res) => {
     console.error(err);
   }
   req.flash('error', `Could not create the admin user ${email}`);
-  return sendResponse(req, res, 400, CREATE_ADMIN_PAGE, [
+  return sendResponse(req, res, 500, CREATE_ADMIN_PAGE, [
     CONFIG_PAGE_ATTR,
     ['formAttributes', { firstName, lastName, email }],
   ]);

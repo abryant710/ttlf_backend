@@ -34,7 +34,7 @@ module.exports.postLogin = async (req, res) => {
     console.error(err);
   }
   req.flash('error', 'Could not sign in successfully');
-  return sendResponse(req, res, 403, LOGIN_PAGE, defaultFormAttrs);
+  return sendResponse(req, res, 401, LOGIN_PAGE, defaultFormAttrs);
 };
 
 module.exports.deleteSession = (req, res) => {
@@ -81,7 +81,7 @@ module.exports.postSendReset = async (req, res) => {
     console.error(err);
   }
   req.flash('error', 'Unable to send a reset email for this user');
-  return sendResponse(req, res, 403, SEND_RESET_PAGE, defaultFormAttrs);
+  return sendResponse(req, res, 401, SEND_RESET_PAGE, defaultFormAttrs);
 };
 
 module.exports.getResetPassword = async (req, res) => {
@@ -111,13 +111,13 @@ module.exports.postResetPassword = async (req, res) => {
   } = req.body;
   if (password1 !== password2) {
     req.flash('error', 'The passwords do not match');
-    return sendResponse(req, res, 403, RESET_PW_PAGE, [
+    return sendResponse(req, res, 422, RESET_PW_PAGE, [
       ['formAttributes', { email, token }],
     ]);
   }
   if (password1.length < 12) {
     req.flash('error', 'The password must be at least 12 characters long');
-    return sendResponse(req, res, 403, RESET_PW_PAGE, [
+    return sendResponse(req, res, 422, RESET_PW_PAGE, [
       ['formAttributes', { email, token }],
     ]);
   }
@@ -137,7 +137,7 @@ module.exports.postResetPassword = async (req, res) => {
     console.error(err);
   }
   req.flash('error', 'Failed to reset the password for this user');
-  return sendResponse(req, res, 403, RESET_PW_PAGE, [
+  return sendResponse(req, res, 401, RESET_PW_PAGE, [
     ['formAttributes', { email, token }],
   ]);
 };

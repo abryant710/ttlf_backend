@@ -120,7 +120,7 @@ module.exports.postUpdateBio = async (req, res, next) => {
   if (!name || !bio) {
     const bios = await getDjBios();
     req.flash('error', 'Please complete the form');
-    return sendResponse(req, res, 400, MANAGE_BIOS_PAGE, [
+    return sendResponse(req, res, 422, MANAGE_BIOS_PAGE, [
       CONTENT_PAGE_ATTR,
       ['chosenProfile', chosenProfile],
       ['bios', bios],
@@ -166,7 +166,7 @@ module.exports.postCreateBio = async (req, res, next) => {
   } = req.body;
   if (!name || !bio) {
     req.flash('error', 'Please complete the form');
-    return sendResponse(req, res, 400, CREATE_BIO_PAGE, [
+    return sendResponse(req, res, 422, CREATE_BIO_PAGE, [
       CONTENT_PAGE_ATTR,
     ]);
   }
@@ -174,7 +174,7 @@ module.exports.postCreateBio = async (req, res, next) => {
     const item = await DjProfile.findOne({ name });
     if (item) {
       req.flash('error', `${name} already exists in the database`);
-      return sendResponse(req, res, 400, CREATE_BIO_PAGE, [
+      return sendResponse(req, res, 422, CREATE_BIO_PAGE, [
         CONTENT_PAGE_ATTR,
       ]);
     }
@@ -198,7 +198,7 @@ module.exports.postUpdateMedia = async (req, res, next) => {
   const { DataModel } = getMediaTypeParams(mediaType);
   if (!title || !url) {
     req.flash('error', 'Please complete the form');
-    return sendResponse(req, res, 400, UPDATE_MEDIA_PAGE, [
+    return sendResponse(req, res, 422, UPDATE_MEDIA_PAGE, [
       CONTENT_PAGE_ATTR,
       ['formAttributes', {
         title: originalTitle, url: originalUrl, urlPrefix, mediaType,
@@ -250,7 +250,7 @@ module.exports.postCreateMedia = async (req, res, next) => {
   const { DataModel } = getMediaTypeParams(mediaType);
   if (!title || !url) {
     req.flash('error', 'Please complete the form');
-    return sendResponse(req, res, 400, CREATE_MEDIA_PAGE, [
+    return sendResponse(req, res, 422, CREATE_MEDIA_PAGE, [
       CONTENT_PAGE_ATTR,
       ['formAttributes', { urlPrefix, mediaType }],
     ]);
@@ -259,7 +259,7 @@ module.exports.postCreateMedia = async (req, res, next) => {
     const item = await DataModel.findOne({ url });
     if (item) {
       req.flash('error', `${urlPrefix}${item.url} already exists in the database`);
-      return sendResponse(req, res, 400, CREATE_MEDIA_PAGE, [
+      return sendResponse(req, res, 422, CREATE_MEDIA_PAGE, [
         CONTENT_PAGE_ATTR,
         ['formAttributes', { urlPrefix, mediaType }],
       ]);
