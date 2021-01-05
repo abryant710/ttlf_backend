@@ -29,6 +29,7 @@ const {
 
 module.exports.initialiseData = async (_req, res) => {
   try {
+    await SiteConfig.find({}).deleteMany({});
     await DjProfile.find({}).deleteMany({});
     await YouTubeVideo.find({}).deleteMany({});
     await SoundcloudTrack.find({}).deleteMany({});
