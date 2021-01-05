@@ -31,11 +31,12 @@ module.exports.getWebsiteConfig = async (_req, res) => {
       const { name, nickname, bio } = profiles.find(({ _id }) => profileId.equals(_id));
       return { name, nickname, bio };
     });
+    const dj = await DjProfile.findOne({ _id: currentLiveDj });
     return res.status(200).json({
       ...collections,
       upcomingEvent,
       liveNow,
-      currentLiveDj,
+      currentLiveDj: dj.name,
       youTubeVideosRandomised,
       youTubeVideoPrefix,
       soundcloudTracksRandomised,
