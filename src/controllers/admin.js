@@ -5,6 +5,7 @@ const {
     CREATE_MEDIA_PAGE,
     UPDATE_MEDIA_PAGE,
     MANAGE_BIOS_PAGE,
+    CREATE_BIO_PAGE,
   },
 } = require('../utils/pages');
 const SiteConfig = require('../models/SiteConfig');
@@ -23,6 +24,13 @@ const getMediaTypeParams = (mediaType) => {
   return { mediaRandomised, prefixIdentifier, DataModel };
 };
 
+const getDjBios = async () => {
+  const fetchedItems = await DjProfile.find({});
+  return fetchedItems.map(({ name, nickname, bio }) => ({
+    name, nickname, bio,
+  }));
+};
+
 module.exports.getConfig = async (req, res, next) => {
   try {
     const siteConfig = await SiteConfig.findOne({});
@@ -37,14 +45,13 @@ module.exports.getConfig = async (req, res, next) => {
 };
 
 module.exports.getManageBios = async (req, res, next) => {
+  const { chosenProfile } = req.query;
   try {
-    const fetchedItems = await DjProfile.find({});
-    const items = fetchedItems.map(({ name, nickname, bio }) => ({
-      name, nickname, bio,
-    }));
+    const bios = await getDjBios();
     return sendResponse(req, res, 200, MANAGE_BIOS_PAGE, [
       CONTENT_PAGE_ATTR,
-      ['bios', items],
+      ['chosenProfile', chosenProfile],
+      ['bios', bios],
     ]);
   } catch (err) {
     const error = new Error(err);
@@ -95,6 +102,84 @@ module.exports.getUpdateMedia = async (req, res, next) => {
     }
     const error = new Error('Media item not found in the database');
     return next(error);
+  } catch (err) {
+    const error = new Error(err);
+    return next(error);
+  }
+};
+
+module.exports.postUpdateBio = async (req, res, next) => {
+  const {
+    name, nickname, bio, chosenProfile, prevName,
+  } = req.body;
+  if (!name || !bio) {
+    const bios = await getDjBios();
+    req.flash('error', 'Please complete the form');
+    return sendResponse(req, res, 400, MANAGE_BIOS_PAGE, [
+      CONTENT_PAGE_ATTR,
+      ['chosenProfile', chosenProfile],
+      ['bios', bios],
+    ]);
+  }
+  try {
+    const item = await DjProfile.findOne({ name: prevName });
+    if (item) {
+      const bioArr = bio.split('\r\n').filter((para) => para);
+      await item.updateOne({
+        name, nickname, bio: bioArr,
+      });
+      const bios = await getDjBios();
+      req.flash('success', `Updated DJ profile ${name}.`);
+      return sendResponse(req, res, 201, MANAGE_BIOS_PAGE, [
+        CONTENT_PAGE_ATTR,
+        ['chosenProfile', chosenProfile],
+        ['bios', bios],
+      ]);
+    }
+    const error = new Error('DJ profile not found in the database');
+    return next(error);
+  } catch (err) {
+    const error = new Error(err);
+    return next(error);
+  }
+};
+
+module.exports.getCreateBio = async (req, res, next) => {
+  try {
+    return sendResponse(req, res, 200, CREATE_BIO_PAGE, [
+      CONTENT_PAGE_ATTR,
+    ]);
+  } catch (err) {
+    const error = new Error(err);
+    return next(error);
+  }
+};
+
+module.exports.postCreateBio = async (req, res, next) => {
+  const {
+    name, nickname, bio,
+  } = req.body;
+  if (!name || !bio) {
+    req.flash('error', 'Please complete the form');
+    return sendResponse(req, res, 400, CREATE_BIO_PAGE, [
+      CONTENT_PAGE_ATTR,
+    ]);
+  }
+  try {
+    const item = await DjProfile.findOne({ name });
+    if (item) {
+      req.flash('error', `${name} already exists in the database`);
+      return sendResponse(req, res, 400, CREATE_BIO_PAGE, [
+        CONTENT_PAGE_ATTR,
+      ]);
+    }
+    const bioArr = bio.split('\r\n').filter((para) => para);
+    const newItem = new DjProfile({ name, nickname, bio: bioArr });
+    await newItem.save();
+    req.flash('success', `New DJ profile ${name} created.`);
+    return sendResponse(req, res, 201, CREATE_BIO_PAGE, [
+      CONTENT_PAGE_ATTR,
+    ]);
   } catch (err) {
     const error = new Error(err);
     return next(error);
@@ -181,6 +266,23 @@ module.exports.postCreateMedia = async (req, res, next) => {
       CONTENT_PAGE_ATTR,
       ['formAttributes', { urlPrefix, mediaType }],
     ]);
+  } catch (err) {
+    const error = new Error(err);
+    return next(error);
+  }
+};
+
+module.exports.deleteBio = async (req, res, next) => {
+  const { name } = req.body;
+  try {
+    const item = await DjProfile.findOne({ name });
+    if (item) {
+      await item.deleteOne({ name });
+      req.flash('success', `Deleted DJ profile ${name}`);
+      return res.redirect('/config/manage-bios');
+    }
+    const error = new Error('DJ profile not found in the database');
+    return next(error);
   } catch (err) {
     const error = new Error(err);
     return next(error);

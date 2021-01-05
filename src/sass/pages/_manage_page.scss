@@ -16,4 +16,8 @@
       @include table-content(300);
     }
   }
+
+  &__wide-form {
+    width: 30rem;
+  }
 }

@@ -1,10 +1,38 @@
 <%- include('../../partials/head.ejs') %> 
-<%- include('../../partials/nav.ejs') %> 
+<%- include('../../partials/nav.ejs') %>
+<% const profileName = chosenProfile || bios[0].name; %>
+<% const { name, nickname, bio } = bios.find(bio => bio.name === profileName); %>
 <div class="manage-page">
   <h2 class="manage-page-title">Manage DJ profiles</h2>
   <p><a type="button" class="btn btn-primary" href="/config/create-bio">Add new</a></p>
+  <p>Edit an existing profile</p>
   <div class="manage-page-panel">
-    
+    <div class="form-group">
+      <select class="bio-select custom-select">
+        <% bios.forEach(({ name }, idx) => { %> 
+        <option value="<%= name %>" <%= name === profileName ? 'selected' : '' %>><%= name %></option>
+        <% }); %> 
+      </select>
+    </div>
+    <form class="manage-page__wide-form" action="/config/update-bio" method="POST">
+      <fieldset>
+        <%- include('../../components/forms/name-input.ejs', { name }) %>
+        <%- include('../../components/forms/nickname-input.ejs', { nickname }) %>
+        <input type="hidden" id="chosenProfile" name="chosenProfile" value="<%= chosenProfile %>">
+        <input type="hidden" id="prevName" name="prevName" value="<%= name %>">
+        <label>Bio</label>
+        <textarea name="bio" class="form-control bio-text mb-2" rows="8"><%= bio.join('\n\n') %></textarea>
+        <div class="text-center">
+          <%- include('../../components/forms/form-submit.ejs', {
+            sendMessage,
+            submitButtonText: 'Update DJ profile',
+          }) %>
+        </div>
+      </fieldset>
+    </form>
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-danger mb-2" onclick="updateFormValue('delete-bio-name', '<%= name %>');">Delete DJ Profile</button>
+    </div>
   </div>
 </div>
 <%- include('../../components/forms/delete-item-form.ejs', {

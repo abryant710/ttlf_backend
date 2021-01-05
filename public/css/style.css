@@ -7578,6 +7578,9 @@ a.text-dark:focus, a.text-dark:hover {
 .success-background {
   background-color: #93c54b; }
 
+.w-100 {
+  width: 100%; }
+
 .toast-position {
   min-height: 7rem;
   min-width: 14rem;
@@ -7668,6 +7671,8 @@ a.text-dark:focus, a.text-dark:hover {
           width: 5rem; }
       .manage-page-panel__item form {
         width: 15rem; }
+  .manage-page__wide-form {
+    width: 30rem; }
 
 .create-page {
   align-items: center;

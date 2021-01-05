@@ -19,6 +19,11 @@ const updateFormValue = (attrClass, value, openModal = true) => {
     $('.modal-close').click(() => $('.modal').css({ display: 'none' }));
 
     $('.random-order-switch').change(() => submitForm('randomise-media-form'));
+
+    $('.bio-select').change((e) => {
+      const newName = e.target.value;
+      window.location.assign(`/config/manage-bios?chosenProfile=${newName}`);
+    });
   });
 })(jQuery);
 

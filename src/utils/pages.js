@@ -8,6 +8,7 @@ module.exports.pages = {
   CREATE_MEDIA_PAGE: 'pages/loggedIn/create-media',
   UPDATE_MEDIA_PAGE: 'pages/loggedIn/update-media',
   MANAGE_BIOS_PAGE: 'pages/loggedIn/manage-bios',
+  CREATE_BIO_PAGE: 'pages/loggedIn/create-bio',
   LOGIN_PAGE: 'pages/loggedOut/login',
   SEND_RESET_PAGE: 'pages/loggedOut/send-reset',
   RESET_PW_PAGE: 'pages/loggedOut/reset-password',
