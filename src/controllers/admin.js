@@ -34,10 +34,15 @@ const getDjBios = async () => {
 module.exports.getConfig = async (req, res, next) => {
   try {
     const siteConfig = await SiteConfig.findOne({});
-    console.info(siteConfig);
-    return sendResponse(
-      req, res, 200, CONFIG_LIVE_PAGE, [LIVE_PAGE_ATTR],
-    );
+    const bios = await getDjBios();
+    const { liveNow, currentLiveDj } = siteConfig;
+    const dj = await DjProfile.findOne({ _id: currentLiveDj });
+    return sendResponse(req, res, 200, CONFIG_LIVE_PAGE, [
+      LIVE_PAGE_ATTR,
+      ['liveNow', liveNow],
+      ['currentLiveDj', dj.name],
+      ['bios', bios],
+    ]);
   } catch (err) {
     const error = new Error(err);
     return next(error);
@@ -319,6 +324,18 @@ module.exports.postRandomiseMedia = async (req, res, next) => {
     await siteConfig.updateOne({ [mediaRandomised]: !randomised });
     req.flash('success', `${mediaType} randomisation set to ${!randomised}`);
     return res.redirect(`/config/manage-media?mediaType=${mediaType}`);
+  } catch (err) {
+    const error = new Error(err);
+    return next(error);
+  }
+};
+
+module.exports.postLiveNow = async (req, res, next) => {
+  try {
+    const siteConfig = await SiteConfig.findOne({});
+    const { liveNow } = siteConfig;
+    await siteConfig.updateOne({ liveNow: !liveNow });
+    return res.redirect('/config/live');
   } catch (err) {
     const error = new Error(err);
     return next(error);

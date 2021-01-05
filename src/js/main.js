@@ -20,7 +20,14 @@ const updateFormValue = (attrClass, value, openModal = true) => {
 
     $('.random-order-switch').change(() => submitForm('randomise-media-form'));
 
+    $('.live-now-switch').change(() => submitForm('randomise-media-form'));
+
     $('.bio-select').change((e) => {
+      const newName = e.target.value;
+      window.location.assign(`/config/manage-bios?chosenProfile=${newName}`);
+    });
+
+    $('.live-dj').change((e) => {
       const newName = e.target.value;
       window.location.assign(`/config/manage-bios?chosenProfile=${newName}`);
     });

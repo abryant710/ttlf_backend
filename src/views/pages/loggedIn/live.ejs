@@ -3,8 +3,37 @@
 <% const environ = process.env.TTLF_ENV; %> 
 <div class="live">
   <h2 class="live-title">Manage live configuration</h2>
-  <div class="live-panel">
+  <div class="live-panel text-center">
     <a href="<%= environ === 'production' ? 'https://ttlf.net' : 'http://localhost:3000' %>" target="_blank">Vist the live site</a>
+    <div class="form-group mt-4">
+      <div class="custom-control custom-switch">
+        <input
+          type="checkbox"
+          class="custom-control-input live-now-switch"
+          id="live-now-switch"
+          <%= liveNow ? 'checked' : '' %>
+        >
+        <label class="custom-control-label" for="live-now-switch">Switch on if a DJ is live right now</label>
+      </div>
+    </div>
+    <div class="form-group mt-4">
+      <p class="font-weight-bold">Switch DJ?</p>
+      <select class="live-dj-select custom-select">
+        <% bios.forEach(({ name }, idx) => { %> 
+        <option value="<%= name %>" <%= name === currentLiveDj ? 'selected' : '' %>><%= name %></option>
+        <% }); %> 
+      </select>
+    </div>
   </div>
 </div>
+<%- include('../../components/forms/live-now-form.ejs', {
+  sendMessage,
+}) %>
+<% if (liveNow && currentLiveDj) { %>
+  <%- include('../../components/toast.ejs', {
+    toastCss: 'success',
+    toastType: 'Success',
+    toastMsg: `You are live now with ${currentLiveDj}` ,
+  }) %>
+<% } %>
 <%- include('../../partials/foot.ejs') %> 

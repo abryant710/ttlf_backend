@@ -30,7 +30,16 @@ var updateFormValue = function updateFormValue(attrClass, value) {
       return submitForm('randomise-media-form');
     });
 
+    $('.live-now-switch').change(function () {
+      return submitForm('randomise-media-form');
+    });
+
     $('.bio-select').change(function (e) {
+      var newName = e.target.value;
+      window.location.assign('/config/manage-bios?chosenProfile=' + newName);
+    });
+
+    $('.live-dj').change(function (e) {
       var newName = e.target.value;
       window.location.assign('/config/manage-bios?chosenProfile=' + newName);
     });

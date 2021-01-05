@@ -3,6 +3,7 @@ const { checkAuth } = require('../middleware/auth');
 
 const {
   getConfig,
+  postLiveNow,
   getManageMedia,
   getCreateMedia,
   postCreateMedia,
@@ -19,6 +20,7 @@ const {
 
 const router = express.Router();
 router.get('/config/live', checkAuth, getConfig);
+router.post('/config/live-now', checkAuth, postLiveNow);
 router.get('/config/manage-media', checkAuth, getManageMedia);
 router.get('/config/create-media', checkAuth, getCreateMedia);
 router.post('/config/create-media', checkAuth, postCreateMedia);
