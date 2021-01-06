@@ -2,6 +2,7 @@
 node_modules/
 www/*
 yarn-error.log
+db/*
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
