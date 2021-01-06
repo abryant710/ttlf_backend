@@ -36,7 +36,7 @@ module.exports.getWebsiteConfig = async (_req, res) => {
       ...collections,
       upcomingEvent,
       liveNow,
-      currentLiveDj: dj.name,
+      currentLiveDj: dj.nickname || dj.name,
       youTubeVideosRandomised,
       youTubeVideoPrefix,
       soundcloudTracksRandomised,
