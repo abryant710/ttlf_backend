@@ -41,13 +41,13 @@
   sendMessage,
 }) %>
 <% if (liveNow && currentLiveDj) { %>
-  <%- include('../../components/toast.ejs', {
+  <%- include('../../components/toast-dynamic.ejs', {
     toastCss: 'success',
     toastType: 'Info',
     toastMsg: `You are live now with ${currentLiveDj}` ,
   }) %>
 <% } else { %>
-  <%- include('../../components/toast.ejs', {
+  <%- include('../../components/toast-dynamic.ejs', {
     toastCss: 'info',
     toastType: 'Info',
     toastMsg: `You are not streaming live right now` ,

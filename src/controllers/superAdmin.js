@@ -68,12 +68,15 @@ module.exports.initialiseData = async (_req, res) => {
 module.exports.getManageAdmins = async (req, res, next) => {
   try {
     let adminUsers = await User.find({});
-    adminUsers = adminUsers.map(({ email, firstName, lastName }) => ({
-      email, firstName, lastName,
+    adminUsers = adminUsers.map(({
+      email, firstName, lastName, _id,
+    }) => ({
+      email, firstName, lastName, _id,
     })).filter(({ email }) => !PROTECTED_ADMINS.includes(email));
     return sendResponse(req, res, 200, MANAGE_ADMINS_PAGE, [
       CONFIG_PAGE_ATTR,
       ['adminUsers', adminUsers],
+      ['deleteType', 'admin'],
     ]);
   } catch (err) {
     const error = new Error(err);
@@ -151,17 +154,21 @@ module.exports.postCreateAdmin = async (req, res) => {
 };
 
 module.exports.deleteAdmin = async (req, res) => {
-  const { email } = req.body;
+  const { itemId: _id } = req.params;
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ _id });
     if (user) {
-      await user.deleteOne({ email });
-      req.flash('success', `Deleted admin user ${email}`);
-      return res.redirect('/config/manage-admins');
+      await user.deleteOne({ _id });
+      return res.status(200).json({
+        status: 'Success',
+        message: `Deleted user with email ${user.email}`,
+      });
     }
   } catch (err) {
-    console.error(err);
+    console.log(err);
   }
-  req.flash('error', `Could not delete the admin user ${email}`);
-  return res.redirect('/config/manage-admins');
+  return res.status(500).json({
+    status: 'Error',
+    message: 'Failed to delete the specified user',
+  });
 };

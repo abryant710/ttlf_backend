@@ -10,11 +10,55 @@ var submitForm = function submitForm(formClass) {
   $('.' + formClass).submit();
 };
 
-var updateFormValue = function updateFormValue(attrClass, value) {
-  var openModal = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+var updateIdAttr = function updateIdAttr(_id) {
+  var openModal = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
-  if (openModal) showModal();
-  $('.' + attrClass).attr('value', value);
+  if (openModal) {
+    showModal();
+  }
+  $('.modal-action').attr('value', _id);
+};
+
+var createStaticToast = function createStaticToast(status, message) {
+  var toastStatus = 'info';
+  switch (status) {
+    case 'Success':
+      toastStatus = 'success';
+      break;
+    case 'Error':
+      toastStatus = 'danger';
+      break;
+    default:
+      toastStatus = 'info';
+  }
+  var $toast = $('.static-toast').clone();
+  $toast.addClass(toastStatus + '-background static-toast-clone');
+  $toast.find('.toast-header').addClass(toastStatus + '-background');
+  $toast.find('.toast-header-message').text(status);
+  $toast.find('.toast-body-message').text(message);
+  $toast.find('.static-toast-close').click(function () {
+    return $('.static-toast-clone').remove();
+  });
+  $('body').append($toast);
+};
+
+var sendAction = async function sendAction(btn, deleteType, action, csrfToken) {
+  if (action === 'delete') {
+    var id = $(btn).attr('value');
+    console.log(id, deleteType, csrfToken);
+    var result = await fetch('/config/delete-' + deleteType + '/' + id, {
+      method: 'DELETE',
+      headers: {
+        'csrf-token': csrfToken
+      }
+    });
+
+    var _ref = await result.json(),
+        status = _ref.status,
+        message = _ref.message;
+
+    createStaticToast(status, message);
+  }
 };
 
 (function ($) {
