@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand navbar-light bg-light">
   <span class="navbar-brand"><img src="/images/ttlf_0006.png" class="nav-img" /></span>
 
   <div class="collapse navbar-collapse" id="navbarColor03">
@@ -26,7 +26,7 @@
       <% } %>
     </ul>
     <p class="form-inline mr-2 my-2 my-lg-0"><%= userEmail %></p>
-    <form action="/logout" method="POST" class="form-inline my-2 my-lg-0">
+    <form action="/logout" method="POST" class="logout-form form-inline my-2 my-lg-0">
       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <button class="btn btn-secondary my-2 my-sm-0" type="submit">Logout</button>
     </form>

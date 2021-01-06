@@ -7582,14 +7582,14 @@ a.text-dark:focus, a.text-dark:hover {
   background-color: #93c54b; }
 
 .faded-background {
-  width: 100vw;
+  background-color: #000000;
   height: 100vh;
+  left: 0;
   opacity: .4;
-  background-color: black;
-  z-index: 900;
   position: fixed;
   top: 0;
-  left: 0; }
+  width: 100vw;
+  z-index: 900; }
 
 .w-100 {
   width: 100%; }
@@ -7598,12 +7598,34 @@ a.text-dark:focus, a.text-dark:hover {
   min-height: 7rem;
   min-width: 14rem;
   position: fixed !important;
-  right: .5rem;
-  top: .5rem; }
+  right: 0;
+  top: 0;
+  z-index: 900; }
+
+@media (max-width: 760px) {
+  .toast-position {
+    min-height: 6rem;
+    min-width: 100%;
+    position: fixed !important;
+    right: 0;
+    top: 0;
+    z-index: 900; } }
 
 .nav-img {
   height: 2rem;
   width: auto; }
+
+@media (max-width: 760px) {
+  .navbar {
+    display: flex;
+    flex-direction: column; }
+  .navbar-collapse {
+    align-items: center;
+    flex-direction: column; }
+  .nav-link {
+    padding-left: 0 !important; }
+  .logout-form {
+    margin: 0 !important; } }
 
 .error-page {
   align-items: center;
@@ -7666,6 +7688,8 @@ a.text-dark:focus, a.text-dark:hover {
         word-break: break-word; }
         .manage-page-panel__header p.action-button {
           width: 5rem; }
+        .manage-page-panel__header p.smaller-cell {
+          width: 10rem; }
       .manage-page-panel__header form {
         width: 15rem; }
     .manage-page-panel__item {
@@ -7682,10 +7706,39 @@ a.text-dark:focus, a.text-dark:hover {
         word-break: break-word; }
         .manage-page-panel__item p.action-button {
           width: 5rem; }
+        .manage-page-panel__item p.smaller-cell {
+          width: 10rem; }
       .manage-page-panel__item form {
         width: 15rem; }
   .manage-page__wide-form {
     width: 30rem; }
+
+@media (max-width: 760px) {
+  .manage-page__wide-form {
+    width: 20rem; }
+  .custom-control-label {
+    padding-left: 1rem;
+    width: 15rem; }
+  .manage-page-panel__header {
+    display: none; }
+  .manage-page-panel__item {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 2px solid #000;
+    text-align: center; }
+    .manage-page-panel__item p {
+      font-weight: 300;
+      margin: 1rem .5rem;
+      width: 15rem;
+      word-break: break-word; }
+      .manage-page-panel__item p.action-button {
+        width: 5rem; }
+      .manage-page-panel__item p.smaller-cell {
+        width: 10rem; }
+    .manage-page-panel__item form {
+      width: 15rem; } }
 
 .create-page {
   align-items: center;

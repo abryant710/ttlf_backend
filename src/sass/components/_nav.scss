@@ -4,3 +4,23 @@
     width: auto;
   }
 }
+
+@media (max-width: 760px) {
+  .navbar {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .navbar-collapse {
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .nav-link {
+    padding-left: 0 !important;
+  }
+
+  .logout-form {
+    margin: 0 !important;
+  }
+}
