@@ -5,15 +5,15 @@
   <p><a type="button" class="btn btn-primary" href="/config/create-admin">Add new admin</a></p>
   <div class="manage-page-panel">
     <div class="manage-page-panel__header">
-      <p class="text-primary">First name</p>
-      <p class="text-primary">Last name</p>
+      <p class="text-primary smaller-cell">First name</p>
+      <p class="text-primary smaller-cell">Last name</p>
       <p class="text-primary">Email</p>
       <p class="text-danger action-button">Delete?</p>
     </div>
     <% adminUsers.forEach(({ firstName, lastName, email }) => { %>
       <div class="manage-page-panel__item">
-        <p><%= firstName %></p>
-        <p><%= lastName %></p>
+        <p class="smaller-cell"><%= firstName %></p>
+        <p class="smaller-cell"><%= lastName %></p>
         <p><%= email %></p>
         <p class="action-button"><button type="submit" class="btn btn-danger" onclick="updateFormValue('delete-admin-email', '<%= email %>');">Delete</button></p>
       </div>
