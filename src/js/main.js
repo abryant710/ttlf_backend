@@ -39,15 +39,18 @@ const createStaticToast = (status, message) => {
 const sendAction = async (btn, deleteType, action, csrfToken) => {
   if (action === 'delete') {
     const id = $(btn).attr('value');
-    console.log(id, deleteType, csrfToken);
     const result = await fetch(`/config/delete-${deleteType}/${id}`, {
       method: 'DELETE',
       headers: {
         'csrf-token': csrfToken,
       }
     });
-    const { status, message } = await result.json();
+    const { status, message, reload } = await result.json();
     createStaticToast(status, message);
+    $(`#${id}`).remove();
+    if (reload) {
+      window.location.reload();
+    }
   }
 };
 

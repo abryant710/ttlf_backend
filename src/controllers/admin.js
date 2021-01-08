@@ -26,8 +26,10 @@ const getMediaTypeParams = (mediaType) => {
 
 const getDjBios = async () => {
   const fetchedItems = await DjProfile.find({});
-  return fetchedItems.map(({ name, nickname, bio }) => ({
-    name, nickname, bio,
+  return fetchedItems.map(({
+    name, nickname, bio, _id,
+  }) => ({
+    name, nickname, bio, _id,
   }));
 };
 
@@ -74,8 +76,8 @@ module.exports.getManageMedia = async (req, res, next) => {
       [mediaRandomised]: randomised,
     } = siteConfig;
     const fetchedItems = await DataModel.find({});
-    const items = fetchedItems.map(({ title, url }) => ({
-      title, url: `${urlPrefix}${url}`,
+    const items = fetchedItems.map(({ title, url, _id }) => ({
+      title, url: `${urlPrefix}${url}`, _id,
     }));
     return sendResponse(req, res, 200, MANAGE_MEDIA_PAGE, [
       CONTENT_PAGE_ATTR,
@@ -278,41 +280,49 @@ module.exports.postCreateMedia = async (req, res, next) => {
 };
 
 module.exports.deleteBio = async (req, res, next) => {
-  const { name } = req.body;
+  const { itemId: _id } = req.params;
   try {
-    const item = await DjProfile.findOne({ name });
-    if (item) {
-      await item.deleteOne({ name });
-      req.flash('success', `Deleted DJ profile ${name}`);
-      return res.redirect('/config/manage-bios');
+    const dj = await DjProfile.findOne({ _id });
+    if (dj) {
+      await dj.deleteOne({ _id });
+      req.flash('success', `Deleted DJ ${dj.name}`);
+      return res.status(200).json({
+        status: 'Success',
+        message: `Deleted DJ ${dj.name}`,
+        reload: true,
+      });
     }
     const error = new Error('DJ profile not found in the database');
     return next(error);
   } catch (err) {
-    const error = new Error(err);
-    return next(error);
+    console.log(err);
   }
+  return res.status(500).json({
+    status: 'Error',
+    message: 'Failed to delete the DJ',
+  });
 };
 
-module.exports.deleteMedia = async (req, res, next) => {
-  const { url, mediaType } = req.body;
-  const { prefixIdentifier, DataModel } = getMediaTypeParams(mediaType);
+module.exports.deleteMedia = async (req, res) => {
+  const { itemId: _id } = req.params;
+  const mediaType = req.originalUrl.includes('track') ? 'track' : 'video';
+  const { DataModel } = getMediaTypeParams(mediaType);
   try {
-    const siteConfig = await SiteConfig.findOne({});
-    const { [prefixIdentifier]: urlPrefix } = siteConfig;
-    const truncatedUrl = url.replace(urlPrefix, '');
-    const item = await DataModel.findOne({ url: truncatedUrl });
+    const item = await DataModel.findOne({ _id });
     if (item) {
-      await item.deleteOne({ url: truncatedUrl });
-      req.flash('success', `Deleted ${mediaType} ${url}`);
-      return res.redirect(`/config/manage-media?mediaType=${mediaType}`);
+      await item.deleteOne({ _id });
+      return res.status(200).json({
+        status: 'Success',
+        message: `Deleted ${mediaType} with url ${item.url}`,
+      });
     }
-    const error = new Error('Media item not found in the database');
-    return next(error);
   } catch (err) {
-    const error = new Error(err);
-    return next(error);
+    console.error(err);
   }
+  return res.status(500).json({
+    status: 'Error',
+    message: `Failed to delete the ${mediaType}`,
+  });
 };
 
 module.exports.postRandomiseMedia = async (req, res, next) => {

@@ -82,7 +82,7 @@ app.use(get404);
 
 // eslint-disable-next-line no-unused-vars
 app.use((error, req, res, next) => {
-  console.log(error);
+  console.error(error);
   return res.redirect('/500');
 });
 

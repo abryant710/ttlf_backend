@@ -45,7 +45,6 @@ var createStaticToast = function createStaticToast(status, message) {
 var sendAction = async function sendAction(btn, deleteType, action, csrfToken) {
   if (action === 'delete') {
     var id = $(btn).attr('value');
-    console.log(id, deleteType, csrfToken);
     var result = await fetch('/config/delete-' + deleteType + '/' + id, {
       method: 'DELETE',
       headers: {
@@ -55,9 +54,14 @@ var sendAction = async function sendAction(btn, deleteType, action, csrfToken) {
 
     var _ref = await result.json(),
         status = _ref.status,
-        message = _ref.message;
+        message = _ref.message,
+        reload = _ref.reload;
 
     createStaticToast(status, message);
+    $('#' + id).remove();
+    if (reload) {
+      window.location.reload();
+    }
   }
 };
 

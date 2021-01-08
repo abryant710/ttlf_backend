@@ -76,7 +76,6 @@ module.exports.getManageAdmins = async (req, res, next) => {
     return sendResponse(req, res, 200, MANAGE_ADMINS_PAGE, [
       CONFIG_PAGE_ATTR,
       ['adminUsers', adminUsers],
-      ['deleteType', 'admin'],
     ]);
   } catch (err) {
     const error = new Error(err);
@@ -161,11 +160,11 @@ module.exports.deleteAdmin = async (req, res) => {
       await user.deleteOne({ _id });
       return res.status(200).json({
         status: 'Success',
-        message: `Deleted user with email ${user.email}`,
+        message: `Deleted user ${user.email}`,
       });
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
   return res.status(500).json({
     status: 'Error',

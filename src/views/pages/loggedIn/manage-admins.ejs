@@ -11,7 +11,7 @@
       <p class="text-danger action-button">Delete?</p>
     </div>
     <% adminUsers.forEach(({ firstName, lastName, email, _id }) => { %>
-      <div class="manage-page-panel__item">
+      <div class="manage-page-panel__item" id="<%= _id %>">
         <p class="smaller-cell"><%= firstName %></p>
         <p class="smaller-cell"><%= lastName %></p>
         <p><%= email %></p>
@@ -24,7 +24,7 @@
   modalTitle: 'Delete',
   modalText: `Are you sure you want to delete this user?`,
   modalTitle: 'Delete admin',
-  deleteType,
+  deleteType: 'admin',
   action: 'delete',
 }) %>
 <%- include('../../partials/foot.ejs') %> 
