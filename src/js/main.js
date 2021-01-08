@@ -45,11 +45,11 @@ const sendAction = async (btn, deleteType, action, csrfToken) => {
         'csrf-token': csrfToken,
       }
     });
-    const { status, message, reload } = await result.json();
+    const { status, message, redirect } = await result.json();
     createStaticToast(status, message);
     $(`#${id}`).remove();
-    if (reload) {
-      window.location.reload();
+    if (redirect) {
+      window.location.assign(redirect);
     }
   }
 };

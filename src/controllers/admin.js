@@ -289,7 +289,7 @@ module.exports.deleteBio = async (req, res, next) => {
       return res.status(200).json({
         status: 'Success',
         message: `Deleted DJ ${dj.name}`,
-        reload: true,
+        redirect: '/config/manage-bios',
       });
     }
     const error = new Error('DJ profile not found in the database');

@@ -55,12 +55,12 @@ var sendAction = async function sendAction(btn, deleteType, action, csrfToken) {
     var _ref = await result.json(),
         status = _ref.status,
         message = _ref.message,
-        reload = _ref.reload;
+        redirect = _ref.redirect;
 
     createStaticToast(status, message);
     $('#' + id).remove();
-    if (reload) {
-      window.location.reload();
+    if (redirect) {
+      window.location.assign(redirect);
     }
   }
 };
