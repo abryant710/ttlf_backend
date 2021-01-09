@@ -10,6 +10,10 @@ var submitForm = function submitForm(formClass) {
   $('.' + formClass).submit();
 };
 
+var updateFormValue = function updateFormValue(attrClass, value) {
+  $('.' + attrClass).attr('value', value);
+};
+
 var updateIdAttr = function updateIdAttr(_id) {
   var openModal = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
@@ -20,6 +24,8 @@ var updateIdAttr = function updateIdAttr(_id) {
 };
 
 var createStaticToast = function createStaticToast(status, message) {
+  $('.dynamic-toast').remove();
+  $('.static-toast-clone').remove();
   var toastStatus = 'info';
   switch (status) {
     case 'Success':
@@ -42,14 +48,12 @@ var createStaticToast = function createStaticToast(status, message) {
   $('body').append($toast);
 };
 
-var sendAction = async function sendAction(btn, deleteType, action, csrfToken) {
+var sendAction = async function sendAction(btn, actionType, action, csrfToken) {
   if (action === 'delete') {
     var id = $(btn).attr('value');
-    var result = await fetch('/config/delete-' + deleteType + '/' + id, {
+    var result = await fetch('/config/delete-' + actionType + '/' + id, {
       method: 'DELETE',
-      headers: {
-        'csrf-token': csrfToken
-      }
+      headers: { 'csrf-token': csrfToken }
     });
 
     var _ref = await result.json(),
@@ -62,6 +66,21 @@ var sendAction = async function sendAction(btn, deleteType, action, csrfToken) {
     if (redirect) {
       window.location.assign(redirect);
     }
+  } else if (action === 'patch') {
+    var _result = await fetch('/config/patch-boolean', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'csrf-token': csrfToken
+      },
+      body: JSON.stringify({ actionType: actionType })
+    });
+
+    var _ref2 = await _result.json(),
+        _status = _ref2.status,
+        _message = _ref2.message;
+
+    createStaticToast(_status, _message);
   }
 };
 
@@ -74,14 +93,6 @@ var sendAction = async function sendAction(btn, deleteType, action, csrfToken) {
     $('.modal-close').click(function () {
       $('.faded-background').addClass('invisible');
       $('.modal').css({ display: 'none' });
-    });
-
-    $('.random-order-switch').change(function () {
-      return submitForm('randomise-media-form');
-    });
-
-    $('.live-now-switch').change(function () {
-      return submitForm('live-now-form');
     });
 
     $('.bio-select').change(function (e) {

@@ -8,6 +8,10 @@ const submitForm = (formClass) => {
   $(`.${formClass}`).submit();
 }
 
+const updateFormValue = (attrClass, value) => {
+  $(`.${attrClass}`).attr('value', value);
+}
+
 const updateIdAttr = (_id, openModal = true) => {
   if (openModal) {
     showModal();
@@ -16,6 +20,8 @@ const updateIdAttr = (_id, openModal = true) => {
 }
 
 const createStaticToast = (status, message) => {
+  $('.dynamic-toast').remove();
+  $('.static-toast-clone').remove();
   let toastStatus = 'info';
   switch (status) {
     case 'Success':
@@ -36,14 +42,12 @@ const createStaticToast = (status, message) => {
   $('body').append($toast);
 }
 
-const sendAction = async (btn, deleteType, action, csrfToken) => {
+const sendAction = async (btn, actionType, action, csrfToken) => {
   if (action === 'delete') {
     const id = $(btn).attr('value');
-    const result = await fetch(`/config/delete-${deleteType}/${id}`, {
+    const result = await fetch(`/config/delete-${actionType}/${id}`, {
       method: 'DELETE',
-      headers: {
-        'csrf-token': csrfToken,
-      }
+      headers: { 'csrf-token': csrfToken }
     });
     const { status, message, redirect } = await result.json();
     createStaticToast(status, message);
@@ -51,6 +55,17 @@ const sendAction = async (btn, deleteType, action, csrfToken) => {
     if (redirect) {
       window.location.assign(redirect);
     }
+  } else if (action === 'patch') {
+    const result = await fetch(`/config/patch-boolean`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'csrf-token': csrfToken,
+      },
+      body: JSON.stringify({ actionType }),
+    });
+    const { status, message } = await result.json();
+    createStaticToast(status, message);
   }
 };
 
@@ -62,10 +77,6 @@ const sendAction = async (btn, deleteType, action, csrfToken) => {
       $('.faded-background').addClass('invisible');
       $('.modal').css({ display: 'none' })
     });
-
-    $('.random-order-switch').change(() => submitForm('randomise-media-form'));
-
-    $('.live-now-switch').change(() => submitForm('live-now-form'));
 
     $('.bio-select').change((e) => window.location.assign(`/config/manage-bios?chosenProfile=${e.target.value}`));
 

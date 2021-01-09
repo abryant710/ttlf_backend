@@ -295,7 +295,7 @@ module.exports.deleteBio = async (req, res, next) => {
     const error = new Error('DJ profile not found in the database');
     return next(error);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
   return res.status(500).json({
     status: 'Error',
@@ -325,7 +325,7 @@ module.exports.deleteMedia = async (req, res) => {
   });
 };
 
-module.exports.postRandomiseMedia = async (req, res, next) => {
+module.exports.patchMedia = async (req, res, next) => {
   const { mediaType } = req.body;
   const { mediaRandomised } = getMediaTypeParams(mediaType);
   try {
@@ -340,16 +340,36 @@ module.exports.postRandomiseMedia = async (req, res, next) => {
   }
 };
 
-module.exports.postLiveNow = async (_req, res, next) => {
+module.exports.patchBoolean = async (req, res) => {
+  const { actionType } = req.body;
+  let liveDj = '';
+  const getToastMessageText = (newValue) => {
+    switch (actionType) {
+      case 'liveNow': return `You are ${newValue ? `live now with ${liveDj}!` : 'no longer live.'}`;
+      case 'youTubeVideosRandomised': return `YouTube videos will ${newValue ? '' : 'not '}be randomised.`;
+      case 'soundcloudTracksRandomised': return `Soundcloud tracks will ${newValue ? '' : 'not '}be randomised.`;
+      default: return 'Site updated';
+    }
+  };
   try {
     const siteConfig = await SiteConfig.findOne({});
-    const { liveNow } = siteConfig;
-    await siteConfig.updateOne({ liveNow: !liveNow });
-    return res.redirect('/config/live');
+    const { [actionType]: actionValue, currentLiveDj } = siteConfig;
+    if (actionType === 'liveNow') {
+      const { name, nickname } = await DjProfile.findOne({ _id: currentLiveDj });
+      liveDj = nickname || name;
+    }
+    await siteConfig.updateOne({ [actionType]: !actionValue });
+    return res.status(200).json({
+      status: !actionValue ? 'Success' : 'Info',
+      message: getToastMessageText(!actionValue),
+    });
   } catch (err) {
-    const error = new Error(err);
-    return next(error);
+    console.error(err);
   }
+  return res.status(500).json({
+    status: 'Error',
+    message: 'Failed to update',
+  });
 };
 
 module.exports.postUpdateLiveDj = async (req, res, next) => {

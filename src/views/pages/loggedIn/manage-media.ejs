@@ -10,6 +10,7 @@
         class="custom-control-input random-order-switch"
         id="random-order-switch"
         <%= mediaRandomised ? 'checked' : '' %>
+        onchange="sendAction(null, '<%= mediaType === 'video' ? 'youTubeVideosRandomised' : 'soundcloudTracksRandomised' %>', 'patch', '<%= csrfToken %>')"
       >
       <label class="custom-control-label" for="random-order-switch">Randomise the order of <%= mediaType %>s every time the website loads</label>
     </div>
@@ -32,10 +33,6 @@
     <% }); %> 
   </div>
 </div>
-<%- include('../../components/forms/randomise-media-form.ejs', {
-  dataType: mediaType,
-  sendMessage,
-}) %>
 <%- include('../../components/modal.ejs', {
   modalTitle: 'Delete',
   modalText: `Are you sure you want to delete this ${mediaType}?`,
