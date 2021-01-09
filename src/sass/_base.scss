@@ -1,0 +1,6 @@
+// Fixes bootstrap button appearance in safari
+a[type='button'] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}

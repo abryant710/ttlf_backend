@@ -7572,6 +7572,11 @@ a.text-dark:focus, a.text-dark:hover {
 .close:hover {
   color: #b9a78a; }
 
+a[type='button'] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none; }
+
 .danger-background {
   background-color: #d23430; }
 
