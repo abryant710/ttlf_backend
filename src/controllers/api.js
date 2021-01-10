@@ -2,6 +2,8 @@ const SiteConfig = require('../models/SiteConfig');
 const YouTubeVideo = require('../models/YouTubeVideo');
 const SoundcloudTrack = require('../models/SoundcloudTrack');
 const DjProfile = require('../models/DjProfile');
+const Schedule = require('../models/Schedule');
+const { sortSchedules } = require('../utils/general');
 
 module.exports.getWebsiteConfig = async (_req, res) => {
   try {
@@ -19,6 +21,7 @@ module.exports.getWebsiteConfig = async (_req, res) => {
     const videos = await YouTubeVideo.find({});
     const tracks = await SoundcloudTrack.find({});
     const profiles = await DjProfile.find({});
+    const scheds = await Schedule.find({});
     collections.youTubeVideos = siteConfig.youTubeVideos.map((youTubeVid) => {
       const { url, title } = videos.find(({ _id }) => youTubeVid.equals(_id));
       return { url, title };
@@ -31,6 +34,9 @@ module.exports.getWebsiteConfig = async (_req, res) => {
       const { name, nickname, bio } = profiles.find(({ _id }) => profileId.equals(_id));
       return { name, nickname, bio };
     });
+    collections.schedules = sortSchedules(profiles, scheds).map(
+      ({ date, time, name }) => ({ date, time, dj: name }),
+    );
     const dj = await DjProfile.findOne({ _id: currentLiveDj });
     return res.status(200).json({
       ...collections,

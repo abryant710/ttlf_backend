@@ -7,6 +7,10 @@ const siteConfigSchema = new Schema({
     type: [Schema.Types.ObjectId],
     required: true,
   },
+  schedules: {
+    type: [Schema.Types.ObjectId],
+    required: true,
+  },
   upcomingEvent: {
     type: Boolean,
     required: true,

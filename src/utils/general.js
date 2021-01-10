@@ -1,9 +1,23 @@
+/* eslint-disable no-underscore-dangle */
 const path = require('path');
 
 module.exports.getOrigin = (req) => {
   const host = req.get('host');
   const httpPart = host.includes('localhost') ? 'http' : 'https';
   return `${httpPart}://${host}`;
+};
+
+module.exports.sortSchedules = (bios, schedules) => {
+  // Ensure the table sorts the sets in chronological order
+  const biosmap = {};
+  bios.forEach((bio) => { biosmap[bio._id] = bio.name; }); // (creating lookup table)
+  const modifiedSchedules = schedules.map((sched) => {
+    const newSched = { ...sched._doc };
+    newSched.name = biosmap[sched.dj];
+    newSched.datetime = new Date(`${sched.date}T${sched.time}`);
+    return newSched;
+  });
+  return modifiedSchedules.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
 };
 
 const getFlashMessage = (req) => {
