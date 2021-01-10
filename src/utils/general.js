@@ -10,7 +10,8 @@ module.exports.getOrigin = (req) => {
 module.exports.sortSchedules = (bios, schedules) => {
   // Ensure the table sorts the sets in chronological order
   const biosmap = {};
-  bios.forEach((bio) => { biosmap[bio._id] = bio.name; }); // (creating lookup table)
+  // creating lookup table
+  bios.forEach((bio) => { biosmap[bio._id] = bio.nickname || bio.name; });
   const modifiedSchedules = schedules.map((sched) => {
     const newSched = { ...sched._doc };
     newSched.name = biosmap[sched.dj];
