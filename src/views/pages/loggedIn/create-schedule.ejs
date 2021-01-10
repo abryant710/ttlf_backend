@@ -1,0 +1,23 @@
+<%- include('../../partials/head.ejs') %>
+<%- include('../../partials/nav.ejs') %>
+<div class="create-page">
+  <h2 class="create-page-title">Add a new set to the schedule</h2>
+  <div class="create-page-panel">
+    <form action="/config/create-schedule" method="POST">
+      <fieldset>
+        <%- include('../../components/forms/datetime-input.ejs', { datetime: new Date() }) %>
+        <select name="name" class="custom-select mb-4">
+          <% bios.forEach(({ name }, idx) => { %> 
+          <option value="<%= name %>" <%= idx === 0 ? 'selected' : '' %>><%= name %></option>
+          <% }); %> 
+        </select>
+        <%- include('../../components/forms/form-submit.ejs', {
+          sendMessage,
+          submitButtonText: `Add set`,
+        }) %>
+      </fieldset>
+    </form>
+    <a class="mt-2" href="/config/manage-schedule">Return to list</a>
+  </div>
+</div>
+<%- include('../../partials/foot.ejs') %> 

@@ -4,6 +4,8 @@ const {
     MANAGE_MEDIA_PAGE,
     CREATE_MEDIA_PAGE,
     UPDATE_MEDIA_PAGE,
+    MANAGE_SCHEDULE_PAGE,
+    CREATE_SCHEDULE_PAGE,
     MANAGE_BIOS_PAGE,
     CREATE_BIO_PAGE,
   },
@@ -12,6 +14,7 @@ const SiteConfig = require('../models/SiteConfig');
 const YouTubeVideo = require('../models/YouTubeVideo');
 const SoundcloudTrack = require('../models/SoundcloudTrack');
 const DjProfile = require('../models/DjProfile');
+const Schedule = require('../models/Schedule');
 const { sendResponse } = require('../utils/general');
 
 const LIVE_PAGE_ATTR = ['configPage', 'live'];
@@ -43,6 +46,34 @@ module.exports.getConfig = async (req, res, next) => {
       LIVE_PAGE_ATTR,
       ['liveNow', liveNow],
       ['currentLiveDj', dj.name],
+      ['bios', bios],
+    ]);
+  } catch (err) {
+    const error = new Error(err);
+    return next(error);
+  }
+};
+
+module.exports.getManageSchedule = async (req, res, next) => {
+  try {
+    const schedules = await Schedule.find({});
+    const bios = await getDjBios();
+    const biosmap = {};
+    // eslint-disable-next-line no-underscore-dangle
+    bios.forEach((bio) => { biosmap[bio._id] = bio.name; });
+    schedules.forEach((sched) => {
+      // eslint-disable-next-line no-param-reassign
+      sched.name = biosmap[sched.dj];
+    });
+    schedules.sort((a, b) => {
+      if (a.date === b.date) {
+        return b.time - a.time;
+      }
+      return a.date > b.date ? 1 : -1;
+    });
+    return sendResponse(req, res, 200, MANAGE_SCHEDULE_PAGE, [
+      CONTENT_PAGE_ATTR,
+      ['schedules', schedules],
       ['bios', bios],
     ]);
   } catch (err) {
@@ -162,6 +193,19 @@ module.exports.getCreateBio = async (req, res, next) => {
   }
 };
 
+module.exports.getCreateSchedule = async (req, res, next) => {
+  try {
+    const bios = await getDjBios();
+    return sendResponse(req, res, 200, CREATE_SCHEDULE_PAGE, [
+      CONTENT_PAGE_ATTR,
+      ['bios', bios],
+    ]);
+  } catch (err) {
+    const error = new Error(err);
+    return next(error);
+  }
+};
+
 module.exports.postCreateBio = async (req, res, next) => {
   const {
     name, nickname, bio,
@@ -184,13 +228,48 @@ module.exports.postCreateBio = async (req, res, next) => {
     const newItem = new DjProfile({ name, nickname, bio: bioArr });
     await newItem.save();
     req.flash('success', `New DJ profile ${name} created.`);
+    const bios = await getDjBios();
     return sendResponse(req, res, 201, CREATE_BIO_PAGE, [
       CONTENT_PAGE_ATTR,
+      ['bios', bios],
     ]);
   } catch (err) {
     const error = new Error(err);
     return next(error);
   }
+};
+
+module.exports.postCreateSchedule = async (req, res, next) => {
+  const {
+    name, datetime,
+  } = req.body;
+  const [date, time] = datetime.split('T');
+  try {
+    const bios = await getDjBios();
+    if (!name || !datetime) {
+      req.flash('error', 'Please complete the form');
+      return sendResponse(req, res, 422, CREATE_SCHEDULE_PAGE, [
+        CONTENT_PAGE_ATTR,
+        ['bios', bios],
+      ]);
+    }
+    const dj = await DjProfile.findOne({ name });
+    if (dj) {
+      const { _id } = dj;
+      const newSchedule = new Schedule({ date, time, dj: _id });
+      await newSchedule.save();
+      req.flash('success', 'Created new schedule item');
+      return sendResponse(req, res, 422, CREATE_SCHEDULE_PAGE, [
+        CONTENT_PAGE_ATTR,
+        ['bios', bios],
+      ]);
+    }
+  } catch (err) {
+    const error = new Error(err);
+    return next(error);
+  }
+  const error = new Error('DJ does not exist in the system');
+  return next(error);
 };
 
 module.exports.postUpdateMedia = async (req, res, next) => {
@@ -325,6 +404,26 @@ module.exports.deleteMedia = async (req, res) => {
   });
 };
 
+module.exports.deleteSchedule = async (req, res) => {
+  const { itemId: _id } = req.params;
+  try {
+    const item = await Schedule.findOne({ _id });
+    if (item) {
+      await item.deleteOne({ _id });
+      return res.status(200).json({
+        status: 'Success',
+        message: 'Deleted set',
+      });
+    }
+  } catch (err) {
+    console.error(err);
+  }
+  return res.status(500).json({
+    status: 'Error',
+    message: 'Failed to delete the set',
+  });
+};
+
 module.exports.patchMedia = async (req, res, next) => {
   const { mediaType } = req.body;
   const { mediaRandomised } = getMediaTypeParams(mediaType);
@@ -346,8 +445,8 @@ module.exports.patchBoolean = async (req, res) => {
   const getToastMessageText = (newValue) => {
     switch (actionType) {
       case 'liveNow': return `You are ${newValue ? `live now with ${liveDj}!` : 'no longer live.'}`;
-      case 'youTubeVideosRandomised': return `YouTube videos will ${newValue ? '' : 'not '}be randomised.`;
-      case 'soundcloudTracksRandomised': return `Soundcloud tracks will ${newValue ? '' : 'not '}be randomised.`;
+      case 'youTubeVideosRandomised': return `YouTube videos will ${newValue ? '' : 'no longer '}be randomised.`;
+      case 'soundcloudTracksRandomised': return `Soundcloud tracks will ${newValue ? '' : 'no longer '}be randomised.`;
       default: return 'Site updated';
     }
   };

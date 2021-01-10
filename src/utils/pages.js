@@ -7,6 +7,8 @@ module.exports.pages = {
   MANAGE_MEDIA_PAGE: 'pages/loggedIn/manage-media',
   CREATE_MEDIA_PAGE: 'pages/loggedIn/create-media',
   UPDATE_MEDIA_PAGE: 'pages/loggedIn/update-media',
+  MANAGE_SCHEDULE_PAGE: 'pages/loggedIn/manage-schedule',
+  CREATE_SCHEDULE_PAGE: 'pages/loggedIn/create-schedule',
   MANAGE_BIOS_PAGE: 'pages/loggedIn/manage-bios',
   CREATE_BIO_PAGE: 'pages/loggedIn/create-bio',
   LOGIN_PAGE: 'pages/loggedOut/login',
