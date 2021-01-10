@@ -11,6 +11,7 @@ module.exports.getWebsiteConfig = async (_req, res) => {
     const siteConfig = await SiteConfig.findOne({});
     const {
       upcomingEvent,
+      eventFlyerLocation,
       liveNow,
       currentLiveDj,
       youTubeVideosRandomised,
@@ -41,6 +42,7 @@ module.exports.getWebsiteConfig = async (_req, res) => {
     return res.status(200).json({
       ...collections,
       upcomingEvent,
+      eventFlyerLocation,
       liveNow,
       currentLiveDj: dj.nickname || dj.name,
       youTubeVideosRandomised,

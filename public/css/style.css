@@ -7677,6 +7677,17 @@ a[type='button'] {
   .manage-page-title {
     margin: 0 0 2rem;
     text-align: center; }
+  .manage-page-img-container {
+    width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 2rem; }
+    .manage-page-img-container img {
+      max-width: 20rem;
+      width: 100%;
+      height: auto; }
   .manage-page-panel {
     padding-bottom: 2rem; }
     .manage-page-panel__header {

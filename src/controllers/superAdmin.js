@@ -13,6 +13,7 @@ const SiteConfig = require('../models/SiteConfig');
 const DjProfile = require('../models/DjProfile');
 const YouTubeVideo = require('../models/YouTubeVideo');
 const SoundcloudTrack = require('../models/SoundcloudTrack');
+const Schedule = require('../models/Schedule');
 
 const PROTECTED_ADMINS = ['alexbryant710@gmail.com'];
 const CONFIG_PAGE_ATTR = ['configPage', 'admin-users'];
@@ -33,6 +34,7 @@ module.exports.initialiseData = async (_req, res) => {
     await DjProfile.find({}).deleteMany({});
     await YouTubeVideo.find({}).deleteMany({});
     await SoundcloudTrack.find({}).deleteMany({});
+    await Schedule.find({}).deleteMany({});
     const youTubeVideos = initYouTubeVideos.map(({ title, url }) => new YouTubeVideo({
       title, url,
     }));
@@ -48,8 +50,10 @@ module.exports.initialiseData = async (_req, res) => {
     await Promise.all([...youTubePromises, ...soundcloudPromises, ...djProfilePromises]);
     const newSiteConfig = new SiteConfig({
       djProfiles: djProfiles.map((profile) => profile._id),
-      upcomingEvent: false,
+      upcomingEvent: '2021-01-01',
+      eventFlyerLocation: 'public/images/flyer/flyer.jpg',
       liveNow: false,
+      schedule: [],
       currentLiveDj: djProfiles[0]._id,
       youTubeVideos: youTubeVideos.map((vid) => vid._id),
       youTubeVideosRandomised: initYouTubeRandomise,

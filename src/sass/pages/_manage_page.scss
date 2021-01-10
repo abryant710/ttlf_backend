@@ -6,6 +6,17 @@
     text-align: center;
   }
 
+  &-img-container {
+    width: 100%;
+    @include flex-items(row, center, center);
+    margin-bottom: 2rem;
+    & img {
+      max-width: 20rem;
+      width: 100%;
+      height: auto;
+    }
+  }
+
   &-panel {
     padding-bottom: 2rem;
     &__header {

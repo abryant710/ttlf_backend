@@ -12,7 +12,11 @@ const siteConfigSchema = new Schema({
     required: true,
   },
   upcomingEvent: {
-    type: Boolean,
+    type: String,
+    required: true,
+  },
+  eventFlyerLocation: {
+    type: String,
     required: true,
   },
   liveNow: {

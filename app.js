@@ -9,6 +9,7 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
+const multer = require('multer');
 
 const {
   TTLF_MONGO_USER,
@@ -37,8 +38,27 @@ const superAdminRoutes = require('./src/routes/superAdmin');
 const adminRoutes = require('./src/routes/admin');
 const apiRoutes = require('./src/routes/api');
 
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/images/flyer');
+  },
+  filename: (req, file, cb) => {
+    const [, originalExt] = file.originalname.match(/\.([^.]+)$/);
+    cb(null, `flyer.${originalExt}`);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  const validMimeTypes = ['image/png', 'image/jpg', 'image/jpeg'];
+  if (validMimeTypes.includes(file.mimetype)) {
+    cb(null, true);
+  }
+  cb(null, false);
+};
+
 app.use(bodyParser.json()); // json api data
 app.use(bodyParser.urlencoded({ extended: false })); // form data
+app.use(multer({ storage: fileStorage, fileFilter }).single('image')); // image uploads
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: TTLF_SESSION_SECRET,

@@ -3,13 +3,17 @@
 <div class="manage-page">
   <h2 class="manage-page-title">Manage events</h2>
   <div class="manage-page-panel">
-    <form action="/config/create-event" method="POST">
+    <p>Current flyer</p>
+    <div class="manage-page-img-container">
+      <img src="<%= currentFlyer.replace('public', '') %>" />
+    </div>
+    <form action="/config/update-event" method="POST" enctype="multipart/form-data">
       <fieldset>
         <%- include('../../components/forms/date-input.ejs', { date }) %>
         <%- include('../../components/forms/file-input.ejs') %>
         <%- include('../../components/forms/form-submit.ejs', {
           sendMessage,
-          submitButtonText: `Update event`,
+          submitButtonText: 'Update event',
         }) %>
       </fieldset>
     </form>

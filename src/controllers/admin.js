@@ -1,3 +1,7 @@
+const path = require('path');
+const { promises } = require('fs');
+const { rootPath } = require('../utils/general');
+
 /* eslint-disable no-underscore-dangle */
 const {
   pages: {
@@ -7,6 +11,7 @@ const {
     UPDATE_MEDIA_PAGE,
     MANAGE_SCHEDULE_PAGE,
     CREATE_SCHEDULE_PAGE,
+    MANAGE_EVENTS_PAGE,
     MANAGE_BIOS_PAGE,
     CREATE_BIO_PAGE,
   },
@@ -71,6 +76,21 @@ module.exports.getManageSchedule = async (req, res, next) => {
   }
 };
 
+module.exports.getManageEvents = async (req, res, next) => {
+  try {
+    const siteConfig = await SiteConfig.findOne();
+    const { upcomingEvent, eventFlyerLocation } = siteConfig;
+    return sendResponse(req, res, 200, MANAGE_EVENTS_PAGE, [
+      CONTENT_PAGE_ATTR,
+      ['date', upcomingEvent],
+      ['currentFlyer', eventFlyerLocation],
+    ]);
+  } catch (err) {
+    const error = new Error(err);
+    return next(error);
+  }
+};
+
 module.exports.getManageBios = async (req, res, next) => {
   const { chosenProfile } = req.query;
   try {
@@ -128,6 +148,33 @@ module.exports.getUpdateMedia = async (req, res, next) => {
       ]);
     }
     const error = new Error('Media item not found in the database');
+    return next(error);
+  } catch (err) {
+    const error = new Error(err);
+    return next(error);
+  }
+};
+
+module.exports.postUpdateEvent = async (req, res, next) => {
+  const { date } = req.body;
+  const { filename } = req.file;
+  try {
+    await promises.rmdir(path.join(rootPath, '/public/images/flyer'), { recursive: true });
+    const siteConfig = await SiteConfig.findOne();
+    if (siteConfig) {
+      const newFlyerLoc = `public/images/flyer/${filename}`;
+      siteConfig.updateOne({
+        upcomingEvent: date,
+        eventFlyerLocation: newFlyerLoc,
+      });
+      req.flash('success', 'Updated the next event');
+      return sendResponse(req, res, 201, MANAGE_EVENTS_PAGE, [
+        CONTENT_PAGE_ATTR,
+        ['date', date],
+        ['currentFlyer', newFlyerLoc],
+      ]);
+    }
+    const error = new Error('Could not extract data from site config');
     return next(error);
   } catch (err) {
     const error = new Error(err);
