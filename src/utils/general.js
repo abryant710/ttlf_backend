@@ -7,8 +7,8 @@ module.exports.getOrigin = (req) => {
   return `${httpPart}://${host}`;
 };
 
+// Ensure the table sorts the sets in chronological order
 module.exports.sortSchedules = (bios, schedules) => {
-  // Ensure the table sorts the sets in chronological order
   const biosmap = {};
   // creating lookup table
   bios.forEach((bio) => { biosmap[bio._id] = bio.nickname || bio.name; });
