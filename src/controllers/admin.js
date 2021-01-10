@@ -37,6 +37,19 @@ const getDjBios = async () => {
   }));
 };
 
+const sortSchedules = (bios, schedules) => {
+  // Ensure the table sorts the sets in chronological order
+  const biosmap = {};
+  bios.forEach((bio) => { biosmap[bio._id] = bio.name; }); // (creating lookup table)
+  const modifiedSchedules = schedules.map((sched) => {
+    const newSched = { ...sched._doc };
+    newSched.name = biosmap[sched.dj];
+    newSched.datetime = new Date(`${sched.date}T${sched.time}`);
+    return newSched;
+  });
+  return modifiedSchedules.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
+};
+
 module.exports.getConfig = async (req, res, next) => {
   try {
     const siteConfig = await SiteConfig.findOne({});
@@ -59,16 +72,7 @@ module.exports.getManageSchedule = async (req, res, next) => {
   try {
     const schedules = await Schedule.find({});
     const bios = await getDjBios();
-    // Ensure the table sorts the sets in chronological order
-    const biosmap = {};
-    bios.forEach((bio) => { biosmap[bio._id] = bio.name; }); // (creating lookup table)
-    const modifiedSchedules = schedules.map((sched) => {
-      const newSched = { ...sched._doc };
-      newSched.name = biosmap[sched.dj];
-      newSched.datetime = new Date(`${sched.date}T${sched.time}`);
-      return newSched;
-    });
-    modifiedSchedules.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
+    const modifiedSchedules = sortSchedules(bios, schedules);
     return sendResponse(req, res, 200, MANAGE_SCHEDULE_PAGE, [
       CONTENT_PAGE_ATTR,
       ['schedules', modifiedSchedules],
