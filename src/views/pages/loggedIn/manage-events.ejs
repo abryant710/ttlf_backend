@@ -1,0 +1,18 @@
+<%- include('../../partials/head.ejs') %> 
+<%- include('../../partials/nav.ejs') %> 
+<div class="manage-page">
+  <h2 class="manage-page-title">Manage events</h2>
+  <div class="manage-page-panel">
+    <form action="/config/create-event" method="POST">
+      <fieldset>
+        <%- include('../../components/forms/date-input.ejs', { date }) %>
+        <%- include('../../components/forms/file-input.ejs') %>
+        <%- include('../../components/forms/form-submit.ejs', {
+          sendMessage,
+          submitButtonText: `Update event`,
+        }) %>
+      </fieldset>
+    </form>
+  </div>
+</div>
+<%- include('../../partials/foot.ejs') %> 
