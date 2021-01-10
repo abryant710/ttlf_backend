@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const {
   pages: {
     CONFIG_LIVE_PAGE,
@@ -58,22 +59,19 @@ module.exports.getManageSchedule = async (req, res, next) => {
   try {
     const schedules = await Schedule.find({});
     const bios = await getDjBios();
+    // Ensure the table sorts the sets in chronological order
     const biosmap = {};
-    // eslint-disable-next-line no-underscore-dangle
-    bios.forEach((bio) => { biosmap[bio._id] = bio.name; });
-    schedules.forEach((sched) => {
-      // eslint-disable-next-line no-param-reassign
-      sched.name = biosmap[sched.dj];
+    bios.forEach((bio) => { biosmap[bio._id] = bio.name; }); // (creating lookup table)
+    const modifiedSchedules = schedules.map((sched) => {
+      const newSched = { ...sched._doc };
+      newSched.name = biosmap[sched.dj];
+      newSched.datetime = new Date(`${sched.date}T${sched.time}`);
+      return newSched;
     });
-    schedules.sort((a, b) => {
-      if (a.date === b.date) {
-        return b.time - a.time;
-      }
-      return a.date > b.date ? 1 : -1;
-    });
+    modifiedSchedules.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
     return sendResponse(req, res, 200, MANAGE_SCHEDULE_PAGE, [
       CONTENT_PAGE_ATTR,
-      ['schedules', schedules],
+      ['schedules', modifiedSchedules],
       ['bios', bios],
     ]);
   } catch (err) {
@@ -476,7 +474,6 @@ module.exports.postUpdateLiveDj = async (req, res, next) => {
   try {
     const siteConfig = await SiteConfig.findOne({});
     const liveDj = await DjProfile.findOne({ name });
-    // eslint-disable-next-line no-underscore-dangle
     await siteConfig.updateOne({ currentLiveDj: liveDj._id });
     return res.redirect('/config/live');
   } catch (err) {
