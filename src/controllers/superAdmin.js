@@ -51,7 +51,7 @@ module.exports.initialiseData = async (_req, res) => {
     const newSiteConfig = new SiteConfig({
       djProfiles: djProfiles.map((profile) => profile._id),
       upcomingEvent: '2021-01-01',
-      eventFlyerLocation: 'public/images/flyer/flyer.jpg',
+      eventFlyerLocation: '/images/flyer/flyer.jpg',
       liveNow: false,
       schedule: [],
       currentLiveDj: djProfiles[0]._id,
