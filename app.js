@@ -1,5 +1,6 @@
 // Native node packages
 const path = require('path');
+const fs = require('fs');
 
 // 3rd party packages
 const express = require('express');
@@ -105,6 +106,11 @@ app.use((error, req, res, next) => {
   console.error(error);
   return res.redirect('/500');
 });
+
+const eventDir = path.join(__dirname, 'public/images/flyer');
+if (!fs.existsSync(eventDir)) {
+  fs.mkdirSync(eventDir);
+}
 
 mongoose.connect(
   `${MONGO_DB_URI}?retryWrites=true&w=majority`,
