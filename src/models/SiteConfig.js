@@ -7,8 +7,16 @@ const siteConfigSchema = new Schema({
     type: [Schema.Types.ObjectId],
     required: true,
   },
+  schedules: {
+    type: [Schema.Types.ObjectId],
+    required: true,
+  },
   upcomingEvent: {
-    type: Boolean,
+    type: String,
+    required: true,
+  },
+  eventFlyerLocation: {
+    type: String,
     required: true,
   },
   liveNow: {

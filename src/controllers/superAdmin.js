@@ -13,6 +13,7 @@ const SiteConfig = require('../models/SiteConfig');
 const DjProfile = require('../models/DjProfile');
 const YouTubeVideo = require('../models/YouTubeVideo');
 const SoundcloudTrack = require('../models/SoundcloudTrack');
+const Schedule = require('../models/Schedule');
 
 const PROTECTED_ADMINS = ['alexbryant710@gmail.com'];
 const CONFIG_PAGE_ATTR = ['configPage', 'admin-users'];
@@ -33,6 +34,7 @@ module.exports.initialiseData = async (_req, res) => {
     await DjProfile.find({}).deleteMany({});
     await YouTubeVideo.find({}).deleteMany({});
     await SoundcloudTrack.find({}).deleteMany({});
+    await Schedule.find({}).deleteMany({});
     const youTubeVideos = initYouTubeVideos.map(({ title, url }) => new YouTubeVideo({
       title, url,
     }));
@@ -48,8 +50,10 @@ module.exports.initialiseData = async (_req, res) => {
     await Promise.all([...youTubePromises, ...soundcloudPromises, ...djProfilePromises]);
     const newSiteConfig = new SiteConfig({
       djProfiles: djProfiles.map((profile) => profile._id),
-      upcomingEvent: false,
+      upcomingEvent: '2021-01-01',
+      eventFlyerLocation: 'public/images/flyer/flyer.jpg',
       liveNow: false,
+      schedule: [],
       currentLiveDj: djProfiles[0]._id,
       youTubeVideos: youTubeVideos.map((vid) => vid._id),
       youTubeVideosRandomised: initYouTubeRandomise,
@@ -68,8 +72,10 @@ module.exports.initialiseData = async (_req, res) => {
 module.exports.getManageAdmins = async (req, res, next) => {
   try {
     let adminUsers = await User.find({});
-    adminUsers = adminUsers.map(({ email, firstName, lastName }) => ({
-      email, firstName, lastName,
+    adminUsers = adminUsers.map(({
+      email, firstName, lastName, _id,
+    }) => ({
+      email, firstName, lastName, _id,
     })).filter(({ email }) => !PROTECTED_ADMINS.includes(email));
     return sendResponse(req, res, 200, MANAGE_ADMINS_PAGE, [
       CONFIG_PAGE_ATTR,
@@ -151,17 +157,21 @@ module.exports.postCreateAdmin = async (req, res) => {
 };
 
 module.exports.deleteAdmin = async (req, res) => {
-  const { email } = req.body;
+  const { itemId: _id } = req.params;
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ _id });
     if (user) {
-      await user.deleteOne({ email });
-      req.flash('success', `Deleted admin user ${email}`);
-      return res.redirect('/config/manage-admins');
+      await user.deleteOne({ _id });
+      return res.status(200).json({
+        status: 'Success',
+        message: `Deleted user ${user.email}`,
+      });
     }
   } catch (err) {
     console.error(err);
   }
-  req.flash('error', `Could not delete the admin user ${email}`);
-  return res.redirect('/config/manage-admins');
+  return res.status(500).json({
+    status: 'Error',
+    message: 'Failed to delete the specified user',
+  });
 };

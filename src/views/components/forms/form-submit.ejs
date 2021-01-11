@@ -2,13 +2,13 @@
 <button type="submit" class="btn btn-primary mb-2 w-100"><%= submitButtonText %></button>
 <% if (sendMessage) { %> 
   <% if (sendMessage.error) { %>
-    <%- include('../toast.ejs', {
+    <%- include('../toast-dynamic.ejs', {
       toastCss: 'danger',
       toastType: 'Error',
       toastMsg: sendMessage.error ,
     }) %>
   <% } else if (sendMessage.success) { %> 
-    <%- include('../toast.ejs', {
+    <%- include('../toast-dynamic.ejs', {
       toastCss: 'success',
       toastType: 'Success',
       toastMsg: sendMessage.success ,

@@ -12,6 +12,7 @@
           class="custom-control-input live-now-switch"
           id="live-now-switch"
           <%= liveNow ? 'checked' : '' %>
+          onchange="sendAction(null, 'liveNow', 'patch', '<%= csrfToken %>')"
         >
         <label class="custom-control-label" for="live-now-switch">Switch on if a DJ is live right now</label>
       </div>
@@ -37,20 +38,4 @@
     </form>
   </div>
 </div>
-<%- include('../../components/forms/live-now-form.ejs', {
-  sendMessage,
-}) %>
-<% if (liveNow && currentLiveDj) { %>
-  <%- include('../../components/toast.ejs', {
-    toastCss: 'success',
-    toastType: 'Info',
-    toastMsg: `You are live now with ${currentLiveDj}` ,
-  }) %>
-<% } else { %>
-  <%- include('../../components/toast.ejs', {
-    toastCss: 'info',
-    toastType: 'Info',
-    toastMsg: `You are not streaming live right now` ,
-  }) %>
-<% } %>
 <%- include('../../partials/foot.ejs') %> 

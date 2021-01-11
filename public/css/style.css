@@ -7572,6 +7572,11 @@ a.text-dark:focus, a.text-dark:hover {
 .close:hover {
   color: #b9a78a; }
 
+a[type='button'] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none; }
+
 .danger-background {
   background-color: #d23430; }
 
@@ -7672,6 +7677,17 @@ a.text-dark:focus, a.text-dark:hover {
   .manage-page-title {
     margin: 0 0 2rem;
     text-align: center; }
+  .manage-page-img-container {
+    width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 2rem; }
+    .manage-page-img-container img {
+      max-width: 20rem;
+      width: 100%;
+      height: auto; }
   .manage-page-panel {
     padding-bottom: 2rem; }
     .manage-page-panel__header {

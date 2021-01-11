@@ -1,9 +1,0 @@
-<form class="invisible mt-2 randomise-media-form" action="/config/randomise-media" method="POST">
-  <fieldset>
-    <input type="hidden" id="randomiseMediaType" name="mediaType" value="<%= dataType %>">
-    <%- include('../../components/forms/form-submit.ejs', {
-      sendMessage,
-      submitButtonText: 'Randomise',
-    }) %>
-  </fieldset>
-</form>

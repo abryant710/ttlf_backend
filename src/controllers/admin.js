@@ -1,9 +1,13 @@
+/* eslint-disable no-underscore-dangle */
 const {
   pages: {
     CONFIG_LIVE_PAGE,
     MANAGE_MEDIA_PAGE,
     CREATE_MEDIA_PAGE,
     UPDATE_MEDIA_PAGE,
+    MANAGE_SCHEDULE_PAGE,
+    CREATE_SCHEDULE_PAGE,
+    MANAGE_EVENTS_PAGE,
     MANAGE_BIOS_PAGE,
     CREATE_BIO_PAGE,
   },
@@ -12,7 +16,8 @@ const SiteConfig = require('../models/SiteConfig');
 const YouTubeVideo = require('../models/YouTubeVideo');
 const SoundcloudTrack = require('../models/SoundcloudTrack');
 const DjProfile = require('../models/DjProfile');
-const { sendResponse } = require('../utils/general');
+const Schedule = require('../models/Schedule');
+const { sendResponse, sortSchedules } = require('../utils/general');
 
 const LIVE_PAGE_ATTR = ['configPage', 'live'];
 const CONTENT_PAGE_ATTR = ['configPage', 'site-content'];
@@ -26,8 +31,10 @@ const getMediaTypeParams = (mediaType) => {
 
 const getDjBios = async () => {
   const fetchedItems = await DjProfile.find({});
-  return fetchedItems.map(({ name, nickname, bio }) => ({
-    name, nickname, bio,
+  return fetchedItems.map(({
+    name, nickname, bio, _id,
+  }) => ({
+    name, nickname, bio, _id,
   }));
 };
 
@@ -42,6 +49,37 @@ module.exports.getConfig = async (req, res, next) => {
       ['liveNow', liveNow],
       ['currentLiveDj', dj.name],
       ['bios', bios],
+    ]);
+  } catch (err) {
+    const error = new Error(err);
+    return next(error);
+  }
+};
+
+module.exports.getManageSchedule = async (req, res, next) => {
+  try {
+    const schedules = await Schedule.find({});
+    const bios = await getDjBios();
+    const modifiedSchedules = sortSchedules(bios, schedules);
+    return sendResponse(req, res, 200, MANAGE_SCHEDULE_PAGE, [
+      CONTENT_PAGE_ATTR,
+      ['schedules', modifiedSchedules],
+      ['bios', bios],
+    ]);
+  } catch (err) {
+    const error = new Error(err);
+    return next(error);
+  }
+};
+
+module.exports.getManageEvents = async (req, res, next) => {
+  try {
+    const siteConfig = await SiteConfig.findOne();
+    const { upcomingEvent, eventFlyerLocation } = siteConfig;
+    return sendResponse(req, res, 200, MANAGE_EVENTS_PAGE, [
+      CONTENT_PAGE_ATTR,
+      ['date', upcomingEvent],
+      ['currentFlyer', eventFlyerLocation],
     ]);
   } catch (err) {
     const error = new Error(err);
@@ -74,8 +112,8 @@ module.exports.getManageMedia = async (req, res, next) => {
       [mediaRandomised]: randomised,
     } = siteConfig;
     const fetchedItems = await DataModel.find({});
-    const items = fetchedItems.map(({ title, url }) => ({
-      title, url: `${urlPrefix}${url}`,
+    const items = fetchedItems.map(({ title, url, _id }) => ({
+      title, url: `${urlPrefix}${url}`, _id,
     }));
     return sendResponse(req, res, 200, MANAGE_MEDIA_PAGE, [
       CONTENT_PAGE_ATTR,
@@ -107,6 +145,30 @@ module.exports.getUpdateMedia = async (req, res, next) => {
     }
     const error = new Error('Media item not found in the database');
     return next(error);
+  } catch (err) {
+    const error = new Error(err);
+    return next(error);
+  }
+};
+
+module.exports.postUpdateEvent = async (req, res, next) => {
+  const { date } = req.body;
+  const updates = { upcomingEvent: date };
+  const { file } = req;
+  if (file) {
+    const { filename } = file;
+    updates.eventFlyerLocation = `/images/flyer/${filename}`;
+  }
+  try {
+    const siteConfig = await SiteConfig.findOne();
+    await siteConfig.updateOne(updates);
+    const { eventFlyerLocation } = siteConfig;
+    req.flash('success', 'Updated the upcoming event flyer and date');
+    return sendResponse(req, res, 201, MANAGE_EVENTS_PAGE, [
+      CONTENT_PAGE_ATTR,
+      ['date', date],
+      ['currentFlyer', eventFlyerLocation],
+    ]);
   } catch (err) {
     const error = new Error(err);
     return next(error);
@@ -160,6 +222,19 @@ module.exports.getCreateBio = async (req, res, next) => {
   }
 };
 
+module.exports.getCreateSchedule = async (req, res, next) => {
+  try {
+    const bios = await getDjBios();
+    return sendResponse(req, res, 200, CREATE_SCHEDULE_PAGE, [
+      CONTENT_PAGE_ATTR,
+      ['bios', bios],
+    ]);
+  } catch (err) {
+    const error = new Error(err);
+    return next(error);
+  }
+};
+
 module.exports.postCreateBio = async (req, res, next) => {
   const {
     name, nickname, bio,
@@ -182,13 +257,48 @@ module.exports.postCreateBio = async (req, res, next) => {
     const newItem = new DjProfile({ name, nickname, bio: bioArr });
     await newItem.save();
     req.flash('success', `New DJ profile ${name} created.`);
+    const bios = await getDjBios();
     return sendResponse(req, res, 201, CREATE_BIO_PAGE, [
       CONTENT_PAGE_ATTR,
+      ['bios', bios],
     ]);
   } catch (err) {
     const error = new Error(err);
     return next(error);
   }
+};
+
+module.exports.postCreateSchedule = async (req, res, next) => {
+  const {
+    name, datetime,
+  } = req.body;
+  const [date, time] = datetime.split('T');
+  try {
+    const bios = await getDjBios();
+    if (!name || !datetime) {
+      req.flash('error', 'Please complete the form');
+      return sendResponse(req, res, 422, CREATE_SCHEDULE_PAGE, [
+        CONTENT_PAGE_ATTR,
+        ['bios', bios],
+      ]);
+    }
+    const dj = await DjProfile.findOne({ name });
+    if (dj) {
+      const { _id } = dj;
+      const newSchedule = new Schedule({ date, time, dj: _id });
+      await newSchedule.save();
+      req.flash('success', 'Created new schedule item');
+      return sendResponse(req, res, 422, CREATE_SCHEDULE_PAGE, [
+        CONTENT_PAGE_ATTR,
+        ['bios', bios],
+      ]);
+    }
+  } catch (err) {
+    const error = new Error(err);
+    return next(error);
+  }
+  const error = new Error('DJ does not exist in the system');
+  return next(error);
 };
 
 module.exports.postUpdateMedia = async (req, res, next) => {
@@ -278,44 +388,72 @@ module.exports.postCreateMedia = async (req, res, next) => {
 };
 
 module.exports.deleteBio = async (req, res, next) => {
-  const { name } = req.body;
+  const { itemId: _id } = req.params;
   try {
-    const item = await DjProfile.findOne({ name });
-    if (item) {
-      await item.deleteOne({ name });
-      req.flash('success', `Deleted DJ profile ${name}`);
-      return res.redirect('/config/manage-bios');
+    const dj = await DjProfile.findOne({ _id });
+    if (dj) {
+      await dj.deleteOne({ _id });
+      req.flash('success', `Deleted DJ ${dj.name}`);
+      return res.status(200).json({
+        status: 'Success',
+        message: `Deleted DJ ${dj.name}`,
+        redirect: '/config/manage-bios',
+      });
     }
     const error = new Error('DJ profile not found in the database');
     return next(error);
   } catch (err) {
-    const error = new Error(err);
-    return next(error);
+    console.error(err);
   }
+  return res.status(500).json({
+    status: 'Error',
+    message: 'Failed to delete the DJ',
+  });
 };
 
-module.exports.deleteMedia = async (req, res, next) => {
-  const { url, mediaType } = req.body;
-  const { prefixIdentifier, DataModel } = getMediaTypeParams(mediaType);
+module.exports.deleteMedia = async (req, res) => {
+  const { itemId: _id } = req.params;
+  const mediaType = req.originalUrl.includes('track') ? 'track' : 'video';
+  const { DataModel } = getMediaTypeParams(mediaType);
   try {
-    const siteConfig = await SiteConfig.findOne({});
-    const { [prefixIdentifier]: urlPrefix } = siteConfig;
-    const truncatedUrl = url.replace(urlPrefix, '');
-    const item = await DataModel.findOne({ url: truncatedUrl });
+    const item = await DataModel.findOne({ _id });
     if (item) {
-      await item.deleteOne({ url: truncatedUrl });
-      req.flash('success', `Deleted ${mediaType} ${url}`);
-      return res.redirect(`/config/manage-media?mediaType=${mediaType}`);
+      await item.deleteOne({ _id });
+      return res.status(200).json({
+        status: 'Success',
+        message: `Deleted ${mediaType} with url ${item.url}`,
+      });
     }
-    const error = new Error('Media item not found in the database');
-    return next(error);
   } catch (err) {
-    const error = new Error(err);
-    return next(error);
+    console.error(err);
   }
+  return res.status(500).json({
+    status: 'Error',
+    message: `Failed to delete the ${mediaType}`,
+  });
 };
 
-module.exports.postRandomiseMedia = async (req, res, next) => {
+module.exports.deleteSchedule = async (req, res) => {
+  const { itemId: _id } = req.params;
+  try {
+    const item = await Schedule.findOne({ _id });
+    if (item) {
+      await item.deleteOne({ _id });
+      return res.status(200).json({
+        status: 'Success',
+        message: 'Deleted set',
+      });
+    }
+  } catch (err) {
+    console.error(err);
+  }
+  return res.status(500).json({
+    status: 'Error',
+    message: 'Failed to delete the set',
+  });
+};
+
+module.exports.patchMedia = async (req, res, next) => {
   const { mediaType } = req.body;
   const { mediaRandomised } = getMediaTypeParams(mediaType);
   try {
@@ -330,16 +468,36 @@ module.exports.postRandomiseMedia = async (req, res, next) => {
   }
 };
 
-module.exports.postLiveNow = async (_req, res, next) => {
+module.exports.patchBoolean = async (req, res) => {
+  const { actionType } = req.body;
+  let liveDj = '';
+  const getToastMessageText = (newValue) => {
+    switch (actionType) {
+      case 'liveNow': return `You are ${newValue ? `live now with ${liveDj}!` : 'no longer live.'}`;
+      case 'youTubeVideosRandomised': return `YouTube videos will ${newValue ? '' : 'no longer '}be randomised.`;
+      case 'soundcloudTracksRandomised': return `Soundcloud tracks will ${newValue ? '' : 'no longer '}be randomised.`;
+      default: return 'Site updated';
+    }
+  };
   try {
     const siteConfig = await SiteConfig.findOne({});
-    const { liveNow } = siteConfig;
-    await siteConfig.updateOne({ liveNow: !liveNow });
-    return res.redirect('/config/live');
+    const { [actionType]: actionValue, currentLiveDj } = siteConfig;
+    if (actionType === 'liveNow') {
+      const { name, nickname } = await DjProfile.findOne({ _id: currentLiveDj });
+      liveDj = nickname || name;
+    }
+    await siteConfig.updateOne({ [actionType]: !actionValue });
+    return res.status(200).json({
+      status: !actionValue ? 'Success' : 'Info',
+      message: getToastMessageText(!actionValue),
+    });
   } catch (err) {
-    const error = new Error(err);
-    return next(error);
+    console.error(err);
   }
+  return res.status(500).json({
+    status: 'Error',
+    message: 'Failed to update',
+  });
 };
 
 module.exports.postUpdateLiveDj = async (req, res, next) => {
@@ -347,7 +505,6 @@ module.exports.postUpdateLiveDj = async (req, res, next) => {
   try {
     const siteConfig = await SiteConfig.findOne({});
     const liveDj = await DjProfile.findOne({ name });
-    // eslint-disable-next-line no-underscore-dangle
     await siteConfig.updateOne({ currentLiveDj: liveDj._id });
     return res.redirect('/config/live');
   } catch (err) {

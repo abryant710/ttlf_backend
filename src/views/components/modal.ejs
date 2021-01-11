@@ -11,7 +11,7 @@
         <p><%= modalText %></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary modal-close" data-dismiss="modal" onclick="submitForm('<%= formClass %>');">Yes</button>
+        <button type="button" class="btn btn-primary modal-close modal-action" data-dismiss="modal" onclick="sendAction(this, '<%= deleteType %>', '<%= action %>', '<%= csrfToken %>');">Yes</button>
         <button type="button" class="btn btn-secondary modal-close" data-dismiss="modal">Close</button>
       </div>
     </div>
