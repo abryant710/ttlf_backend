@@ -23,18 +23,9 @@ module.exports.getWebsiteConfig = async (_req, res) => {
     const tracks = await SoundcloudTrack.find({});
     const profiles = await DjProfile.find({});
     const scheds = await Schedule.find({});
-    collections.youTubeVideos = siteConfig.youTubeVideos.map((youTubeVid) => {
-      const { url, title } = videos.find(({ _id }) => youTubeVid.equals(_id));
-      return { url, title };
-    });
-    collections.soundcloudTracks = siteConfig.soundcloudTracks.map((soundcloudTrack) => {
-      const { url, title } = tracks.find(({ _id }) => soundcloudTrack.equals(_id));
-      return { url, title };
-    });
-    collections.djProfiles = siteConfig.djProfiles.map((profileId) => {
-      const { name, nickname, bio } = profiles.find(({ _id }) => profileId.equals(_id));
-      return { name, nickname, bio };
-    });
+    collections.youTubeVideos = videos.map(({ url, title }) => ({ url, title }));
+    collections.soundcloudTracks = tracks.map(({ url, title }) => ({ url, title }));
+    collections.djProfiles = profiles.map(({ name, nickname, bio }) => ({ name, nickname, bio }));
     collections.schedules = sortSchedules(profiles, scheds).map(
       ({ date, time, name }) => ({ date, time, dj: name }),
     );

@@ -162,13 +162,8 @@ module.exports.postUpdateEvent = async (req, res, next) => {
   try {
     const siteConfig = await SiteConfig.findOne();
     await siteConfig.updateOne(updates);
-    const { eventFlyerLocation } = siteConfig;
     req.flash('success', 'Updated the upcoming event flyer and date');
-    return sendResponse(req, res, 201, MANAGE_EVENTS_PAGE, [
-      CONTENT_PAGE_ATTR,
-      ['date', date],
-      ['currentFlyer', eventFlyerLocation],
-    ]);
+    return res.redirect('/config/manage-events');
   } catch (err) {
     const error = new Error(err);
     return next(error);

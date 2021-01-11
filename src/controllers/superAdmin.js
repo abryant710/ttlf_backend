@@ -49,16 +49,12 @@ module.exports.initialiseData = async (_req, res) => {
     const djProfilePromises = djProfiles.map((profile) => profile.save());
     await Promise.all([...youTubePromises, ...soundcloudPromises, ...djProfilePromises]);
     const newSiteConfig = new SiteConfig({
-      djProfiles: djProfiles.map((profile) => profile._id),
       upcomingEvent: '2021-01-01',
       eventFlyerLocation: '/images/flyer/flyer.jpg',
       liveNow: false,
-      schedule: [],
       currentLiveDj: djProfiles[0]._id,
-      youTubeVideos: youTubeVideos.map((vid) => vid._id),
       youTubeVideosRandomised: initYouTubeRandomise,
       youTubeVideoPrefix: initYouTubeUrlPrefix,
-      soundcloudTracks: soundcloudTracks.map((track) => track._id),
       soundcloudTracksRandomised: initSoundcloudRandomise,
       soundcloudTrackPrefix: initSoundcloudUrlPrefix,
     });
