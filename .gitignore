@@ -3,6 +3,7 @@ node_modules/
 www/*
 yarn-error.log
 db/*
+public/images/flyer/*
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

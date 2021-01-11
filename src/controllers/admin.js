@@ -1,7 +1,3 @@
-const path = require('path');
-const { promises } = require('fs');
-const { rootPath } = require('../utils/general');
-
 /* eslint-disable no-underscore-dangle */
 const {
   pages: {
@@ -157,25 +153,22 @@ module.exports.getUpdateMedia = async (req, res, next) => {
 
 module.exports.postUpdateEvent = async (req, res, next) => {
   const { date } = req.body;
-  const { filename } = req.file;
+  const updates = { upcomingEvent: date };
+  const { file } = req;
+  if (file) {
+    const { filename } = file;
+    updates.eventFlyerLocation = `/images/flyer/${filename}`;
+  }
   try {
-    await promises.rmdir(path.join(rootPath, '/public/images/flyer'), { recursive: true });
     const siteConfig = await SiteConfig.findOne();
-    if (siteConfig) {
-      const newFlyerLoc = `public/images/flyer/${filename}`;
-      siteConfig.updateOne({
-        upcomingEvent: date,
-        eventFlyerLocation: newFlyerLoc,
-      });
-      req.flash('success', 'Updated the next event');
-      return sendResponse(req, res, 201, MANAGE_EVENTS_PAGE, [
-        CONTENT_PAGE_ATTR,
-        ['date', date],
-        ['currentFlyer', newFlyerLoc],
-      ]);
-    }
-    const error = new Error('Could not extract data from site config');
-    return next(error);
+    await siteConfig.updateOne(updates);
+    const { eventFlyerLocation } = siteConfig;
+    req.flash('success', 'Updated the upcoming event flyer and date');
+    return sendResponse(req, res, 201, MANAGE_EVENTS_PAGE, [
+      CONTENT_PAGE_ATTR,
+      ['date', date],
+      ['currentFlyer', eventFlyerLocation],
+    ]);
   } catch (err) {
     const error = new Error(err);
     return next(error);
