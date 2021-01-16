@@ -10,7 +10,7 @@ const PROD_ALLOWED_ORIGINS = [
 const DEV_ALLOWED_ORIGIN = '*';
 
 // add headers to allow REST api to recieve requests
-module.exports.apiOrigin = (req, res, next) => {
+export const apiOrigin = (req, res, next) => {
   const { origin } = req.headers;
   if (TTLF_ENV === 'production') {
     if (PROD_ALLOWED_ORIGINS.includes(origin)) {
@@ -29,7 +29,7 @@ module.exports.apiOrigin = (req, res, next) => {
 };
 
 // add headers to allow REST api to recieve requests
-module.exports.adminOrigin = (_req, res, next) => {
+export const adminOrigin = (_req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', DEV_ALLOWED_ORIGIN);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');

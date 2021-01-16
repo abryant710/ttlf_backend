@@ -1,7 +1,7 @@
-const express = require('express');
-const { adminOrigin } = require('../middleware/originCheck');
+import express from 'express';
+import { adminOrigin } from '../middleware/originCheck.js';
 
-const {
+import {
   getLogin,
   postLogin,
   deleteSession,
@@ -9,7 +9,7 @@ const {
   postSendReset,
   getResetPassword,
   postResetPassword,
-} = require('../controllers/auth');
+} from '../controllers/auth.js';
 
 const router = express.Router();
 router.get('/login', adminOrigin, getLogin);
@@ -20,4 +20,4 @@ router.post('/send-reset', adminOrigin, postSendReset);
 router.get('/reset-password', adminOrigin, getResetPassword);
 router.post('/reset-password', adminOrigin, postResetPassword);
 
-module.exports = router;
+export default router;

@@ -1,14 +1,14 @@
 /* eslint-disable no-underscore-dangle */
-const path = require('path');
+import main from 'require-main-filename';
 
-module.exports.getOrigin = (req) => {
+export const getOrigin = (req) => {
   const host = req.get('host');
   const httpPart = host.includes('localhost') ? 'http' : 'https';
   return `${httpPart}://${host}`;
 };
 
 // Ensure the table sorts the sets in chronological order
-module.exports.sortSchedules = (bios, schedules) => {
+export const sortSchedules = (bios, schedules) => {
   const biosmap = {};
   // creating lookup table
   bios.forEach((bio) => { biosmap[bio._id] = bio.nickname || bio.name; });
@@ -36,7 +36,7 @@ const getFlashMessage = (req) => {
   return [messageType, messageText];
 };
 
-module.exports.sendResponse = (
+export const sendResponse = (
   req,
   res,
   status,
@@ -59,4 +59,4 @@ module.exports.sendResponse = (
     });
 };
 
-module.exports.rootPath = path.dirname(require.main.filename);
+export const rootPath = main();

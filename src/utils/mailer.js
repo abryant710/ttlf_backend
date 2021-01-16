@@ -1,5 +1,5 @@
-const nodemailer = require('nodemailer');
-const sendgridTransport = require('nodemailer-sendgrid-transport');
+import nodemailer from 'nodemailer';
+import sendgridTransport from 'nodemailer-sendgrid-transport';
 
 const { TTLF_MAILER_API_KEY } = process.env;
 
@@ -20,7 +20,7 @@ const emailTemplates = (attrs) => ({
   `,
 });
 
-module.exports.sendMail = ({
+export default ({
   email, subject, template, attrs,
 }) => {
   transporter.sendMail({

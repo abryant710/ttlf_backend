@@ -1,21 +1,21 @@
-const bcrypt = require('bcryptjs');
-const { v4: uuidv4 } = require('uuid');
-const User = require('../models/User');
+import bcrypt from 'bcryptjs';
+import { v4 as uuidv4 } from 'uuid';
+import User from '../models/User.js';
+import pages from '../utils/pages.js';
+import { getOrigin, sendResponse } from '../utils/general.js';
+import sendMail from '../utils/mailer.js';
+
 const {
-  pages: {
-    LOGIN_PAGE,
-    SEND_RESET_PAGE,
-    RESET_PW_PAGE,
-  },
-} = require('../utils/pages');
-const { getOrigin, sendResponse } = require('../utils/general');
-const { sendMail } = require('../utils/mailer');
+  LOGIN_PAGE,
+  SEND_RESET_PAGE,
+  RESET_PW_PAGE,
+} = pages;
 
 const defaultFormAttrs = [['formAttributes', {}]];
 
-module.exports.getLogin = (req, res) => sendResponse(req, res, 200, LOGIN_PAGE, defaultFormAttrs);
+export const getLogin = (req, res) => sendResponse(req, res, 200, LOGIN_PAGE, defaultFormAttrs);
 
-module.exports.postLogin = async (req, res) => {
+export const postLogin = async (req, res) => {
   const { email, password1 } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -37,7 +37,7 @@ module.exports.postLogin = async (req, res) => {
   return sendResponse(req, res, 401, LOGIN_PAGE, defaultFormAttrs);
 };
 
-module.exports.deleteSession = (req, res) => {
+export const deleteSession = (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.error(err);
@@ -48,11 +48,11 @@ module.exports.deleteSession = (req, res) => {
   });
 };
 
-module.exports.getSendReset = (req, res) => sendResponse(
+export const getSendReset = (req, res) => sendResponse(
   req, res, 200, SEND_RESET_PAGE, defaultFormAttrs,
 );
 
-module.exports.postSendReset = async (req, res) => {
+export const postSendReset = async (req, res) => {
   const { email } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -84,7 +84,7 @@ module.exports.postSendReset = async (req, res) => {
   return sendResponse(req, res, 401, SEND_RESET_PAGE, defaultFormAttrs);
 };
 
-module.exports.getResetPassword = async (req, res) => {
+export const getResetPassword = async (req, res) => {
   const { email, token } = req.query;
   try {
     if (email && token) {
@@ -105,7 +105,7 @@ module.exports.getResetPassword = async (req, res) => {
   return res.redirect('/login');
 };
 
-module.exports.postResetPassword = async (req, res) => {
+export const postResetPassword = async (req, res) => {
   const {
     email, token, password1, password2,
   } = req.body;

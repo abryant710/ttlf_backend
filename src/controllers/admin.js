@@ -1,23 +1,23 @@
 /* eslint-disable no-underscore-dangle */
+import pages from '../utils/pages.js';
+import SiteConfig from '../models/SiteConfig.js';
+import YouTubeVideo from '../models/YouTubeVideo.js';
+import SoundcloudTrack from '../models/SoundcloudTrack.js';
+import DjProfile from '../models/DjProfile.js';
+import Schedule from '../models/Schedule.js';
+import { sendResponse, sortSchedules } from '../utils/general.js';
+
 const {
-  pages: {
-    CONFIG_LIVE_PAGE,
-    MANAGE_MEDIA_PAGE,
-    CREATE_MEDIA_PAGE,
-    UPDATE_MEDIA_PAGE,
-    MANAGE_SCHEDULE_PAGE,
-    CREATE_SCHEDULE_PAGE,
-    MANAGE_EVENTS_PAGE,
-    MANAGE_BIOS_PAGE,
-    CREATE_BIO_PAGE,
-  },
-} = require('../utils/pages');
-const SiteConfig = require('../models/SiteConfig');
-const YouTubeVideo = require('../models/YouTubeVideo');
-const SoundcloudTrack = require('../models/SoundcloudTrack');
-const DjProfile = require('../models/DjProfile');
-const Schedule = require('../models/Schedule');
-const { sendResponse, sortSchedules } = require('../utils/general');
+  CONFIG_LIVE_PAGE,
+  MANAGE_MEDIA_PAGE,
+  CREATE_MEDIA_PAGE,
+  UPDATE_MEDIA_PAGE,
+  MANAGE_SCHEDULE_PAGE,
+  CREATE_SCHEDULE_PAGE,
+  MANAGE_EVENTS_PAGE,
+  MANAGE_BIOS_PAGE,
+  CREATE_BIO_PAGE,
+} = pages;
 
 const LIVE_PAGE_ATTR = ['configPage', 'live'];
 const CONTENT_PAGE_ATTR = ['configPage', 'site-content'];
@@ -38,7 +38,7 @@ const getDjBios = async () => {
   }));
 };
 
-module.exports.getConfig = async (req, res, next) => {
+export const getConfig = async (req, res, next) => {
   try {
     const siteConfig = await SiteConfig.findOne({});
     const bios = await getDjBios();
@@ -56,7 +56,7 @@ module.exports.getConfig = async (req, res, next) => {
   }
 };
 
-module.exports.getManageSchedule = async (req, res, next) => {
+export const getManageSchedule = async (req, res, next) => {
   try {
     const schedules = await Schedule.find({});
     const bios = await getDjBios();
@@ -72,7 +72,7 @@ module.exports.getManageSchedule = async (req, res, next) => {
   }
 };
 
-module.exports.getManageEvents = async (req, res, next) => {
+export const getManageEvents = async (req, res, next) => {
   try {
     const siteConfig = await SiteConfig.findOne();
     const { upcomingEvent, eventFlyerLocation } = siteConfig;
@@ -87,7 +87,7 @@ module.exports.getManageEvents = async (req, res, next) => {
   }
 };
 
-module.exports.getManageBios = async (req, res, next) => {
+export const getManageBios = async (req, res, next) => {
   const { chosenProfile } = req.query;
   try {
     const bios = await getDjBios();
@@ -102,7 +102,7 @@ module.exports.getManageBios = async (req, res, next) => {
   }
 };
 
-module.exports.getManageMedia = async (req, res, next) => {
+export const getManageMedia = async (req, res, next) => {
   const { mediaType } = req.query;
   const { mediaRandomised, prefixIdentifier, DataModel } = getMediaTypeParams(mediaType);
   try {
@@ -127,7 +127,7 @@ module.exports.getManageMedia = async (req, res, next) => {
   }
 };
 
-module.exports.getUpdateMedia = async (req, res, next) => {
+export const getUpdateMedia = async (req, res, next) => {
   const { url: fullUrl, mediaType } = req.query;
   const { prefixIdentifier, DataModel } = getMediaTypeParams(mediaType);
   try {
@@ -151,7 +151,7 @@ module.exports.getUpdateMedia = async (req, res, next) => {
   }
 };
 
-module.exports.postUpdateEvent = async (req, res, next) => {
+export const postUpdateEvent = async (req, res, next) => {
   const { date } = req.body;
   const updates = { upcomingEvent: date };
   const { file } = req;
@@ -170,7 +170,7 @@ module.exports.postUpdateEvent = async (req, res, next) => {
   }
 };
 
-module.exports.postUpdateBio = async (req, res, next) => {
+export const postUpdateBio = async (req, res, next) => {
   const {
     name, nickname, bio, chosenProfile, prevName,
   } = req.body;
@@ -206,7 +206,7 @@ module.exports.postUpdateBio = async (req, res, next) => {
   }
 };
 
-module.exports.getCreateBio = async (req, res, next) => {
+export const getCreateBio = async (req, res, next) => {
   try {
     return sendResponse(req, res, 200, CREATE_BIO_PAGE, [
       CONTENT_PAGE_ATTR,
@@ -217,7 +217,7 @@ module.exports.getCreateBio = async (req, res, next) => {
   }
 };
 
-module.exports.getCreateSchedule = async (req, res, next) => {
+export const getCreateSchedule = async (req, res, next) => {
   try {
     const bios = await getDjBios();
     return sendResponse(req, res, 200, CREATE_SCHEDULE_PAGE, [
@@ -230,7 +230,7 @@ module.exports.getCreateSchedule = async (req, res, next) => {
   }
 };
 
-module.exports.postCreateBio = async (req, res, next) => {
+export const postCreateBio = async (req, res, next) => {
   const {
     name, nickname, bio,
   } = req.body;
@@ -263,7 +263,7 @@ module.exports.postCreateBio = async (req, res, next) => {
   }
 };
 
-module.exports.postCreateSchedule = async (req, res, next) => {
+export const postCreateSchedule = async (req, res, next) => {
   const {
     name, datetime,
   } = req.body;
@@ -296,7 +296,7 @@ module.exports.postCreateSchedule = async (req, res, next) => {
   return next(error);
 };
 
-module.exports.postUpdateMedia = async (req, res, next) => {
+export const postUpdateMedia = async (req, res, next) => {
   const {
     title, originalTitle, url, originalUrl, urlPrefix, mediaType,
   } = req.body;
@@ -332,7 +332,7 @@ module.exports.postUpdateMedia = async (req, res, next) => {
   }
 };
 
-module.exports.getCreateMedia = async (req, res, next) => {
+export const getCreateMedia = async (req, res, next) => {
   const { mediaType } = req.query;
   const { prefixIdentifier } = getMediaTypeParams(mediaType);
   try {
@@ -348,7 +348,7 @@ module.exports.getCreateMedia = async (req, res, next) => {
   }
 };
 
-module.exports.postCreateMedia = async (req, res, next) => {
+export const postCreateMedia = async (req, res, next) => {
   const {
     title, url, urlPrefix, mediaType,
   } = req.body;
@@ -382,7 +382,7 @@ module.exports.postCreateMedia = async (req, res, next) => {
   }
 };
 
-module.exports.deleteBio = async (req, res, next) => {
+export const deleteBio = async (req, res, next) => {
   const { itemId: _id } = req.params;
   try {
     const dj = await DjProfile.findOne({ _id });
@@ -406,7 +406,7 @@ module.exports.deleteBio = async (req, res, next) => {
   });
 };
 
-module.exports.deleteMedia = async (req, res) => {
+export const deleteMedia = async (req, res) => {
   const { itemId: _id } = req.params;
   const mediaType = req.originalUrl.includes('track') ? 'track' : 'video';
   const { DataModel } = getMediaTypeParams(mediaType);
@@ -428,7 +428,7 @@ module.exports.deleteMedia = async (req, res) => {
   });
 };
 
-module.exports.deleteSchedule = async (req, res) => {
+export const deleteSchedule = async (req, res) => {
   const { itemId: _id } = req.params;
   try {
     const item = await Schedule.findOne({ _id });
@@ -448,7 +448,7 @@ module.exports.deleteSchedule = async (req, res) => {
   });
 };
 
-module.exports.patchMedia = async (req, res, next) => {
+export const patchMedia = async (req, res, next) => {
   const { mediaType } = req.body;
   const { mediaRandomised } = getMediaTypeParams(mediaType);
   try {
@@ -463,7 +463,7 @@ module.exports.patchMedia = async (req, res, next) => {
   }
 };
 
-module.exports.patchBoolean = async (req, res) => {
+export const patchBoolean = async (req, res) => {
   const { actionType } = req.body;
   let liveDj = '';
   const getToastMessageText = (newValue) => {
@@ -495,7 +495,7 @@ module.exports.patchBoolean = async (req, res) => {
   });
 };
 
-module.exports.postUpdateLiveDj = async (req, res, next) => {
+export const postUpdateLiveDj = async (req, res, next) => {
   const { name } = req.body;
   try {
     const siteConfig = await SiteConfig.findOne({});

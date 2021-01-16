@@ -1,4 +1,4 @@
-module.exports.checkAuth = (req, res, next) => {
+export const checkAuth = (req, res, next) => {
   const { isLoggedIn } = req.session;
   if (!isLoggedIn) {
     return res
@@ -8,7 +8,7 @@ module.exports.checkAuth = (req, res, next) => {
   return next();
 };
 
-module.exports.checkSuperAdmin = (req, res, next) => {
+export const checkSuperAdmin = (req, res, next) => {
   const { user: { isSuperAdmin }, isLoggedIn } = req.session;
   if (!isLoggedIn) {
     return res

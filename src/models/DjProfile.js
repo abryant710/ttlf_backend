@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
@@ -17,4 +17,4 @@ const djProfile = new Schema({
   },
 });
 
-module.exports = mongoose.model('DjProfile', djProfile);
+export default mongoose.model('DjProfile', djProfile);

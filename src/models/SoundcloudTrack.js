@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
@@ -13,4 +13,4 @@ const soundcloudTrackSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model('SoundcloudTrack', soundcloudTrackSchema);
+export default mongoose.model('SoundcloudTrack', soundcloudTrackSchema);

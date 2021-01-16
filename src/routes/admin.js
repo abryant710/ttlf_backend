@@ -1,8 +1,8 @@
-const express = require('express');
-const { checkAuth } = require('../middleware/auth');
-const { adminOrigin } = require('../middleware/originCheck');
+import express from 'express';
+import { checkAuth } from '../middleware/auth.js';
+import { adminOrigin } from '../middleware/originCheck.js';
 
-const {
+import {
   getConfig,
   getManageMedia,
   getCreateMedia,
@@ -23,7 +23,7 @@ const {
   deleteMedia,
   deleteSchedule,
   deleteBio,
-} = require('../controllers/admin');
+} from '../controllers/admin.js';
 
 const router = express.Router();
 router.get('/config/live', adminOrigin, checkAuth, getConfig);
@@ -48,4 +48,4 @@ router.delete('/config/delete-video/:itemId', adminOrigin, checkAuth, deleteMedi
 router.delete('/config/delete-schedule/:itemId', adminOrigin, checkAuth, deleteSchedule);
 router.delete('/config/delete-bio/:itemId', adminOrigin, checkAuth, deleteBio);
 
-module.exports = router;
+export default router;
