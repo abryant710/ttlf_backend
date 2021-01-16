@@ -5,8 +5,7 @@ module.exports.checkAuth = (req, res, next) => {
       .status(403)
       .redirect('/login');
   }
-  next();
-  return null;
+  return next();
 };
 
 module.exports.checkSuperAdmin = (req, res, next) => {
@@ -21,6 +20,5 @@ module.exports.checkSuperAdmin = (req, res, next) => {
       .status(403)
       .redirect('/404');
   }
-  next();
-  return null;
+  return next();
 };
