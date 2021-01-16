@@ -1,5 +1,5 @@
 const express = require('express');
-const { checkOrigin } = require('../middleware/originCheck');
+const { adminOrigin } = require('../middleware/originCheck');
 
 const {
   getLogin,
@@ -12,12 +12,12 @@ const {
 } = require('../controllers/auth');
 
 const router = express.Router();
-router.get('/login', checkOrigin, getLogin);
-router.post('/login', checkOrigin, postLogin);
-router.post('/logout', checkOrigin, deleteSession);
-router.get('/send-reset', checkOrigin, getSendReset);
-router.post('/send-reset', checkOrigin, postSendReset);
-router.get('/reset-password', checkOrigin, getResetPassword);
-router.post('/reset-password', checkOrigin, postResetPassword);
+router.get('/login', adminOrigin, getLogin);
+router.post('/login', adminOrigin, postLogin);
+router.post('/logout', adminOrigin, deleteSession);
+router.get('/send-reset', adminOrigin, getSendReset);
+router.post('/send-reset', adminOrigin, postSendReset);
+router.get('/reset-password', adminOrigin, getResetPassword);
+router.post('/reset-password', adminOrigin, postResetPassword);
 
 module.exports = router;
