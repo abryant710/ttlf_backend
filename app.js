@@ -23,14 +23,7 @@ const {
   TTLF_ENV,
 } = process.env;
 
-const allowedOrigins = [];
-if (TTLF_ENV === 'production') {
-  allowedOrigins.push('https://www.ttlf.net');
-  allowedOrigins.push('https://ttlf.net');
-  allowedOrigins.push('https://admin.ttlf.net');
-} else {
-  allowedOrigins.push('*');
-}
+const API_ALLOWED_ORIGIN = TTLF_ENV === 'production' ? 'https://www.ttlf.net' : '*';
 
 const MONGO_DB_URI = `mongodb+srv://${TTLF_MONGO_USER}:${TTLF_MONGO_PW}@${TTLF_MONGO_URI}/${TTLF_MONGO_DB}`;
 
@@ -84,9 +77,7 @@ app.use(session({
 app.use(csrfProtection); // protect form submission from csrf
 app.use(flash()); // allow messages to be flashed
 app.use((_req, res, next) => { // add headers to allow REST api to recieve requests
-  allowedOrigins.forEach((origin) => {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  });
+  res.setHeader('Access-Control-Allow-Origin', API_ALLOWED_ORIGIN);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
