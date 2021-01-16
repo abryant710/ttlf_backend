@@ -11,6 +11,8 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
 const multer = require('multer');
+// SHOULD USE FOR FORM VALIDATION
+// https://www.npmjs.com/package/validatorjs
 
 const {
   TTLF_MONGO_USER,
@@ -20,6 +22,8 @@ const {
   TTLF_SESSION_SECRET,
   TTLF_ENV,
 } = process.env;
+
+const API_ALLOWED_ORIGINS = TTLF_ENV === 'production' ? '*.ttlf.net' : '*';
 
 const MONGO_DB_URI = `mongodb+srv://${TTLF_MONGO_USER}:${TTLF_MONGO_PW}@${TTLF_MONGO_URI}/${TTLF_MONGO_DB}`;
 
@@ -73,7 +77,7 @@ app.use(session({
 app.use(csrfProtection); // protect form submission from csrf
 app.use(flash()); // allow messages to be flashed
 app.use((_req, res, next) => { // add headers to allow REST api to recieve requests
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', API_ALLOWED_ORIGINS);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
