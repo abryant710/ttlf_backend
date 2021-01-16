@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
@@ -13,4 +13,4 @@ const youTubeVideoSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model('YouTubeVideo', youTubeVideoSchema);
+export default mongoose.model('YouTubeVideo', youTubeVideoSchema);

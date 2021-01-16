@@ -3,11 +3,9 @@
   "version": "1.0.0",
   "description": "ttlf.net backend app",
   "main": "app.js",
+  "type": "module",
   "author": "Alex Bryant",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/abryant710/ttlf-backend/issues"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/abryant710/ttlf-backend.git"
@@ -75,6 +73,30 @@
     "multer": "^1.4.2",
     "nodemailer": "^6.4.17",
     "nodemailer-sendgrid-transport": "^0.2.0",
+    "require-main-filename": "^2.0.0",
     "uuid": "^8.3.2"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "commonjs": true,
+      "es2021": true
+    },
+    "extends": [
+      "airbnb-base"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 12
+    },
+    "rules": {
+      "no-console": 0,
+      "import/extensions": [
+        "error",
+        "ignorePackages",
+        {
+          "js": "always"
+        }
+     ]
+    }
   }
 }

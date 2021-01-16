@@ -1,24 +1,16 @@
 /* eslint-disable no-underscore-dangle */
-const bcrypt = require('bcryptjs');
-const User = require('../models/User');
-const {
-  pages: {
-    CREATE_ADMIN_PAGE,
-    MANAGE_ADMINS_PAGE,
-  },
-} = require('../utils/pages');
-const { sendMail } = require('../utils/mailer');
-const { getOrigin, sendResponse } = require('../utils/general');
-const SiteConfig = require('../models/SiteConfig');
-const DjProfile = require('../models/DjProfile');
-const YouTubeVideo = require('../models/YouTubeVideo');
-const SoundcloudTrack = require('../models/SoundcloudTrack');
-const Schedule = require('../models/Schedule');
+import bcrypt from 'bcryptjs';
+import User from '../models/User.js';
+import pages from '../utils/pages.js';
+import sendMail from '../utils/mailer.js';
+import { getOrigin, sendResponse } from '../utils/general.js';
+import SiteConfig from '../models/SiteConfig.js';
+import DjProfile from '../models/DjProfile.js';
+import YouTubeVideo from '../models/YouTubeVideo.js';
+import SoundcloudTrack from '../models/SoundcloudTrack.js';
+import Schedule from '../models/Schedule.js';
 
-const PROTECTED_ADMINS = ['alexbryant710@gmail.com'];
-const CONFIG_PAGE_ATTR = ['configPage', 'admin-users'];
-
-const {
+import {
   initDjProfiles,
   initYouTubeRandomise,
   initYouTubeUrlPrefix,
@@ -26,9 +18,17 @@ const {
   initSoundcloudRandomise,
   initSoundcloudUrlPrefix,
   initSoundcloudTracks,
-} = require('../utils/initialConfig');
+} from '../utils/initialConfig.js';
 
-module.exports.initialiseData = async (_req, res) => {
+const PROTECTED_ADMINS = ['alexbryant710@gmail.com'];
+const CONFIG_PAGE_ATTR = ['configPage', 'admin-users'];
+
+const {
+  CREATE_ADMIN_PAGE,
+  MANAGE_ADMINS_PAGE,
+} = pages;
+
+export const initialiseData = async (_req, res) => {
   try {
     await SiteConfig.find({}).deleteMany({});
     await DjProfile.find({}).deleteMany({});
@@ -65,7 +65,7 @@ module.exports.initialiseData = async (_req, res) => {
   return res.redirect('/config/live');
 };
 
-module.exports.getManageAdmins = async (req, res, next) => {
+export const getManageAdmins = async (req, res, next) => {
   try {
     let adminUsers = await User.find({});
     adminUsers = adminUsers.map(({
@@ -83,12 +83,12 @@ module.exports.getManageAdmins = async (req, res, next) => {
   }
 };
 
-module.exports.getCreateAdmin = (req, res) => sendResponse(req, res, 200, CREATE_ADMIN_PAGE, [
+export const getCreateAdmin = (req, res) => sendResponse(req, res, 200, CREATE_ADMIN_PAGE, [
   CONFIG_PAGE_ATTR,
   ['formAttributes', {}],
 ]);
 
-module.exports.postCreateAdmin = async (req, res) => {
+export const postCreateAdmin = async (req, res) => {
   const {
     firstName, lastName, email, password1, password2,
   } = req.body;
@@ -152,7 +152,7 @@ module.exports.postCreateAdmin = async (req, res) => {
   ]);
 };
 
-module.exports.deleteAdmin = async (req, res) => {
+export const deleteAdmin = async (req, res) => {
   const { itemId: _id } = req.params;
   try {
     const user = await User.findOne({ _id });

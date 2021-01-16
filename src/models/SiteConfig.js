@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
@@ -37,4 +37,4 @@ const siteConfigSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model('SiteConfig', siteConfigSchema);
+export default mongoose.model('SiteConfig', siteConfigSchema);

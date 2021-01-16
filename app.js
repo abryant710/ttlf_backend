@@ -1,18 +1,31 @@
+/* eslint-disable no-underscore-dangle */
 // Native node packages
-const path = require('path');
-const fs = require('fs');
+import path, { dirname } from 'path';
+import fs, { promises as fsPromises } from 'fs';
+import { fileURLToPath } from 'url';
 
 // 3rd party packages
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const session = require('express-session');
-const MongoDBStore = require('connect-mongodb-session')(session);
-const csrf = require('csurf');
-const flash = require('connect-flash');
-const multer = require('multer');
+import express from 'express';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import session from 'express-session';
+import storeImport from 'connect-mongodb-session';
+import csrf from 'csurf';
+import flash from 'connect-flash';
+import multer from 'multer';
 // SHOULD USE FOR FORM VALIDATION
 // https://www.npmjs.com/package/validatorjs
+
+import { get404, get500 } from './src/controllers/error.js';
+import authRoutes from './src/routes/auth.js';
+import superAdminRoutes from './src/routes/superAdmin.js';
+import adminRoutes from './src/routes/admin.js';
+import apiRoutes from './src/routes/api.js';
+
+const MongoDBStore = storeImport(session);
+
+export const __filename = fileURLToPath(import.meta.url);
+export const __dirname = dirname(__filename);
 
 const DEFAULT_ROUTE = '/config/live';
 const {
@@ -34,12 +47,6 @@ const csrfProtection = csrf();
 
 app.set('view engine', 'ejs'); // set template engine to ejs
 app.set('views', 'src/views'); // use src/views folders to store view files
-
-const { get404, get500 } = require('./src/controllers/error');
-const authRoutes = require('./src/routes/auth');
-const superAdminRoutes = require('./src/routes/superAdmin');
-const adminRoutes = require('./src/routes/admin');
-const apiRoutes = require('./src/routes/api');
 
 const fileStorage = multer.diskStorage({ // config file storage for uploads
   destination: (req, file, cb) => {
@@ -103,9 +110,18 @@ app.use((error, req, res, next) => {
 
 // create folder for flyer files if it doesn't already exist
 const eventDir = path.join(__dirname, 'public/images/flyer');
-if (!fs.existsSync(eventDir)) {
-  fs.mkdirSync(eventDir);
-}
+const checkEventDir = async () => {
+  try {
+    const dirExist = fs.existsSync(eventDir);
+    if (!dirExist) {
+      await fsPromises.mkdir(eventDir);
+    }
+  } catch (err) {
+    console.error(err, 'Failed create public/images/flyer dir');
+  }
+};
+
+checkEventDir();
 
 // spin up the application by connecting to the database and listening on port 5000
 const startApp = async () => {

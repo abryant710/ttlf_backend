@@ -1,11 +1,9 @@
-const express = require('express');
-const { apiOrigin } = require('../middleware/originCheck');
+import express from 'express';
+import { apiOrigin } from '../middleware/originCheck.js';
 
-const {
-  getWebsiteConfig,
-} = require('../controllers/api');
+import getWebsiteConfig from '../controllers/api.js';
 
 const router = express.Router();
 router.get('/v1/siteConfig', apiOrigin, getWebsiteConfig);
 
-module.exports = router;
+export default router;

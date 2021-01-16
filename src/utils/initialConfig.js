@@ -1,4 +1,4 @@
-module.exports.initDjProfiles = [
+export const initDjProfiles = [
   {
     name: 'Jonni Bryant',
     nickname: '',
@@ -59,9 +59,9 @@ module.exports.initDjProfiles = [
     ],
   },
 ];
-module.exports.initYouTubeRandomise = false;
-module.exports.initYouTubeUrlPrefix = 'https://www.youtube.com/watch?v=';
-module.exports.initYouTubeVideos = [
+export const initYouTubeRandomise = false;
+export const initYouTubeUrlPrefix = 'https://www.youtube.com/watch?v=';
+export const initYouTubeVideos = [
   {
     title: 'Banging HARD HOUSE TTLF Live Set by Fil EP Part 2 - 11/10/20',
     url: '3_ewvsS_nh8',
@@ -119,9 +119,9 @@ module.exports.initYouTubeVideos = [
     url: 'F9ZgZsWjOq0',
   },
 ];
-module.exports.initSoundcloudRandomise = true;
-module.exports.initSoundcloudUrlPrefix = 'https://soundcloud.com';
-module.exports.initSoundcloudTracks = [
+export const initSoundcloudRandomise = true;
+export const initSoundcloudUrlPrefix = 'https://soundcloud.com';
+export const initSoundcloudTracks = [
   {
     title: 'Vini Vici vs Ace Ventura - The Calling (Jilax Flip)',
     url: '/jilaxofficial/thecalling',

@@ -1,14 +1,14 @@
-const express = require('express');
-const { checkSuperAdmin } = require('../middleware/auth');
-const { adminOrigin } = require('../middleware/originCheck');
+import express from 'express';
+import { checkSuperAdmin } from '../middleware/auth.js';
+import { adminOrigin } from '../middleware/originCheck.js';
 
-const {
+import {
   initialiseData,
   getManageAdmins,
   getCreateAdmin,
   postCreateAdmin,
   deleteAdmin,
-} = require('../controllers/superAdmin');
+} from '../controllers/superAdmin.js';
 
 const router = express.Router();
 router.get('/config/initialise', adminOrigin, checkSuperAdmin, initialiseData); // Only used to import data initially
@@ -17,4 +17,4 @@ router.get('/config/create-admin', adminOrigin, checkSuperAdmin, getCreateAdmin)
 router.post('/config/create-admin', adminOrigin, checkSuperAdmin, postCreateAdmin);
 router.delete('/config/delete-admin/:itemId', adminOrigin, checkSuperAdmin, deleteAdmin);
 
-module.exports = router;
+export default router;

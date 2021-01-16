@@ -1,11 +1,11 @@
-const SiteConfig = require('../models/SiteConfig');
-const YouTubeVideo = require('../models/YouTubeVideo');
-const SoundcloudTrack = require('../models/SoundcloudTrack');
-const DjProfile = require('../models/DjProfile');
-const Schedule = require('../models/Schedule');
-const { sortSchedules } = require('../utils/general');
+import SiteConfig from '../models/SiteConfig.js';
+import YouTubeVideo from '../models/YouTubeVideo.js';
+import SoundcloudTrack from '../models/SoundcloudTrack.js';
+import DjProfile from '../models/DjProfile.js';
+import Schedule from '../models/Schedule.js';
+import { sortSchedules } from '../utils/general.js';
 
-module.exports.getWebsiteConfig = async (_req, res) => {
+export default async (_req, res) => {
   try {
     const collections = {};
     const siteConfig = await SiteConfig.findOne({});

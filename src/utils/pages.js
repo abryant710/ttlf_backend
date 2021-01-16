@@ -1,4 +1,4 @@
-module.exports.pages = {
+export default {
   NOT_FOUND_PAGE: 'pages/loggedOut/404',
   SERVER_ERROR_PAGE: 'pages/loggedIn/500',
   CONFIG_LIVE_PAGE: 'pages/loggedIn/live',
