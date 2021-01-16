@@ -14,6 +14,8 @@ const multer = require('multer');
 // SHOULD USE FOR FORM VALIDATION
 // https://www.npmjs.com/package/validatorjs
 
+const DEFAULT_ROUTE = '/config/live';
+
 const {
   TTLF_MONGO_USER,
   TTLF_MONGO_PW,
@@ -22,16 +24,6 @@ const {
   TTLF_SESSION_SECRET,
   TTLF_ENV,
 } = process.env;
-
-const allowedOrigins = [];
-if (TTLF_ENV === 'production') {
-  allowedOrigins.push('https://www.ttlf.net');
-  allowedOrigins.push('https://ttlf.net');
-  allowedOrigins.push('https://admin.ttlf.net');
-} else {
-  allowedOrigins.push('*');
-}
-
 const MONGO_DB_URI = `mongodb+srv://${TTLF_MONGO_USER}:${TTLF_MONGO_PW}@${TTLF_MONGO_URI}/${TTLF_MONGO_DB}`;
 
 const app = express();
@@ -83,15 +75,6 @@ app.use(session({
 }));
 app.use(csrfProtection); // protect form submission from csrf
 app.use(flash()); // allow messages to be flashed
-app.use((req, res, next) => { // add headers to allow REST api to recieve requests
-  const { origin } = req.headers;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-});
 
 app.use((req, res, next) => {
   const { isSuperAdmin, email: userEmail } = req.session.user || {};
@@ -100,8 +83,6 @@ app.use((req, res, next) => {
   res.locals.userEmail = userEmail;
   next();
 });
-
-const DEFAULT_ROUTE = '/config/live';
 
 app.use(authRoutes);
 app.use(superAdminRoutes);
