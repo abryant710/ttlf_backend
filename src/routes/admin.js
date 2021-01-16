@@ -1,5 +1,6 @@
 const express = require('express');
 const { checkAuth } = require('../middleware/auth');
+const { checkOrigin } = require('../middleware/originCheck');
 
 const {
   getConfig,
@@ -25,26 +26,26 @@ const {
 } = require('../controllers/admin');
 
 const router = express.Router();
-router.get('/config/live', checkAuth, getConfig);
-router.get('/config/manage-media', checkAuth, getManageMedia);
-router.get('/config/create-media', checkAuth, getCreateMedia);
-router.get('/config/update-media', checkAuth, getUpdateMedia);
-router.get('/config/create-schedule', checkAuth, getCreateSchedule);
-router.get('/config/manage-schedule', checkAuth, getManageSchedule);
-router.get('/config/manage-events', checkAuth, getManageEvents);
-router.get('/config/manage-bios', checkAuth, getManageBios);
-router.get('/config/create-bio', checkAuth, getCreateBio);
-router.patch('/config/patch-boolean', checkAuth, patchBoolean);
-router.post('/config/update-live-dj', checkAuth, postUpdateLiveDj);
-router.post('/config/create-media', checkAuth, postCreateMedia);
-router.post('/config/update-media', checkAuth, postUpdateMedia);
-router.post('/config/create-schedule', checkAuth, postCreateSchedule);
-router.post('/config/update-event', checkAuth, postUpdateEvent);
-router.post('/config/create-bio', checkAuth, postCreateBio);
-router.post('/config/update-bio', checkAuth, postUpdateBio);
-router.delete('/config/delete-track/:itemId', checkAuth, deleteMedia);
-router.delete('/config/delete-video/:itemId', checkAuth, deleteMedia);
-router.delete('/config/delete-schedule/:itemId', checkAuth, deleteSchedule);
-router.delete('/config/delete-bio/:itemId', checkAuth, deleteBio);
+router.get('/config/live', checkOrigin, checkAuth, getConfig);
+router.get('/config/manage-media', checkOrigin, checkAuth, getManageMedia);
+router.get('/config/create-media', checkOrigin, checkAuth, getCreateMedia);
+router.get('/config/update-media', checkOrigin, checkAuth, getUpdateMedia);
+router.get('/config/create-schedule', checkOrigin, checkAuth, getCreateSchedule);
+router.get('/config/manage-schedule', checkOrigin, checkAuth, getManageSchedule);
+router.get('/config/manage-events', checkOrigin, checkAuth, getManageEvents);
+router.get('/config/manage-bios', checkOrigin, checkAuth, getManageBios);
+router.get('/config/create-bio', checkOrigin, checkAuth, getCreateBio);
+router.patch('/config/patch-boolean', checkOrigin, checkAuth, patchBoolean);
+router.post('/config/update-live-dj', checkOrigin, checkAuth, postUpdateLiveDj);
+router.post('/config/create-media', checkOrigin, checkAuth, postCreateMedia);
+router.post('/config/update-media', checkOrigin, checkAuth, postUpdateMedia);
+router.post('/config/create-schedule', checkOrigin, checkAuth, postCreateSchedule);
+router.post('/config/update-event', checkOrigin, checkAuth, postUpdateEvent);
+router.post('/config/create-bio', checkOrigin, checkAuth, postCreateBio);
+router.post('/config/update-bio', checkOrigin, checkAuth, postUpdateBio);
+router.delete('/config/delete-track/:itemId', checkOrigin, checkAuth, deleteMedia);
+router.delete('/config/delete-video/:itemId', checkOrigin, checkAuth, deleteMedia);
+router.delete('/config/delete-schedule/:itemId', checkOrigin, checkAuth, deleteSchedule);
+router.delete('/config/delete-bio/:itemId', checkOrigin, checkAuth, deleteBio);
 
 module.exports = router;
