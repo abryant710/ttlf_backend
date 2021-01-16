@@ -88,7 +88,6 @@ app.use((req, res, next) => { // add headers to allow REST api to recieve reques
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
-  // res.setHeader('Access-Control-Allow-Origin', API_ALLOWED_ORIGIN);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
