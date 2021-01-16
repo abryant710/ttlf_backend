@@ -23,7 +23,7 @@ const {
   TTLF_ENV,
 } = process.env;
 
-const API_ALLOWED_ORIGINS = TTLF_ENV === 'production' ? '*.ttlf.net' : '*';
+const API_ALLOWED_ORIGINS = TTLF_ENV === 'production' ? 'ttlf.net' : '*';
 
 const MONGO_DB_URI = `mongodb+srv://${TTLF_MONGO_USER}:${TTLF_MONGO_PW}@${TTLF_MONGO_URI}/${TTLF_MONGO_DB}`;
 
