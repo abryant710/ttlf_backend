@@ -5,7 +5,7 @@ import DjProfile from '../models/DjProfile.js';
 import Schedule from '../models/Schedule.js';
 import { sortSchedules } from '../utils/general.js';
 
-export default async (_req, res) => {
+export const getWebsiteConfig = async (_req, res) => {
   try {
     const collections = {};
     const siteConfig = await SiteConfig.findOne({});
@@ -40,6 +40,32 @@ export default async (_req, res) => {
       youTubeVideoPrefix,
       soundcloudTracksRandomised,
       soundcloudTrackPrefix,
+      status: 'success',
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      status: 'error',
+    });
+  }
+};
+
+export const getLatestChat = async (_req, res) => {
+  try {
+    return res.status(200).json({
+      status: 'success',
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      status: 'error',
+    });
+  }
+};
+
+export const postNewMessage = async (_req, res) => {
+  try {
+    return res.status(200).json({
       status: 'success',
     });
   } catch (err) {
