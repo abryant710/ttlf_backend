@@ -64,6 +64,7 @@
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
     "connect-mongodb-session": "^2.4.1",
+    "cors": "^2.8.5",
     "csurf": "^1.11.0",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
@@ -74,6 +75,7 @@
     "nodemailer": "^6.4.17",
     "nodemailer-sendgrid-transport": "^0.2.0",
     "require-main-filename": "^2.0.0",
+    "socket.io": "^3.1.0",
     "uuid": "^8.3.2"
   },
   "eslintConfig": {
@@ -96,7 +98,7 @@
         {
           "js": "always"
         }
-     ]
+      ]
     }
   }
 }

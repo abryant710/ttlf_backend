@@ -4,6 +4,7 @@ import SoundcloudTrack from '../models/SoundcloudTrack.js';
 import DjProfile from '../models/DjProfile.js';
 import Schedule from '../models/Schedule.js';
 import { sortSchedules } from '../utils/general.js';
+import io from '../../socket.js';
 
 export const getWebsiteConfig = async (_req, res) => {
   try {
@@ -63,8 +64,13 @@ export const getLatestChat = async (_req, res) => {
   }
 };
 
-export const postNewMessage = async (_req, res) => {
+export const postNewMessage = async (req, res) => {
+  console.log(req.body);
   try {
+    // io.getIO().emit('messages', {
+    //   action: 'create',
+    //   message,
+    // })
     return res.status(200).json({
       status: 'success',
     });

@@ -13,9 +13,12 @@ import storeImport from 'connect-mongodb-session';
 import csrf from 'csurf';
 import flash from 'connect-flash';
 import multer from 'multer';
+import cors from 'cors';
+
 // SHOULD USE FOR FORM VALIDATION
 // https://www.npmjs.com/package/validatorjs
 
+import io from './socket.js';
 import { get404, get500 } from './src/controllers/error.js';
 import authRoutes from './src/routes/auth.js';
 import superAdminRoutes from './src/routes/superAdmin.js';
@@ -65,6 +68,10 @@ const fileFilter = (req, file, cb) => { // set file mime types
   }
   cb(null, false);
 };
+
+if (TTLF_ENV !== 'production') {
+  app.use(cors({ origin: 'http://localhost:3000' }));
+}
 
 app.use(bodyParser.json()); // json api data
 app.use(bodyParser.urlencoded({ extended: false })); // form data
@@ -136,7 +143,11 @@ const startApp = async () => {
     );
     console.info(`Successfully connected to the ${TTLF_MONGO_DB} database`);
     console.info(`Running the ${TTLF_ENV} environment`);
-    app.listen(process.env.PORT || 5000);
+    const server = app.listen(process.env.PORT || 5000);
+    const socketio = io.init(server);
+    socketio.on('connection', () => {
+      console.info('Websocket connection established from client');
+    });
   } catch (err) {
     console.error(err);
   }
