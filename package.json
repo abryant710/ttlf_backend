@@ -24,8 +24,8 @@
     "db:backup": "npm-run-all db:backup:dev db:backup:live",
     "db:backup:dev": "mongodump --uri=mongodb+srv://$(echo $TTLF_MONGO_USER):$(echo $TTLF_MONGO_PW)@$(echo $TTLF_MONGO_URI)/ttlf-dev --out ./db/$(date +%F)",
     "db:backup:live": "mongodump --uri=mongodb+srv://$(echo $TTLF_MONGO_USER):$(echo $TTLF_MONGO_PW)@$(echo $TTLF_MONGO_URI)/ttlf-live --out ./db/$(date +%F)",
-    "clean:build": "rm -rf www/* || true",
-    "clean:yarn": "rm -rf node_modules || true && rm yarn.lock || true && yarn cache clean && yarn install && npm rebuild node-sass",
+    "clean:build": "rimraf www",
+    "clean:yarn": "rimraf node_modules && rm yarn.lock || true && yarn cache clean && yarn install && npm rebuild node-sass",
     "lint": "npm-run-all lint:js lint:css",
     "lint:js": "npx eslint --fix .",
     "lint:css": "sass-lint-auto-fix --config-sass-lint .sass-lint.yml -c .sass-lint-auto-fix.yml",
@@ -55,6 +55,7 @@
     "npm-run-all": "^4.1.5",
     "postcss": "^8.2.1",
     "postcss-cli": "^8.3.1",
+    "rimraf": "^3.0.2",
     "sass": "^1.30.0",
     "sass-lint": "^1.13.1",
     "sass-lint-auto-fix": "^0.21.2"
